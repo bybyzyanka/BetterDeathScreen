@@ -1,0 +1,20 @@
+actionbar:
+  death: '&7Você ressurgirá em &6%time%.'
+  hardcore: '&7Você não irá renascer...'
+  kill: '&c&lELIMINADO! &f%player%'
+titles:
+  - "&cVOCÊ FOI ELIMINADO"
+  - "&cVOCÊ MORREU"
+subtitles:
+  - "&7Vencer significa ser melhor."
+  - "&7Paciência é o que separa os caçadores bons dos mortos."
+  - "&7Já caiu no esquecimento."
+  - "&7Isso foi no máximo... mediocre."
+  - "&7Você não é o herói desse história, você não é nada!"
+  - "&7Resultados dizem mais do que palavras."
+time:
+  singular: " segundo"
+  plural: " segundos"
+perms:
+  reload: "&a[BDS] Plugin recarregado com sucesso."
+  no-perm: "&c[BDS] Você não tem permissão para usar esse comando."

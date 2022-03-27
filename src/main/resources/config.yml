@@ -1,0 +1,25 @@
+#____       _   _            _____             _   _      _____
+#|  _ \     | | | |          |  __ \           | | | |    / ____|
+#| |_) | ___| |_| |_ ___ _ __| |  | | ___  __ _| |_| |__ | (___   ___ _ __ ___  ___ _ __
+#|  _ < / _ \ __| __/ _ \ '__| |  | |/ _ \/ _` | __| '_ \ \___ \ / __| '__/ _ \/ _ \ '_ \
+#| |_) |  __/ |_| ||  __/ |  | |__| |  __/ (_| | |_| | | |____) | (__| | |  __/  __/ | | |
+#|____/ \___|\__|\__\___|_|  |_____/ \___|\__,_|\__|_| |_|_____/ \___|_|  \___|\___|_| |_|
+
+#Author: Tedesk
+
+#The config.yml was created with 1.8.8 in mind.
+#Please check the Sounds for your server version!
+misc: #Available languages: en-US, pt-BR
+  language: 'en-US'
+sound:
+  death: BLAZE_DEATH
+  countdown: NOTE_BASS_DRUM
+  respawn: NOTE_PLING
+animation: #Available types: DISABLED, BLOOD, EXPLOSION, LIGHTNING
+  type: "BLOOD"
+time:
+  duration: 10
+perms:
+  keepxp: 'bds.xp'
+  admin: 'bds.admin'
+

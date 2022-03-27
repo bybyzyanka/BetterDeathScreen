@@ -1,0 +1,20 @@
+actionbar:
+  death: '&7You will respawn in &6%time%.'
+  hardcore: '&7You will never respawn again...'
+  kill: '&c&lELIMINATED! &f%player%'
+titles:
+  - "&cYOU HAVE BEEN SLAIN"
+  - "&cYOU DIED"
+subtitles:
+  - "&7Winning means being better."
+  - "&7Patience is what separate good hunters from dead ones."
+  - "&7You are already forgotten."
+  - "&7This was mediocre at best."
+  - "&7You are not the hero of this tale, you are nothing!"
+  - "&7Results speaks louder than words."
+time:
+  singular: " second"
+  plural: " seconds"
+perms:
+  reload: "&a[BDS] Plugin successfully reload."
+  no-perm: "&c[BDS] You don´t have permission to reload the plugin."

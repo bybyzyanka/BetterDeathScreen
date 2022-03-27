@@ -1,0 +1,11 @@
+name: BetterDeathScreen
+main: me.tedesk.deathscreen.BetterDeathScreen
+version: ${project.version}
+author: Tedesk
+depend: [ProtocolLib]
+api-version: 1.13
+
+commands:
+  bdsreload:
+    description: Reload config.
+    usage: /<command>
