@@ -1,7 +1,7 @@
 package me.tedesk.deathscreen;
 
-import me.tedesk.deathscreen.api.utils.Metrics;
-import me.tedesk.deathscreen.api.utils.Version;
+import me.tedesk.deathscreen.utils.Metrics;
+import me.tedesk.deathscreen.utils.Version;
 import me.tedesk.deathscreen.configs.Config;
 import me.tedesk.deathscreen.configs.ConfigHandler;
 import me.tedesk.deathscreen.configs.Messages;

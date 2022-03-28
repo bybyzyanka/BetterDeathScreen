@@ -1,14 +1,14 @@
 package me.tedesk.deathscreen.systems.general;
 
+import me.tedesk.deathscreen.BetterDeathScreen;
 import me.tedesk.deathscreen.api.ActionBarAPI;
+import me.tedesk.deathscreen.api.SoundAPI;
 import me.tedesk.deathscreen.configs.Config;
 import me.tedesk.deathscreen.configs.Messages;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import static me.tedesk.deathscreen.BetterDeathScreen.plugin;
 
 public class Timer {
 
@@ -21,25 +21,21 @@ public class Timer {
             public void run() {
                 time--;
 
-                String actionbarplural = Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL);
-                actionbarplural = ChatColor.translateAlternateColorCodes('&', actionbarplural);
-
-                ActionBarAPI.sendActionBar(p, actionbarplural);
-
                 if (!p.isOnline()){
                     cancel();
                 }
-
-                if (time > 0) {
-                    p.playSound(p.getLocation(), Sound.valueOf(Config.COUNTDOWN), 3.0F, 1.0F);
+                if (time > 1) {
+                    String actionbarplural = Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL);
+                    actionbarplural = ChatColor.translateAlternateColorCodes('&', actionbarplural);
+                    ActionBarAPI.sendActionBar(p, actionbarplural);
+                    SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_COUNTDOWN, 3, 1);
                 }
-
                 if (time == 1) {
                     String actionbarsingular = Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR);
                     actionbarsingular = ChatColor.translateAlternateColorCodes('&', actionbarsingular);
                     ActionBarAPI.sendActionBar(p, actionbarsingular);
+                    SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_COUNTDOWN, 3, 1);
                 }
-
                 if (time <= 0) {
                     ActionBarAPI.sendActionBar(p, "§r");
                     double health = p.getMaxHealth();
@@ -55,12 +51,12 @@ public class Timer {
                         PlayerRespawnEvent respawn = new PlayerRespawnEvent(p, Config.DEFAULT_WORLD_SPAWN, false);
                         Bukkit.getPluginManager().callEvent(respawn);
                     }
-                    p.playSound(p.getLocation(), Sound.valueOf(Config.RESPAWN), 3.0F, 1.0F);
+                    SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_RESPAWN, 3, 1);
                     p.updateInventory();
                     cancel();
                 }
             }
-        }.runTaskTimer(plugin, 20, 20);
+        }.runTaskTimer(BetterDeathScreen.plugin, 20, 20);
     }
 
     // Esse timer nunca chegará ao fim, somente quando o jogador mudar seu modo de jogo.
@@ -78,7 +74,6 @@ public class Timer {
                 if (!p.isOnline()){
                     cancel();
                 }
-
                 // Ao mudar o modo de jogo do jogador, ele renasce.
                 if (!(p.getGameMode() == GameMode.SPECTATOR)) {
                     ActionBarAPI.sendActionBar(p, "§r");
@@ -88,6 +83,6 @@ public class Timer {
                     cancel();
                 }
             }
-        }.runTaskTimer(plugin, 20, 20);
+        }.runTaskTimer(BetterDeathScreen.plugin, 20, 20);
     }
 }

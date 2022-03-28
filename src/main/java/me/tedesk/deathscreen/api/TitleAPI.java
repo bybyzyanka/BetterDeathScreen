@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import me.tedesk.deathscreen.BetterDeathScreen;
+import me.tedesk.deathscreen.configs.Messages;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 public class TitleAPI {
 
     @SuppressWarnings("deprecation")
-    public static void sendTitle(Player player, Integer fadeIn, Integer stay, Integer fadeOut, String title, String subtitle) {
+    public static void sendTitle(Player p, Integer fadeIn, Integer stay, Integer fadeOut, String title, String subtitle) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         if (BetterDeathScreen.veryNewVersion()) {
             PacketContainer title_packet = new PacketContainer(PacketType.Play.Server.SET_TITLE_TEXT);
@@ -32,12 +33,12 @@ public class TitleAPI {
             subtitle_packet.getChatComponents().write(0, WrappedChatComponent.fromText(subtitle));
 
             try {
-                protocolManager.sendServerPacket(player, time_packet);
-                protocolManager.sendServerPacket(player, subtitle_packet);
-                protocolManager.sendServerPacket(player, title_packet);
+                protocolManager.sendServerPacket(p, time_packet);
+                protocolManager.sendServerPacket(p, subtitle_packet);
+                protocolManager.sendServerPacket(p, title_packet);
             } catch (InvocationTargetException e) {
-                BetterDeathScreen.logger("§cThe death message could not be send to: " + player.getDisplayName());
                 e.printStackTrace();
+                BetterDeathScreen.logger(Messages.TITLE_ERROR.replace("%player%", p.getDisplayName()));
             }
         // Envio da TitleBar para versões antigas: pré-1.17
         } else {
@@ -56,12 +57,12 @@ public class TitleAPI {
             subtitle_packet.getChatComponents().write(0, WrappedChatComponent.fromText(subtitle));
 
             try {
-                protocolManager.sendServerPacket(player, time_packet);
-                protocolManager.sendServerPacket(player, subtitle_packet);
-                protocolManager.sendServerPacket(player, title_packet);
+                protocolManager.sendServerPacket(p, time_packet);
+                protocolManager.sendServerPacket(p, subtitle_packet);
+                protocolManager.sendServerPacket(p, title_packet);
             } catch (InvocationTargetException e) {
-                BetterDeathScreen.logger("§cThe death message could not be send to: " + player.getDisplayName());
                 e.printStackTrace();
+                BetterDeathScreen.logger(Messages.TITLE_ERROR.replace("%player%", p.getDisplayName()));
             }
         }
     }

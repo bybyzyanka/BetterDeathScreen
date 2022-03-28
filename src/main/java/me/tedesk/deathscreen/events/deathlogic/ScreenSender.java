@@ -3,6 +3,7 @@ package me.tedesk.deathscreen.events.deathlogic;
 import me.tedesk.deathscreen.animations.Animation;
 import me.tedesk.deathscreen.api.ActionBarAPI;
 import me.tedesk.deathscreen.api.TitleAPI;
+import me.tedesk.deathscreen.api.SoundAPI;
 import me.tedesk.deathscreen.configs.Config;
 import me.tedesk.deathscreen.configs.Messages;
 import me.tedesk.deathscreen.events.Listeners;
@@ -42,7 +43,7 @@ public class ScreenSender extends Listeners {
                 FakeMechanics.changeStatistics(pv);
                 FakeMechanics.dropInventory(pv);
                 Animation.send(pv);
-                pv.playSound(pv.getLocation(), Sound.valueOf(Config.DEATH), 3.0F, 1.0F);
+                pv.playSound(pv.getLocation(), Sound.valueOf(Config.SOUND_DEATH), 3.0F, 1.0F);
                 TitleAPI.sendTitle(pv, 1, 20 * time, 1, Randomizer.customtitles(), Randomizer.customsubtitles());
                 Timer.normal(pv);
 
@@ -64,7 +65,7 @@ public class ScreenSender extends Listeners {
                     FakeMechanics.changeStatistics(pv);
                     FakeMechanics.dropInventory(pv);
                     Animation.send(pv);
-                    pv.playSound(pv.getLocation(), Sound.valueOf(Config.DEATH), 3.0F, 1.0F);
+                    SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
                     TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.customtitles(), Randomizer.customsubtitles());
                     Timer.hardcore(pv);
 
@@ -107,7 +108,7 @@ public class ScreenSender extends Listeners {
                 FakeMechanics.changeStatistics(pv);
                 FakeMechanics.dropInventory(pv);
                 Animation.send(pv);
-                pv.playSound(pv.getLocation(), Sound.valueOf(Config.DEATH), 3.0F, 1.0F);
+                pv.playSound(pv.getLocation(), Sound.valueOf(Config.SOUND_DEATH), 3.0F, 1.0F);
                 TitleAPI.sendTitle(pv, 1, 20 * time, 1, Randomizer.customtitles(), Randomizer.customsubtitles());
                 Timer.normal(pv);
             } else {
@@ -120,7 +121,7 @@ public class ScreenSender extends Listeners {
                     FakeMechanics.changeStatistics(pv);
                     FakeMechanics.dropInventory(pv);
                     Animation.send(pv);
-                    pv.playSound(pv.getLocation(), Sound.valueOf(Config.DEATH), 3.0F, 1.0F);
+                    pv.playSound(pv.getLocation(), Sound.valueOf(Config.SOUND_DEATH), 3.0F, 1.0F);
                     TitleAPI.sendTitle(pv, 1, 20 * time, 1, Randomizer.customtitles(), Randomizer.customsubtitles());
                     Timer.hardcore(pv);
                 } else {

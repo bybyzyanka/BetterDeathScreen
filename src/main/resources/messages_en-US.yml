@@ -18,3 +18,7 @@ time:
 perms:
   reload: "&a[BDS] Plugin successfully reload."
   no-perm: "&c[BDS] You don´t have permission to reload the plugin."
+errors:
+  actionbar: "&cCould not send the actionbar to the player %player%"
+  title: "&cCould not send the title message to the player %player%"
+  sound: "&cThis sound does not exist in your server version. Check your config.yml"

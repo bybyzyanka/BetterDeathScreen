@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import me.tedesk.deathscreen.BetterDeathScreen;
+import me.tedesk.deathscreen.configs.Messages;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,8 +25,8 @@ public class ActionBarAPI {
             try {
                 protocolManager.sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
-                BetterDeathScreen.logger("§cNão foi possivel enviar a ActionBar para o jogador: " + p.getDisplayName());
                 e.printStackTrace();
+                BetterDeathScreen.logger(Messages.AB_ERROR.replace("%player%", p.getDisplayName()));
             }
         // Envio da ActionBar para versões antigas: pré-1.17
         } else if (BetterDeathScreen.newVersion()) {
@@ -35,8 +36,8 @@ public class ActionBarAPI {
                 try {
                     protocolManager.sendServerPacket(p, ab_packet);
                 } catch (InvocationTargetException e) {
-                    BetterDeathScreen.logger("§cNão foi possivel enviar a ActionBar para o jogador: " + p.getDisplayName());
                     e.printStackTrace();
+                    BetterDeathScreen.logger(Messages.AB_ERROR.replace("%player%", p.getDisplayName()));
                 }
         // Envio da ActionBar para versões MUITO antigas: pré-1.12
         } else {
@@ -46,8 +47,8 @@ public class ActionBarAPI {
             try {
                 protocolManager.sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
-                BetterDeathScreen.logger("§cNão foi possivel enviar a ActionBar para o jogador: " + p.getDisplayName());
                 e.printStackTrace();
+                BetterDeathScreen.logger(Messages.AB_ERROR.replace("%player%", p.getDisplayName()));
             }
         }
     }

@@ -1,5 +1,6 @@
 package me.tedesk.deathscreen.configs;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
@@ -16,6 +17,10 @@ public class Messages {
     public static String NO_PERM;
     public static String SET_SPAWN;
 
+    public static String AB_ERROR;
+    public static String TITLE_ERROR;
+    public static String SOUND_ERROR;
+
 
     public static void loadMessages() {
         FileConfiguration messages = ConfigHandler.getConfig("messages_" + Config.LANGUAGE);
@@ -30,5 +35,11 @@ public class Messages {
         RELOAD = messages.getString("perms.reload");
         NO_PERM = messages.getString("perms.no-perm");
         SET_SPAWN = messages.getString("perms.set-respawn");
+        AB_ERROR = messages.getString("errors.actionbar");
+        AB_ERROR = ChatColor.translateAlternateColorCodes('&', AB_ERROR);
+        TITLE_ERROR = messages.getString("errors.title");
+        TITLE_ERROR = ChatColor.translateAlternateColorCodes('&', TITLE_ERROR);
+        SOUND_ERROR = messages.getString("errors.sound");
+        SOUND_ERROR = ChatColor.translateAlternateColorCodes('&', SOUND_ERROR);
     }
 }
