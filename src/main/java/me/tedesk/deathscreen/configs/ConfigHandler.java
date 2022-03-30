@@ -9,12 +9,8 @@ import java.io.File;
 public class ConfigHandler {
 
     public static void createConfig(String file) {
-        try {
-            if (!new File(BetterDeathScreen.plugin.getDataFolder(), file + ".yml").exists()) {
-                BetterDeathScreen.plugin.saveResource(file + ".yml", false);
-            }
-        } catch (IllegalArgumentException e) {
-            BetterDeathScreen.logger("§cCould not load the plugin messages! Please check the language section in your config.yml");
+        if (!new File(BetterDeathScreen.plugin.getDataFolder(), file + ".yml").exists()) {
+            BetterDeathScreen.plugin.saveResource(file + ".yml", false);
         }
     }
 

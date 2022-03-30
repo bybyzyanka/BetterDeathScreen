@@ -18,7 +18,7 @@ public class ActionBarAPI {
     public static void sendActionBar(Player p, String message) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
-        // Envio da ActionBar para versões novas. (pós-1.16)
+        // Envio da ActionBar para versões novas. (1.17 até 1.19)
         if (BetterDeathScreen.veryNewVersion()) {
             PacketContainer ab_packet = new PacketContainer(PacketType.Play.Server.SET_ACTION_BAR_TEXT);
             ab_packet.getTitleActions().write(0, EnumWrappers.TitleAction.ACTIONBAR);
@@ -29,8 +29,10 @@ public class ActionBarAPI {
                 e.printStackTrace();
                 BetterDeathScreen.logger(Messages.AB_ERROR.replace("%player%", p.getDisplayName()));
             }
-        // Envio da ActionBar para versões antigas. (pré-1.17)
-        } else if (BetterDeathScreen.newVersion()) {
+        }
+
+        // Envio da ActionBar para versões antigas. (1.12 até 1.16)
+        if (BetterDeathScreen.newVersion()) {
                 PacketContainer ab_packet = new PacketContainer(PacketType.Play.Server.TITLE);
                 ab_packet.getTitleActions().write(0, EnumWrappers.TitleAction.ACTIONBAR);
                 ab_packet.getChatComponents().write(0, WrappedChatComponent.fromText(message));
@@ -40,8 +42,10 @@ public class ActionBarAPI {
                     e.printStackTrace();
                     BetterDeathScreen.logger(Messages.AB_ERROR.replace("%player%", p.getDisplayName()));
                 }
-        // Envio da ActionBar para versões MUITO antigas. (pré-1.12)
-        } else {
+        }
+
+        // Envio da ActionBar para versões MUITO antigas. (1.8 até 1.11)
+        if (BetterDeathScreen.oldVersion()) {
             PacketContainer ab_packet = new PacketContainer(PacketType.Play.Server.CHAT);
             ab_packet.getBytes().write(0, (byte) 2);
             ab_packet.getChatComponents().write(0, WrappedChatComponent.fromText(message));

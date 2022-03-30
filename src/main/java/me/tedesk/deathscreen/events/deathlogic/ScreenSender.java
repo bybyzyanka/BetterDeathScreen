@@ -34,6 +34,9 @@ public class ScreenSender extends Listeners {
         if (e.getEntity() instanceof Player) {
             Player pv = (Player) victim;
 
+            if (pv.getGameMode() == GameMode.SPECTATOR) {
+                e.setCancelled(true);
+            }
             if (e.getFinalDamage() >= pv.getHealth() && !Bukkit.getServer().isHardcore() && !(pv.getGameMode() == GameMode.SPECTATOR)) {
                 e.setCancelled(true);
                 pv.setGameMode(GameMode.SPECTATOR);
@@ -44,42 +47,19 @@ public class ScreenSender extends Listeners {
                 FakeMechanics.dropInventory(pv);
                 Animation.sendAnimation(pv);
                 SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
-                TitleAPI.sendTitle(pv, 1, 20 * time, 1, Randomizer.customtitles(), Randomizer.customsubtitles());
-                Timer.normal(pv);
-
+                TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.customtitles(), Randomizer.customsubtitles());
+                if (!Bukkit.getServer().isHardcore()) {
+                    Timer.normal(pv);
+                }
+                if (Bukkit.getServer().isHardcore()) {
+                    Timer.hardcore(pv);
+                }
                 if (e.getDamager() instanceof Player) {
                     Player killer = (Player) e.getDamager();
                     String killab = Messages.ACTIONBAR_KILL.replace("%player%", pv.getDisplayName());
                     killab = ChatColor.translateAlternateColorCodes('&', killab);
                     ActionBarAPI.sendActionBar(killer, killab);
                     FakeMechanics.changeStatisticsKiller(killer, e);
-                }
-
-            } else {
-                if (e.getFinalDamage() >= pv.getHealth() && Bukkit.getServer().isHardcore() && !(pv.getGameMode() == GameMode.SPECTATOR)) {
-                    e.setCancelled(true);
-                    pv.setGameMode(GameMode.SPECTATOR);
-                    EntityDamageByEntityEvent fakehit = new EntityDamageByEntityEvent(damager, victim, e.getCause(), e.getFinalDamage());
-                    Bukkit.getPluginManager().callEvent(fakehit);
-                    FakeMechanics.sendDeath(pv);
-                    FakeMechanics.changeStatisticsVictim(pv);
-                    FakeMechanics.dropInventory(pv);
-                    Animation.sendAnimation(pv);
-                    SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
-                    TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.customtitles(), Randomizer.customsubtitles());
-                    Timer.hardcore(pv);
-
-                    if (e.getDamager() instanceof Player) {
-                        Player killer = (Player) e.getDamager();
-                        String killab = Messages.ACTIONBAR_KILL.replace("%player%", pv.getDisplayName());
-                        killab = ChatColor.translateAlternateColorCodes('&', killab);
-                        ActionBarAPI.sendActionBar(killer, killab);
-                        FakeMechanics.changeStatisticsKiller(killer, e);
-                    } else {
-                        if (pv.getGameMode() == GameMode.SPECTATOR) {
-                            e.setCancelled(true);
-                        }
-                    }
                 }
             }
         }
@@ -99,7 +79,10 @@ public class ScreenSender extends Listeners {
         if (e.getEntity() instanceof Player) {
             Player pv = (Player) victim;
 
-            if (e.getFinalDamage() >= pv.getHealth() && !Bukkit.getServer().isHardcore() && !(pv.getGameMode() == GameMode.SPECTATOR)) {
+            if (pv.getGameMode() == GameMode.SPECTATOR) {
+                e.setCancelled(true);
+            }
+            if (e.getFinalDamage() >= pv.getHealth() && !(pv.getGameMode() == GameMode.SPECTATOR)) {
                 e.setCancelled(true);
                 pv.setGameMode(GameMode.SPECTATOR);
                 EntityDamageEvent fakedamage = new EntityDamageEvent(victim, e.getCause(), e.getFinalDamage());
@@ -109,25 +92,12 @@ public class ScreenSender extends Listeners {
                 FakeMechanics.dropInventory(pv);
                 Animation.sendAnimation(pv);
                 SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
-                TitleAPI.sendTitle(pv, 1, 20 * time, 1, Randomizer.customtitles(), Randomizer.customsubtitles());
-                Timer.normal(pv);
-            } else {
-                if (e.getFinalDamage() >= pv.getHealth() && Bukkit.getServer().isHardcore() && !(pv.getGameMode() == GameMode.SPECTATOR)) {
-                    e.setCancelled(true);
-                    pv.setGameMode(GameMode.SPECTATOR);
-                    EntityDamageEvent fakedamage = new EntityDamageEvent(victim, e.getCause(), e.getFinalDamage());
-                    Bukkit.getPluginManager().callEvent(fakedamage);
-                    FakeMechanics.sendDeath(pv);
-                    FakeMechanics.changeStatisticsVictim(pv);
-                    FakeMechanics.dropInventory(pv);
-                    Animation.sendAnimation(pv);
-                    SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
-                    TitleAPI.sendTitle(pv, 1, 20 * time, 1, Randomizer.customtitles(), Randomizer.customsubtitles());
+                TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.customtitles(), Randomizer.customsubtitles());
+                if (!Bukkit.getServer().isHardcore()) {
+                    Timer.normal(pv);
+                }
+                if (Bukkit.getServer().isHardcore()) {
                     Timer.hardcore(pv);
-                } else {
-                    if (pv.getGameMode() == GameMode.SPECTATOR) {
-                        e.setCancelled(true);
-                    }
                 }
             }
         }

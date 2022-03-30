@@ -18,7 +18,7 @@ public class TitleAPI {
     public static void sendTitle(Player p, Integer fadeIn, Integer stay, Integer fadeOut, String title, String subtitle) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
-        // Envio da TitleBar para versões novas. (pós-1.16)
+        // Envio da TitleBar para versões novas. (1.17 até 1.19)
         if (BetterDeathScreen.veryNewVersion()) {
             PacketContainer title_packet = new PacketContainer(PacketType.Play.Server.SET_TITLE_TEXT);
             title_packet.getTitleActions().write(0, EnumWrappers.TitleAction.TITLE);
@@ -42,8 +42,10 @@ public class TitleAPI {
                 e.printStackTrace();
                 BetterDeathScreen.logger(Messages.TITLE_ERROR.replace("%player%", p.getDisplayName()));
             }
-        // Envio da TitleBar para versões antigas (pré-1.17) e versões MUITO antigas (pré-1.12).
-        } else {
+        }
+
+        // Envio da TitleBar para versões antigas (1.12 até 1.16) e versões MUITO antigas (1.8 até 1.11).
+        if (BetterDeathScreen.newVersion() || BetterDeathScreen.oldVersion()) {
             PacketContainer title_packet = new PacketContainer(PacketType.Play.Server.TITLE);
             title_packet.getTitleActions().write(0, EnumWrappers.TitleAction.TITLE);
             title_packet.getChatComponents().write(0, WrappedChatComponent.fromText(title));

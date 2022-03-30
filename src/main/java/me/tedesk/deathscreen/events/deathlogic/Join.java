@@ -16,13 +16,14 @@ public class Join extends Listeners {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void playerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        // Caso o servidor não esteja no hardcore, reinicia a contagem.
-        if (p.getGameMode() == GameMode.SPECTATOR && !Bukkit.getServer().isHardcore() && !p.hasPermission(Config.ADMIN)) {
-            Timer.normal(p);
-        }
-        // Caso o servidor esteja no hardcore, envia a mensagem permamente.
-        if (p.getGameMode() == GameMode.SPECTATOR && Bukkit.getServer().isHardcore() && !p.hasPermission(Config.ADMIN)) {
-            Timer.hardcore(p);
+        // Reinicia a contagem ou mostra a mensagem do modo de jogo hardcore ao reconectar.
+        if (p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) {
+            if (!Bukkit.getServer().isHardcore()) {
+                Timer.normal(p);
+            }
+            if (Bukkit.getServer().isHardcore()) {
+                Timer.hardcore(p);
+            }
         }
     }
 }

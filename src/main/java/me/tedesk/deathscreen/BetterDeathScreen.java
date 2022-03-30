@@ -17,9 +17,11 @@ public class BetterDeathScreen extends JavaPlugin {
      */
     public static Version version;
     public static BetterDeathScreen plugin;
+
     public static void logger(String text) {
         Bukkit.getConsoleSender().sendMessage("§7[BetterDeathScreen] " + text);
     }
+
     PluginDescriptionFile pdf = this.getDescription();
 
     @Override
@@ -31,7 +33,7 @@ public class BetterDeathScreen extends JavaPlugin {
         Listeners.Setup();
         createAndLoadConfigs();
 
-        if (version == Version.UNKNOWN){
+        if (version == Version.UNKNOWN) {
             logger("§cYour server version is behind 1.8! §f" + "(" + plugin.getServer().getBukkitVersion() + ")");
             logger("§cIf you think this is an error, write on the review of the plugin page.");
             logger("§cThe plugin will now shutdown.");
@@ -47,7 +49,6 @@ public class BetterDeathScreen extends JavaPlugin {
     public void onDisable() {
         logger("§cPlugin disabled! (v" + pdf.getVersion() + ")");
     }
-
 
     public static void createAndLoadConfigs() {
         ConfigHandler.createConfig("config");
@@ -65,7 +66,7 @@ public class BetterDeathScreen extends JavaPlugin {
         if (version == Version.v1_17)
             return true;
         return false;
-        }
+    }
 
     public static boolean newVersion() {
         if (version == Version.v1_16)
@@ -77,6 +78,18 @@ public class BetterDeathScreen extends JavaPlugin {
         if (version == Version.v1_13)
             return true;
         if (version == Version.v1_12)
+            return true;
+        return false;
+    }
+
+    public static boolean oldVersion() {
+        if (version == Version.v1_11)
+            return true;
+        if (version == Version.v1_10)
+            return true;
+        if (version == Version.v1_9)
+            return true;
+        if (version == Version.v1_8)
             return true;
         return false;
     }
