@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -17,30 +18,19 @@ public class FakeMechanics {
         World w = Bukkit.getServer().getWorld(p.getWorld().getName());
 
         if (!p.hasPermission(Config.KEEPXP)){
-            PlayerDeathEvent playerdeathwithxp = new PlayerDeathEvent(p, null, 0, null);
-            Bukkit.getPluginManager().callEvent(playerdeathwithxp);
             if (w.getGameRuleValue("keepInventory").equals("false")) {
                 p.setLevel(0);
                 p.setExp(0);
             }
-            for(PotionEffect effect : p.getActivePotionEffects())
-            {
-                p.removePotionEffect(effect.getType());
-            }
-        } else {
-            PlayerDeathEvent playerdeathwithoutxp = new PlayerDeathEvent(p, null, 0, null);
-            Bukkit.getPluginManager().callEvent(playerdeathwithoutxp);
-            for(PotionEffect effect : p.getActivePotionEffects())
-            {
-                p.removePotionEffect(effect.getType());
-            }
         }
+        for (PotionEffect effect : p.getActivePotionEffects())
+        {
+            p.removePotionEffect(effect.getType());
+        }
+        PlayerDeathEvent playerdeath = new PlayerDeathEvent(p, null, 0, null);
+        Bukkit.getPluginManager().callEvent(playerdeath);
         EntityDeathEvent entdeath = new EntityDeathEvent(p, null);
         Bukkit.getPluginManager().callEvent(entdeath);
-    }
-    public static void changeStatistics(Player p) {
-        p.setStatistic(Statistic.DEATHS, p.getStatistic(Statistic.DEATHS) + 1);
-        p.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
     }
 
     public static void dropInventory(Player p) {
@@ -69,5 +59,16 @@ public class FakeMechanics {
             p.getInventory().clear();
             p.setItemOnCursor(new ItemStack(Material.AIR));
         }
+    }
+
+    public static void changeStatisticsVictim(Player p) {
+        p.setStatistic(Statistic.DEATHS, p.getStatistic(Statistic.DEATHS) + 1);
+        p.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
+    }
+
+    public static void changeStatisticsKiller(Player p, EntityDamageByEntityEvent event) {
+        p.setStatistic(Statistic.PLAYER_KILLS, p.getStatistic(Statistic.PLAYER_KILLS) + 1);
+        p.setStatistic(Statistic.KILL_ENTITY, p.getStatistic(Statistic.KILL_ENTITY) + 1);
+        p.setStatistic(Statistic.DAMAGE_DEALT, p.getStatistic(Statistic.DAMAGE_DEALT) + (int) event.getDamage());
     }
 }

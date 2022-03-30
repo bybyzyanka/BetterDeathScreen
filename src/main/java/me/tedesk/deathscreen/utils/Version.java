@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 public enum Version {
 
     v1_19(19),
-	v1_18(18),
+    v1_18(18),
     v1_17(17),
     v1_16(16),
     v1_15(15),
@@ -36,7 +36,7 @@ public enum Version {
     }
 
     public static Version getServerVersion(String ver) {
-		if (ver.contains("1.19"))
+        if (ver.contains("1.19"))
             return v1_19;
         else if (ver.contains("1.18"))
             return v1_18;

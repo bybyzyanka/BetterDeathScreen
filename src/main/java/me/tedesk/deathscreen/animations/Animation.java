@@ -40,7 +40,7 @@ public class Animation {
         p.getWorld().strikeLightningEffect(p.getLocation());
     }
 
-    public static void send(Player p) {
+    public static void sendAnimation(Player p) {
 
         if (Config.ANIMATION.equals("DISABLED")) return;
         if (Config.ANIMATION.equals("BLOOD")) {

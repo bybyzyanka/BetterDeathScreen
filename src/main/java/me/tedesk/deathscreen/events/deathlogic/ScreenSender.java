@@ -40,19 +40,19 @@ public class ScreenSender extends Listeners {
                 EntityDamageByEntityEvent fakehit = new EntityDamageByEntityEvent(damager, victim, e.getCause(), e.getFinalDamage());
                 Bukkit.getPluginManager().callEvent(fakehit);
                 FakeMechanics.sendDeath(pv);
-                FakeMechanics.changeStatistics(pv);
+                FakeMechanics.changeStatisticsVictim(pv);
                 FakeMechanics.dropInventory(pv);
-                Animation.send(pv);
-                pv.playSound(pv.getLocation(), Sound.valueOf(Config.SOUND_DEATH), 3.0F, 1.0F);
+                Animation.sendAnimation(pv);
+                SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
                 TitleAPI.sendTitle(pv, 1, 20 * time, 1, Randomizer.customtitles(), Randomizer.customsubtitles());
                 Timer.normal(pv);
 
                 if (e.getDamager() instanceof Player) {
                     Player killer = (Player) e.getDamager();
-                    killer.setStatistic(Statistic.PLAYER_KILLS, killer.getStatistic(Statistic.PLAYER_KILLS) + 1);
                     String killab = Messages.ACTIONBAR_KILL.replace("%player%", pv.getDisplayName());
                     killab = ChatColor.translateAlternateColorCodes('&', killab);
                     ActionBarAPI.sendActionBar(killer, killab);
+                    FakeMechanics.changeStatisticsKiller(killer, e);
                 }
 
             } else {
@@ -62,19 +62,19 @@ public class ScreenSender extends Listeners {
                     EntityDamageByEntityEvent fakehit = new EntityDamageByEntityEvent(damager, victim, e.getCause(), e.getFinalDamage());
                     Bukkit.getPluginManager().callEvent(fakehit);
                     FakeMechanics.sendDeath(pv);
-                    FakeMechanics.changeStatistics(pv);
+                    FakeMechanics.changeStatisticsVictim(pv);
                     FakeMechanics.dropInventory(pv);
-                    Animation.send(pv);
+                    Animation.sendAnimation(pv);
                     SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
                     TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.customtitles(), Randomizer.customsubtitles());
                     Timer.hardcore(pv);
 
                     if (e.getDamager() instanceof Player) {
                         Player killer = (Player) e.getDamager();
-                        killer.setStatistic(Statistic.PLAYER_KILLS, killer.getStatistic(Statistic.PLAYER_KILLS) + 1);
                         String killab = Messages.ACTIONBAR_KILL.replace("%player%", pv.getDisplayName());
                         killab = ChatColor.translateAlternateColorCodes('&', killab);
                         ActionBarAPI.sendActionBar(killer, killab);
+                        FakeMechanics.changeStatisticsKiller(killer, e);
                     } else {
                         if (pv.getGameMode() == GameMode.SPECTATOR) {
                             e.setCancelled(true);
@@ -105,10 +105,10 @@ public class ScreenSender extends Listeners {
                 EntityDamageEvent fakedamage = new EntityDamageEvent(victim, e.getCause(), e.getFinalDamage());
                 Bukkit.getPluginManager().callEvent(fakedamage);
                 FakeMechanics.sendDeath(pv);
-                FakeMechanics.changeStatistics(pv);
+                FakeMechanics.changeStatisticsVictim(pv);
                 FakeMechanics.dropInventory(pv);
-                Animation.send(pv);
-                pv.playSound(pv.getLocation(), Sound.valueOf(Config.SOUND_DEATH), 3.0F, 1.0F);
+                Animation.sendAnimation(pv);
+                SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
                 TitleAPI.sendTitle(pv, 1, 20 * time, 1, Randomizer.customtitles(), Randomizer.customsubtitles());
                 Timer.normal(pv);
             } else {
@@ -118,10 +118,10 @@ public class ScreenSender extends Listeners {
                     EntityDamageEvent fakedamage = new EntityDamageEvent(victim, e.getCause(), e.getFinalDamage());
                     Bukkit.getPluginManager().callEvent(fakedamage);
                     FakeMechanics.sendDeath(pv);
-                    FakeMechanics.changeStatistics(pv);
+                    FakeMechanics.changeStatisticsVictim(pv);
                     FakeMechanics.dropInventory(pv);
-                    Animation.send(pv);
-                    pv.playSound(pv.getLocation(), Sound.valueOf(Config.SOUND_DEATH), 3.0F, 1.0F);
+                    Animation.sendAnimation(pv);
+                    SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
                     TitleAPI.sendTitle(pv, 1, 20 * time, 1, Randomizer.customtitles(), Randomizer.customsubtitles());
                     Timer.hardcore(pv);
                 } else {
