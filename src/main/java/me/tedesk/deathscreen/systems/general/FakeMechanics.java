@@ -17,14 +17,13 @@ public class FakeMechanics {
     public static void sendDeath(Player p){
         World w = Bukkit.getServer().getWorld(p.getWorld().getName());
 
-        if (!p.hasPermission(Config.KEEPXP)){
+        if (!p.hasPermission(Config.KEEP_XP)) {
             if (w.getGameRuleValue("keepInventory").equals("false")) {
                 p.setLevel(0);
                 p.setExp(0);
             }
         }
-        for (PotionEffect effect : p.getActivePotionEffects())
-        {
+        for (PotionEffect effect : p.getActivePotionEffects()) {
             p.removePotionEffect(effect.getType());
         }
         PlayerDeathEvent playerdeath = new PlayerDeathEvent(p, null, 0, null);
@@ -48,6 +47,8 @@ public class FakeMechanics {
             try {
                 for (ItemStack itemStack : p.getInventory().getContents()) {
                     p.getWorld().dropItemNaturally(p.getLocation(), itemStack);
+                    p.getWorld().dropItemNaturally(p.getLocation(), p.getItemOnCursor());
+                    p.setItemOnCursor(new ItemStack(Material.AIR));
                     p.getInventory().removeItem(itemStack);
                 }
             } catch (IllegalArgumentException ignored) {
@@ -57,7 +58,6 @@ public class FakeMechanics {
             p.getInventory().setLeggings(null);
             p.getInventory().setBoots(null);
             p.getInventory().clear();
-            p.setItemOnCursor(new ItemStack(Material.AIR));
         }
     }
 

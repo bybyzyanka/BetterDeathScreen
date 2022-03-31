@@ -2,7 +2,7 @@ name: BetterDeathScreen
 main: me.tedesk.deathscreen.BetterDeathScreen
 version: ${project.version}
 author: Tedesk
-depend: [ProtocolLib]
+depend: [ ProtocolLib ]
 api-version: 1.13
 
 commands:

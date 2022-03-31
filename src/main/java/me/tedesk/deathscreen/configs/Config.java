@@ -12,7 +12,7 @@ public class Config {
     public static String SOUND_COUNTDOWN;
     public static String SOUND_RESPAWN;
     public static int TIME;
-    public static String KEEPXP;
+    public static String KEEP_XP;
     public static String ADMIN;
     public static String ANIMATION;
 
@@ -27,7 +27,7 @@ public class Config {
 
         TIME = config.getInt("time.duration");
 
-        KEEPXP = config.getString("perms.keepxp");
+        KEEP_XP = config.getString("perms.keepxp");
         ADMIN = config.getString("perms.admin");
 
         ANIMATION = config.getString("animation.type");

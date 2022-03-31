@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class Randomizer {
     public static String customtitles() {
-
         List<String> title = Messages.TITLES;
 
         for (int i = 0; i < title.size(); i++)
@@ -20,7 +19,6 @@ public class Randomizer {
     }
 
     public static String customsubtitles() {
-
         List<String> subtitle = Messages.SUBTITLES;
 
         for (int i = 0; i < subtitle.size(); i++)

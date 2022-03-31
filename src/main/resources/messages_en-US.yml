@@ -16,7 +16,7 @@ subtitles:
 time:
   singular: " second"
   plural: " seconds"
-perms:
+misc:
   reload: "&a[BDS] Plugin successfully reload."
   no-perm: "&c[BDS] You don´t have permission to reload the plugin."
 errors:

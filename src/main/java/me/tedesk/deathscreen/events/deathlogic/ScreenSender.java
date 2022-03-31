@@ -40,7 +40,7 @@ public class ScreenSender extends Listeners {
             if (e.getFinalDamage() >= pv.getHealth() && !Bukkit.getServer().isHardcore() && !(pv.getGameMode() == GameMode.SPECTATOR)) {
                 e.setCancelled(true);
                 pv.setGameMode(GameMode.SPECTATOR);
-                EntityDamageByEntityEvent fakehit = new EntityDamageByEntityEvent(damager, victim, e.getCause(), e.getFinalDamage());
+                EntityDamageByEntityEvent fakehit = new EntityDamageByEntityEvent(damager, victim, e.getCause(), e.getDamage());
                 Bukkit.getPluginManager().callEvent(fakehit);
                 FakeMechanics.sendDeath(pv);
                 FakeMechanics.changeStatisticsVictim(pv);
@@ -56,6 +56,7 @@ public class ScreenSender extends Listeners {
                 }
                 if (e.getDamager() instanceof Player) {
                     Player killer = (Player) e.getDamager();
+
                     String killab = Messages.ACTIONBAR_KILL.replace("%player%", pv.getDisplayName());
                     killab = ChatColor.translateAlternateColorCodes('&', killab);
                     ActionBarAPI.sendActionBar(killer, killab);
@@ -85,7 +86,7 @@ public class ScreenSender extends Listeners {
             if (e.getFinalDamage() >= pv.getHealth() && !(pv.getGameMode() == GameMode.SPECTATOR)) {
                 e.setCancelled(true);
                 pv.setGameMode(GameMode.SPECTATOR);
-                EntityDamageEvent fakedamage = new EntityDamageEvent(victim, e.getCause(), e.getFinalDamage());
+                EntityDamageEvent fakedamage = new EntityDamageEvent(victim, e.getCause(), e.getDamage());
                 Bukkit.getPluginManager().callEvent(fakedamage);
                 FakeMechanics.sendDeath(pv);
                 FakeMechanics.changeStatisticsVictim(pv);

@@ -33,15 +33,15 @@ public class ActionBarAPI {
 
         // Envio da ActionBar para versões antigas. (1.12 até 1.16)
         if (BetterDeathScreen.newVersion()) {
-                PacketContainer ab_packet = new PacketContainer(PacketType.Play.Server.TITLE);
-                ab_packet.getTitleActions().write(0, EnumWrappers.TitleAction.ACTIONBAR);
-                ab_packet.getChatComponents().write(0, WrappedChatComponent.fromText(message));
-                try {
-                    protocolManager.sendServerPacket(p, ab_packet);
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                    BetterDeathScreen.logger(Messages.AB_ERROR.replace("%player%", p.getDisplayName()));
-                }
+            PacketContainer ab_packet = new PacketContainer(PacketType.Play.Server.TITLE);
+            ab_packet.getTitleActions().write(0, EnumWrappers.TitleAction.ACTIONBAR);
+            ab_packet.getChatComponents().write(0, WrappedChatComponent.fromText(message));
+            try {
+                protocolManager.sendServerPacket(p, ab_packet);
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+                BetterDeathScreen.logger(Messages.AB_ERROR.replace("%player%", p.getDisplayName()));
+            }
         }
 
         // Envio da ActionBar para versões MUITO antigas. (1.8 até 1.11)

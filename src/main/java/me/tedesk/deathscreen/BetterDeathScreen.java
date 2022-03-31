@@ -1,12 +1,12 @@
 package me.tedesk.deathscreen;
 
-import me.tedesk.deathscreen.utils.Metrics;
-import me.tedesk.deathscreen.utils.Version;
 import me.tedesk.deathscreen.configs.Config;
 import me.tedesk.deathscreen.configs.ConfigHandler;
 import me.tedesk.deathscreen.configs.Messages;
 import me.tedesk.deathscreen.events.Listeners;
 import me.tedesk.deathscreen.systems.commands.ReloadConfig;
+import me.tedesk.deathscreen.utils.Metrics;
+import me.tedesk.deathscreen.utils.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,37 +17,10 @@ public class BetterDeathScreen extends JavaPlugin {
      */
     public static Version version;
     public static BetterDeathScreen plugin;
+    PluginDescriptionFile pdf = plugin.getDescription();
 
     public static void logger(String text) {
         Bukkit.getConsoleSender().sendMessage("§7[BetterDeathScreen] " + text);
-    }
-
-    PluginDescriptionFile pdf = this.getDescription();
-
-    @Override
-    public void onEnable() {
-        plugin = this;
-        version = Version.getServerVersion();
-        this.getCommand("bdsreload").setExecutor(new ReloadConfig());
-
-        Listeners.Setup();
-        createAndLoadConfigs();
-
-        if (version == Version.UNKNOWN) {
-            logger("§cYour server version is behind 1.8! §f" + "(" + plugin.getServer().getBukkitVersion() + ")");
-            logger("§cIf you think this is an error, write on the review of the plugin page.");
-            logger("§cThe plugin will now shutdown.");
-            plugin.getPluginLoader().disablePlugin(this);
-        } else {
-            logger("§aPlugin enabled! (v" + pdf.getVersion() + ")");
-            logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
-        }
-        Metrics metrics = new Metrics(this, 14729);
-    }
-
-    @Override
-    public void onDisable() {
-        logger("§cPlugin disabled! (v" + pdf.getVersion() + ")");
     }
 
     public static void createAndLoadConfigs() {
@@ -55,7 +28,6 @@ public class BetterDeathScreen extends JavaPlugin {
         Config.loadConfigs();
         ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
         Messages.loadMessages();
-
     }
 
     public static boolean veryNewVersion() {
@@ -92,5 +64,33 @@ public class BetterDeathScreen extends JavaPlugin {
         if (version == Version.v1_8)
             return true;
         return false;
+    }
+
+    @Override
+    public void onEnable() {
+        plugin = this;
+        version = Version.getServerVersion();
+        this.getCommand("bdsreload").setExecutor(new ReloadConfig());
+
+        Listeners.Setup();
+        createAndLoadConfigs();
+
+        if (version == Version.UNKNOWN) {
+            logger("§cYour server version is behind 1.8! §f" + "(" + plugin.getServer().getBukkitVersion() + ")");
+            logger("§cIf you think this is an error, write on the review of the plugin page.");
+            logger("§cThe plugin will now shutdown.");
+            plugin.getPluginLoader().disablePlugin(this);
+        }
+        if (veryNewVersion() || newVersion() || oldVersion()) {
+            logger("§aPlugin enabled! (v" + pdf.getVersion() + ")");
+            logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
+        }
+
+        Metrics metrics = new Metrics(this, 14729);
+    }
+
+    @Override
+    public void onDisable() {
+        logger("§cPlugin disabled! (v" + pdf.getVersion() + ")");
     }
 }

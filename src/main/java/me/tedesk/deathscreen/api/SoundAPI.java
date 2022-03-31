@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class SoundAPI {
 
-    public static void sendSound (Player p, Location loc, String sound, float volume, float pitch) {
+    public static void sendSound(Player p, Location loc, String sound, float volume, float pitch) {
         try {
             p.playSound(loc, Sound.valueOf(sound), volume, pitch);
         } catch (IllegalArgumentException e) {

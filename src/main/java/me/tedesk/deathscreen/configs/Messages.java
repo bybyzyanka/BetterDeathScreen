@@ -15,8 +15,6 @@ public class Messages {
     public static String PLURAL;
     public static String RELOAD;
     public static String NO_PERM;
-    public static String SET_SPAWN;
-
     public static String AB_ERROR;
     public static String TITLE_ERROR;
     public static String SOUND_ERROR;
@@ -32,9 +30,8 @@ public class Messages {
         SUBTITLES = messages.getStringList("subtitles");
         SINGULAR = messages.getString("time.singular");
         PLURAL = messages.getString("time.plural");
-        RELOAD = messages.getString("perms.reload");
-        NO_PERM = messages.getString("perms.no-perm");
-        SET_SPAWN = messages.getString("perms.set-respawn");
+        RELOAD = messages.getString("misc.reload");
+        NO_PERM = messages.getString("misc.no-perm");
         AB_ERROR = messages.getString("errors.actionbar");
         AB_ERROR = ChatColor.translateAlternateColorCodes('&', AB_ERROR);
         TITLE_ERROR = messages.getString("errors.title");
