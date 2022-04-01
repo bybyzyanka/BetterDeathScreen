@@ -1,4 +1,4 @@
-package me.tedesk.deathscreen.utils;
+package me.tedesk.plugin.utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;

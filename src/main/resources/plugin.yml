@@ -1,5 +1,5 @@
 name: BetterDeathScreen
-main: me.tedesk.deathscreen.BetterDeathScreen
+main: me.tedesk.plugin.BetterDeathScreen
 version: ${project.version}
 author: Tedesk
 depend: [ ProtocolLib ]

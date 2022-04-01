@@ -1,8 +1,8 @@
-package me.tedesk.deathscreen.events.deathlogic;
+package me.tedesk.plugin.events.deathlogic;
 
-import me.tedesk.deathscreen.configs.Config;
-import me.tedesk.deathscreen.events.Listeners;
-import me.tedesk.deathscreen.systems.general.Timer;
+import me.tedesk.plugin.configs.Config;
+import me.tedesk.plugin.events.Listeners;
+import me.tedesk.plugin.systems.general.Timer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;

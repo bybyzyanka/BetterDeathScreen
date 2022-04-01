@@ -1,6 +1,6 @@
-package me.tedesk.deathscreen.systems.general;
+package me.tedesk.plugin.systems.general;
 
-import me.tedesk.deathscreen.configs.Messages;
+import me.tedesk.plugin.configs.Messages;
 import org.bukkit.ChatColor;
 
 import java.util.List;

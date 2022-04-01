@@ -1,7 +1,7 @@
-package me.tedesk.deathscreen.api;
+package me.tedesk.plugin.api;
 
-import me.tedesk.deathscreen.BetterDeathScreen;
-import me.tedesk.deathscreen.configs.Messages;
+import me.tedesk.plugin.BetterDeathScreen;
+import me.tedesk.plugin.configs.Messages;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

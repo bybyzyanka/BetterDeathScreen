@@ -1,4 +1,4 @@
-package me.tedesk.deathscreen.configs;
+package me.tedesk.plugin.configs;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

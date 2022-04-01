@@ -1,11 +1,11 @@
-package me.tedesk.deathscreen.animations;
+package me.tedesk.plugin.animations;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
-import me.tedesk.deathscreen.BetterDeathScreen;
-import me.tedesk.deathscreen.configs.Config;
+import me.tedesk.plugin.BetterDeathScreen;
+import me.tedesk.plugin.configs.Config;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

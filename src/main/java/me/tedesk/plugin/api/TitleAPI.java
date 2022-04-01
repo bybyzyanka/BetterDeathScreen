@@ -1,4 +1,4 @@
-package me.tedesk.deathscreen.api;
+package me.tedesk.plugin.api;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -6,8 +6,8 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import me.tedesk.deathscreen.BetterDeathScreen;
-import me.tedesk.deathscreen.configs.Messages;
+import me.tedesk.plugin.configs.Messages;
+import me.tedesk.plugin.BetterDeathScreen;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;

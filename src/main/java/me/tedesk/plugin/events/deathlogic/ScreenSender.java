@@ -1,13 +1,15 @@
-package me.tedesk.deathscreen.events.deathlogic;
+package me.tedesk.plugin.events.deathlogic;
 
-import me.tedesk.deathscreen.animations.Animation;
-import me.tedesk.deathscreen.api.ActionBarAPI;
-import me.tedesk.deathscreen.api.TitleAPI;
-import me.tedesk.deathscreen.api.SoundAPI;
-import me.tedesk.deathscreen.configs.Config;
-import me.tedesk.deathscreen.configs.Messages;
-import me.tedesk.deathscreen.events.Listeners;
-import me.tedesk.deathscreen.systems.general.*;
+import me.tedesk.plugin.animations.Animation;
+import me.tedesk.plugin.api.ActionBarAPI;
+import me.tedesk.plugin.api.SoundAPI;
+import me.tedesk.plugin.configs.Config;
+import me.tedesk.plugin.configs.Messages;
+import me.tedesk.plugin.events.Listeners;
+import me.tedesk.plugin.systems.general.FakeMechanics;
+import me.tedesk.plugin.api.TitleAPI;
+import me.tedesk.plugin.systems.general.Randomizer;
+import me.tedesk.plugin.systems.general.Timer;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

@@ -1,12 +1,11 @@
-package me.tedesk.deathscreen;
+package me.tedesk.plugin;
 
-import me.tedesk.deathscreen.configs.Config;
-import me.tedesk.deathscreen.configs.ConfigHandler;
-import me.tedesk.deathscreen.configs.Messages;
-import me.tedesk.deathscreen.events.Listeners;
-import me.tedesk.deathscreen.systems.commands.ReloadConfig;
-import me.tedesk.deathscreen.utils.Metrics;
-import me.tedesk.deathscreen.utils.Version;
+import me.tedesk.plugin.configs.Config;
+import me.tedesk.plugin.configs.ConfigHandler;
+import me.tedesk.plugin.configs.Messages;
+import me.tedesk.plugin.events.Listeners;
+import me.tedesk.plugin.systems.commands.ReloadConfig;
+import me.tedesk.plugin.utils.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,17 +16,10 @@ public class BetterDeathScreen extends JavaPlugin {
      */
     public static Version version;
     public static BetterDeathScreen plugin;
-    PluginDescriptionFile pdf = plugin.getDescription();
+    PluginDescriptionFile pdf = this.getDescription();
 
     public static void logger(String text) {
         Bukkit.getConsoleSender().sendMessage("§7[BetterDeathScreen] " + text);
-    }
-
-    public static void createAndLoadConfigs() {
-        ConfigHandler.createConfig("config");
-        Config.loadConfigs();
-        ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
-        Messages.loadMessages();
     }
 
     public static boolean veryNewVersion() {
@@ -66,6 +58,13 @@ public class BetterDeathScreen extends JavaPlugin {
         return false;
     }
 
+    public static void createAndLoadConfigs() {
+        ConfigHandler.createConfig("config");
+        Config.loadConfigs();
+        ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
+        Messages.loadMessages();
+    }
+
     @Override
     public void onEnable() {
         plugin = this;
@@ -85,8 +84,6 @@ public class BetterDeathScreen extends JavaPlugin {
             logger("§aPlugin enabled! (v" + pdf.getVersion() + ")");
             logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
         }
-
-        Metrics metrics = new Metrics(this, 14729);
     }
 
     @Override

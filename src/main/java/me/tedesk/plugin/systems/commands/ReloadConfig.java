@@ -1,8 +1,8 @@
-package me.tedesk.deathscreen.systems.commands;
+package me.tedesk.plugin.systems.commands;
 
-import me.tedesk.deathscreen.BetterDeathScreen;
-import me.tedesk.deathscreen.configs.Config;
-import me.tedesk.deathscreen.configs.Messages;
+import me.tedesk.plugin.BetterDeathScreen;
+import me.tedesk.plugin.configs.Config;
+import me.tedesk.plugin.configs.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

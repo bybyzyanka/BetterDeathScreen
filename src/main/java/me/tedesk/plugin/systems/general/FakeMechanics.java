@@ -1,6 +1,6 @@
-package me.tedesk.deathscreen.systems.general;
+package me.tedesk.plugin.systems.general;
 
-import me.tedesk.deathscreen.configs.Config;
+import me.tedesk.plugin.configs.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;

@@ -1,8 +1,8 @@
-package me.tedesk.deathscreen.events;
+package me.tedesk.plugin.events;
 
-import me.tedesk.deathscreen.BetterDeathScreen;
-import me.tedesk.deathscreen.events.deathlogic.Join;
-import me.tedesk.deathscreen.events.deathlogic.ScreenSender;
+import me.tedesk.plugin.BetterDeathScreen;
+import me.tedesk.plugin.events.deathlogic.Join;
+import me.tedesk.plugin.events.deathlogic.ScreenSender;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;

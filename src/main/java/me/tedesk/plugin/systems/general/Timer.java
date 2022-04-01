@@ -1,10 +1,10 @@
-package me.tedesk.deathscreen.systems.general;
+package me.tedesk.plugin.systems.general;
 
-import me.tedesk.deathscreen.BetterDeathScreen;
-import me.tedesk.deathscreen.api.ActionBarAPI;
-import me.tedesk.deathscreen.api.SoundAPI;
-import me.tedesk.deathscreen.configs.Config;
-import me.tedesk.deathscreen.configs.Messages;
+import me.tedesk.plugin.api.ActionBarAPI;
+import me.tedesk.plugin.api.SoundAPI;
+import me.tedesk.plugin.configs.Config;
+import me.tedesk.plugin.configs.Messages;
+import me.tedesk.plugin.BetterDeathScreen;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
