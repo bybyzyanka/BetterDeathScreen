@@ -8,6 +8,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import me.tedesk.plugin.configs.Messages;
 import me.tedesk.plugin.BetterDeathScreen;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,6 +18,7 @@ public class TitleAPI {
     @SuppressWarnings("deprecation")
     public static void sendTitle(Player p, Integer fadeIn, Integer stay, Integer fadeOut, String title, String subtitle) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+        String title_error = ChatColor.translateAlternateColorCodes('&', Messages.TITLE_ERROR);
 
         // Envio da TitleBar para versões novas. (1.17 até 1.19)
         if (BetterDeathScreen.veryNewVersion()) {
@@ -40,7 +42,7 @@ public class TitleAPI {
                 protocolManager.sendServerPacket(p, title_packet);
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
-                BetterDeathScreen.logger(Messages.TITLE_ERROR.replace("%player%", p.getDisplayName()));
+                BetterDeathScreen.logger(title_error.replace("%player%", p.getDisplayName()));
             }
         }
 
@@ -66,7 +68,7 @@ public class TitleAPI {
                 protocolManager.sendServerPacket(p, title_packet);
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
-                BetterDeathScreen.logger(Messages.TITLE_ERROR.replace("%player%", p.getDisplayName()));
+                BetterDeathScreen.logger(title_error.replace("%player%", p.getDisplayName()));
             }
         }
     }

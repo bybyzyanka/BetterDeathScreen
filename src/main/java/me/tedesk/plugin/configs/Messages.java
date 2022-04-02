@@ -33,10 +33,7 @@ public class Messages {
         RELOAD = messages.getString("misc.reload");
         NO_PERM = messages.getString("misc.no-perm");
         AB_ERROR = messages.getString("errors.actionbar");
-        AB_ERROR = ChatColor.translateAlternateColorCodes('&', AB_ERROR);
         TITLE_ERROR = messages.getString("errors.title");
-        TITLE_ERROR = ChatColor.translateAlternateColorCodes('&', TITLE_ERROR);
         SOUND_ERROR = messages.getString("errors.sound");
-        SOUND_ERROR = ChatColor.translateAlternateColorCodes('&', SOUND_ERROR);
     }
 }

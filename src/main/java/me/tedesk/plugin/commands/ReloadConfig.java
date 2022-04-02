@@ -19,8 +19,7 @@ public class ReloadConfig implements CommandExecutor {
         String noperm = ChatColor.translateAlternateColorCodes('&', Messages.NO_PERM);
 
         if (!(s instanceof Player)) {
-            Config.loadConfigs();
-            Messages.loadMessages();
+            BetterDeathScreen.createAndLoadConfigs();
             s.sendMessage(reloaded);
         } else if (!s.hasPermission(Config.ADMIN)) {
             s.sendMessage(noperm);
