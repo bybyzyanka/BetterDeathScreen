@@ -1,4 +1,4 @@
-package me.tedesk.plugin.systems.general;
+package me.tedesk.plugin.systems;
 
 import me.tedesk.plugin.configs.Config;
 import org.bukkit.Bukkit;

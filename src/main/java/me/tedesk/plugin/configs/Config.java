@@ -15,6 +15,7 @@ public class Config {
     public static String KEEP_XP;
     public static String ADMIN;
     public static String ANIMATION;
+    public static boolean DEATH_MESSAGE;
 
     public static void loadConfigs() {
         FileConfiguration config = ConfigHandler.getConfig("config");
@@ -31,5 +32,6 @@ public class Config {
         ADMIN = config.getString("perms.admin");
 
         ANIMATION = config.getString("animation.type");
+        DEATH_MESSAGE = config.getBoolean("misc.death-messages");
     }
 }

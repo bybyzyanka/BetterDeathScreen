@@ -4,7 +4,7 @@ import me.tedesk.plugin.configs.Config;
 import me.tedesk.plugin.configs.ConfigHandler;
 import me.tedesk.plugin.configs.Messages;
 import me.tedesk.plugin.events.Listeners;
-import me.tedesk.plugin.systems.commands.ReloadConfig;
+import me.tedesk.plugin.commands.ReloadConfig;
 import me.tedesk.plugin.utils.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;

@@ -1,4 +1,4 @@
-package me.tedesk.plugin.systems.general;
+package me.tedesk.plugin.systems;
 
 import me.tedesk.plugin.api.ActionBarAPI;
 import me.tedesk.plugin.api.SoundAPI;
@@ -41,6 +41,7 @@ public class Timer {
                     double health = p.getMaxHealth();
                     p.setHealth(health);
                     p.setGameMode(GameMode.SURVIVAL);
+                    p.setFoodLevel(20);
                     try {
                         Location bedspawn = new Location(p.getBedSpawnLocation().getWorld(), p.getBedSpawnLocation().getX(), p.getBedSpawnLocation().getY(), p.getBedSpawnLocation().getZ(), p.getBedSpawnLocation().getYaw(), p.getBedSpawnLocation().getPitch());
                         p.teleport(bedspawn);
@@ -79,6 +80,7 @@ public class Timer {
                     ActionBarAPI.sendActionBar(p, "§r");
                     double health = p.getMaxHealth();
                     p.setHealth(health);
+                    p.setFoodLevel(20);
                     p.updateInventory();
                     cancel();
                 }

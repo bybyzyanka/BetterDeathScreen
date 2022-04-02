@@ -1,4 +1,4 @@
-package me.tedesk.plugin.systems.commands;
+package me.tedesk.plugin.commands;
 
 import me.tedesk.plugin.BetterDeathScreen;
 import me.tedesk.plugin.configs.Config;

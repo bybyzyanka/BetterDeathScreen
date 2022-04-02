@@ -2,7 +2,7 @@ package me.tedesk.plugin.events.deathlogic;
 
 import me.tedesk.plugin.configs.Config;
 import me.tedesk.plugin.events.Listeners;
-import me.tedesk.plugin.systems.general.Timer;
+import me.tedesk.plugin.systems.Timer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
