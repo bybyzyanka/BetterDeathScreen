@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +13,7 @@ import org.bukkit.potion.PotionEffect;
 
 public class FakeMechanics {
 
-    public static void sendDeath(Player p){
+    public static void sendDeath(Player p) {
         World w = Bukkit.getServer().getWorld(p.getWorld().getName());
 
         if (!p.hasPermission(Config.KEEP_XP)) {
@@ -26,10 +25,10 @@ public class FakeMechanics {
         for (PotionEffect effect : p.getActivePotionEffects()) {
             p.removePotionEffect(effect.getType());
         }
-        PlayerDeathEvent playerdeath = new PlayerDeathEvent(p, null, 0, null);
-        Bukkit.getPluginManager().callEvent(playerdeath);
         EntityDeathEvent entdeath = new EntityDeathEvent(p, null);
         Bukkit.getPluginManager().callEvent(entdeath);
+        PlayerDeathEvent playerdeath = new PlayerDeathEvent(p, null, 0, null);
+        Bukkit.getPluginManager().callEvent(playerdeath);
     }
 
     public static void dropInventory(Player p) {
@@ -37,27 +36,46 @@ public class FakeMechanics {
         World w = Bukkit.getServer().getWorld(p.getWorld().getName());
 
         if (w.getGameRuleValue("keepInventory").equals("false")) {
+            p.updateInventory();
             try {
-                for (ItemStack itemStackArmor : p.getInventory().getArmorContents()) {
-                    p.getWorld().dropItemNaturally(p.getLocation(), itemStackArmor);
-                    p.getInventory().removeItem(itemStackArmor);
+                int remove = 0;
+                for (ItemStack stack : p.getInventory().getArmorContents().clone()) {
+                    if (stack == null)
+                        continue;
+                    if (stack.getType() != Material.AIR) {
+                        remove++;
+                        p.getWorld().dropItemNaturally(p.getLocation(), stack);
+                        p.getInventory().removeItem(stack);
+                    }
                 }
-            } catch (IllegalArgumentException ignored) {
+                p.getInventory().setHelmet(null);
+                p.getInventory().setChestplate(null);
+                p.getInventory().setLeggings(null);
+                p.getInventory().setBoots(null);
+            } catch (RuntimeException ignored) {
             }
             try {
-                for (ItemStack itemStack : p.getInventory().getContents()) {
-                    p.getWorld().dropItemNaturally(p.getLocation(), itemStack);
+                int remove = 0;
+                for (ItemStack stack : p.getInventory().getContents().clone()) {
+                    if (stack == null)
+                        continue;
+                    if (stack.getType() != Material.AIR) {
+                        remove++;
+                        p.getWorld().dropItemNaturally(p.getLocation(), stack);
+                        p.getInventory().removeItem(stack);
+                    }
+                }
+            } catch (RuntimeException ignored) {
+            }
+            try {
+                if (p.getItemOnCursor() == null)
+                    return;
+                if (p.getItemOnCursor() != null) {
                     p.getWorld().dropItemNaturally(p.getLocation(), p.getItemOnCursor());
-                    p.setItemOnCursor(new ItemStack(Material.AIR));
-                    p.getInventory().removeItem(itemStack);
+                    p.setItemOnCursor(null);
                 }
-            } catch (IllegalArgumentException ignored) {
+            } catch (RuntimeException ignored) {
             }
-            p.getInventory().setHelmet(null);
-            p.getInventory().setChestplate(null);
-            p.getInventory().setLeggings(null);
-            p.getInventory().setBoots(null);
-            p.getInventory().clear();
         }
     }
 
@@ -66,9 +84,7 @@ public class FakeMechanics {
         p.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
     }
 
-    public static void changeStatisticsKiller(Player p, EntityDamageByEntityEvent event) {
+    public static void changeStatisticsKiller(Player p) {
         p.setStatistic(Statistic.PLAYER_KILLS, p.getStatistic(Statistic.PLAYER_KILLS) + 1);
-        p.setStatistic(Statistic.KILL_ENTITY, p.getStatistic(Statistic.KILL_ENTITY) + 1);
-        p.setStatistic(Statistic.DAMAGE_DEALT, p.getStatistic(Statistic.DAMAGE_DEALT) + (int) event.getDamage());
     }
 }

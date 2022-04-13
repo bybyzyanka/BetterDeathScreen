@@ -6,6 +6,6 @@ depend: [ ProtocolLib ]
 api-version: 1.13
 
 commands:
-  bdsreload:
-    description: Reload config.
+  bds:
+    description: Main command of the plugin.
     usage: /<command>

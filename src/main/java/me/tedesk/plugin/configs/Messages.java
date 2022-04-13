@@ -1,6 +1,5 @@
 package me.tedesk.plugin.configs;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;

@@ -1,10 +1,11 @@
 package me.tedesk.plugin;
 
+import me.tedesk.plugin.commands.MainCommand;
 import me.tedesk.plugin.configs.Config;
 import me.tedesk.plugin.configs.ConfigHandler;
 import me.tedesk.plugin.configs.Messages;
 import me.tedesk.plugin.events.Listeners;
-import me.tedesk.plugin.commands.ReloadConfig;
+import me.tedesk.plugin.utils.Metrics;
 import me.tedesk.plugin.utils.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -69,7 +70,7 @@ public class BetterDeathScreen extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         version = Version.getServerVersion();
-        this.getCommand("bdsreload").setExecutor(new ReloadConfig());
+        this.getCommand("bds").setExecutor(new MainCommand());
 
         Listeners.Setup();
         createAndLoadConfigs();
@@ -84,6 +85,7 @@ public class BetterDeathScreen extends JavaPlugin {
             logger("§aPlugin enabled! (v" + pdf.getVersion() + ")");
             logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
         }
+        Metrics metrics = new Metrics(this, 14729);
     }
 
     @Override

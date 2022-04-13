@@ -6,8 +6,8 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import me.tedesk.plugin.configs.Messages;
 import me.tedesk.plugin.BetterDeathScreen;
+import me.tedesk.plugin.configs.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

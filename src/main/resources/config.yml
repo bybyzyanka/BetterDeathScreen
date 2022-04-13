@@ -11,6 +11,7 @@
 #Please check the Sounds for your server version!
 misc: #Available languages: en-US, pt-BR
   language: 'en-US'
+  death-messages: true
 sound:
   death: BLAZE_DEATH
   countdown: NOTE_BASS_DRUM

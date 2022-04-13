@@ -1,13 +1,16 @@
 package me.tedesk.plugin.systems;
 
+import me.tedesk.plugin.BetterDeathScreen;
 import me.tedesk.plugin.api.ActionBarAPI;
 import me.tedesk.plugin.api.SoundAPI;
 import me.tedesk.plugin.configs.Config;
 import me.tedesk.plugin.configs.Messages;
-import me.tedesk.plugin.BetterDeathScreen;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Timer {
@@ -25,15 +28,15 @@ public class Timer {
                     cancel();
                 }
                 if (time > 1) {
-                    String actionbarplural = Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL);
-                    actionbarplural = ChatColor.translateAlternateColorCodes('&', actionbarplural);
-                    ActionBarAPI.sendActionBar(p, actionbarplural);
+                    String abplural = Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL);
+                    abplural = ChatColor.translateAlternateColorCodes('&', abplural);
+                    ActionBarAPI.sendActionBar(p, abplural);
                     SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_COUNTDOWN, 3, 1);
                 }
                 if (time == 1) {
-                    String actionbarsingular = Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR);
-                    actionbarsingular = ChatColor.translateAlternateColorCodes('&', actionbarsingular);
-                    ActionBarAPI.sendActionBar(p, actionbarsingular);
+                    String absingular = Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR);
+                    absingular = ChatColor.translateAlternateColorCodes('&', absingular);
+                    ActionBarAPI.sendActionBar(p, absingular);
                     SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_COUNTDOWN, 3, 1);
                 }
                 if (time <= 0) {
@@ -42,14 +45,14 @@ public class Timer {
                     p.setHealth(health);
                     p.setGameMode(GameMode.SURVIVAL);
                     p.setFoodLevel(20);
-                    try {
-                        Location bedspawn = new Location(p.getBedSpawnLocation().getWorld(), p.getBedSpawnLocation().getX(), p.getBedSpawnLocation().getY(), p.getBedSpawnLocation().getZ(), p.getBedSpawnLocation().getYaw(), p.getBedSpawnLocation().getPitch());
-                        p.teleport(bedspawn);
-                        PlayerRespawnEvent respawn = new PlayerRespawnEvent(p, bedspawn, true);
+                    if (p.getBedSpawnLocation() != null) {
+                        p.teleport(p.getBedSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        PlayerRespawnEvent respawn = new PlayerRespawnEvent(p, p.getBedSpawnLocation(), true);
                         Bukkit.getPluginManager().callEvent(respawn);
-                    } catch (NullPointerException e) {
-                        p.teleport(Config.DEFAULT_WORLD_SPAWN);
-                        PlayerRespawnEvent respawn = new PlayerRespawnEvent(p, Config.DEFAULT_WORLD_SPAWN, false);
+                    }
+                    if (p.getBedSpawnLocation() == null) {
+                        p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        PlayerRespawnEvent respawn = new PlayerRespawnEvent(p, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
                         Bukkit.getPluginManager().callEvent(respawn);
                     }
                     SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_RESPAWN, 3, 1);
@@ -68,11 +71,11 @@ public class Timer {
             @Override
             public void run() {
 
-                String actionbarhc = Messages.ACTIONBAR_HC;
-                actionbarhc = ChatColor.translateAlternateColorCodes('&', actionbarhc);
-                ActionBarAPI.sendActionBar(p, actionbarhc);
+                String abhardcore = Messages.ACTIONBAR_HC;
+                abhardcore = ChatColor.translateAlternateColorCodes('&', abhardcore);
+                ActionBarAPI.sendActionBar(p, abhardcore);
 
-                if (!p.isOnline()){
+                if (!p.isOnline()) {
                     cancel();
                 }
                 // Ao mudar o modo de jogo do jogador, ele renasce.

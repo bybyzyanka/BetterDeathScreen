@@ -51,7 +51,6 @@ public class Animation {
         if (Config.ANIMATION.equals("EXPLOSION")) {
             explosionAnimation(p);
         }
-
         if (Config.ANIMATION.equals("LIGHTNING")) {
             lightningAnimation(p);
         }
