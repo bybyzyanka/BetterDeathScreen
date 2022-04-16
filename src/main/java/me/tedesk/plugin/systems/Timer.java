@@ -6,7 +6,6 @@ import me.tedesk.plugin.api.SoundAPI;
 import me.tedesk.plugin.configs.Config;
 import me.tedesk.plugin.configs.Messages;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -28,32 +27,31 @@ public class Timer {
                     cancel();
                 }
                 if (time > 1) {
-                    String abplural = Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL);
-                    abplural = ChatColor.translateAlternateColorCodes('&', abplural);
-                    ActionBarAPI.sendActionBar(p, abplural);
+                    String ab_plural = Messages.ACTIONBAR_DEATH.replace("&", "§").replace("%time%", time + Messages.PLURAL);
+                    ActionBarAPI.sendActionBar(p, ab_plural);
                     SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_COUNTDOWN, 3, 1);
                 }
                 if (time == 1) {
-                    String absingular = Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR);
-                    absingular = ChatColor.translateAlternateColorCodes('&', absingular);
-                    ActionBarAPI.sendActionBar(p, absingular);
+                    String ab_singular = Messages.ACTIONBAR_DEATH.replace("&", "§").replace("%time%", time + Messages.SINGULAR);
+                    ActionBarAPI.sendActionBar(p, ab_singular);
                     SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_COUNTDOWN, 3, 1);
                 }
                 if (time <= 0) {
+                    Config.DEAD_PLAYERS.remove(p.getName());
                     ActionBarAPI.sendActionBar(p, "§r");
                     double health = p.getMaxHealth();
                     p.setHealth(health);
-                    p.setGameMode(GameMode.SURVIVAL);
                     p.setFoodLevel(20);
-                    if (p.getBedSpawnLocation() != null) {
-                        p.teleport(p.getBedSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                        PlayerRespawnEvent respawn = new PlayerRespawnEvent(p, p.getBedSpawnLocation(), true);
-                        Bukkit.getPluginManager().callEvent(respawn);
-                    }
+                    p.setGameMode(GameMode.SURVIVAL);
                     if (p.getBedSpawnLocation() == null) {
-                        p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                         PlayerRespawnEvent respawn = new PlayerRespawnEvent(p, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
                         Bukkit.getPluginManager().callEvent(respawn);
+                        p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    }
+                    if (p.getBedSpawnLocation() != null) {
+                        PlayerRespawnEvent respawn = new PlayerRespawnEvent(p, p.getBedSpawnLocation(), true);
+                        Bukkit.getPluginManager().callEvent(respawn);
+                        p.teleport(p.getBedSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                     }
                     SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_RESPAWN, 3, 1);
                     p.updateInventory();
@@ -71,15 +69,15 @@ public class Timer {
             @Override
             public void run() {
 
-                String abhardcore = Messages.ACTIONBAR_HC;
-                abhardcore = ChatColor.translateAlternateColorCodes('&', abhardcore);
-                ActionBarAPI.sendActionBar(p, abhardcore);
+                String ab_hc = Messages.ACTIONBAR_HC.replace("&", "§");
+                ActionBarAPI.sendActionBar(p, ab_hc);
 
                 if (!p.isOnline()) {
                     cancel();
                 }
                 // Ao mudar o modo de jogo do jogador, ele renasce.
                 if (!(p.getGameMode() == GameMode.SPECTATOR)) {
+                    Config.DEAD_PLAYERS.remove(p.getName());
                     ActionBarAPI.sendActionBar(p, "§r");
                     double health = p.getMaxHealth();
                     p.setHealth(health);

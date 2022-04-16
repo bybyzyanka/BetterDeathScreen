@@ -4,8 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Config {
 
+    public static List<String> DEAD_PLAYERS = new ArrayList<>();
     public static Location DEFAULT_WORLD_SPAWN;
     public static String LANGUAGE;
     public static String SOUND_DEATH;

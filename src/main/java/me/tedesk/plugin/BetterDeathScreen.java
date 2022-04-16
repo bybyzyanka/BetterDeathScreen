@@ -20,7 +20,7 @@ public class BetterDeathScreen extends JavaPlugin {
     PluginDescriptionFile pdf = this.getDescription();
 
     public static void logger(String text) {
-        Bukkit.getConsoleSender().sendMessage("§7[BetterDeathScreen] " + text);
+        Bukkit.getConsoleSender().sendMessage("[BetterDeathScreen] " + text);
     }
 
     public static boolean veryNewVersion() {
@@ -70,21 +70,23 @@ public class BetterDeathScreen extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         version = Version.getServerVersion();
-        this.getCommand("bds").setExecutor(new MainCommand());
 
-        Listeners.Setup();
+        Listeners.setup();
         createAndLoadConfigs();
 
         if (version == Version.UNKNOWN) {
             logger("§cYour server version is behind 1.8! §f" + "(" + plugin.getServer().getBukkitVersion() + ")");
-            logger("§cIf you think this is an error, write on the review of the plugin page.");
+            logger("§cIf you think this is an error, contact the author: " + pdf.getAuthors());
             logger("§cThe plugin will now shutdown.");
             plugin.getPluginLoader().disablePlugin(this);
+            return;
         }
         if (veryNewVersion() || newVersion() || oldVersion()) {
             logger("§aPlugin enabled! (v" + pdf.getVersion() + ")");
             logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
         }
+
+        this.getCommand("bds").setExecutor(new MainCommand());
         Metrics metrics = new Metrics(this, 14729);
     }
 

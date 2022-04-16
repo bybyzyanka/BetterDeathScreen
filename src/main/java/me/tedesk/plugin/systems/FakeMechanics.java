@@ -25,10 +25,10 @@ public class FakeMechanics {
         for (PotionEffect effect : p.getActivePotionEffects()) {
             p.removePotionEffect(effect.getType());
         }
-        EntityDeathEvent entdeath = new EntityDeathEvent(p, null);
-        Bukkit.getPluginManager().callEvent(entdeath);
-        PlayerDeathEvent playerdeath = new PlayerDeathEvent(p, null, 0, null);
-        Bukkit.getPluginManager().callEvent(playerdeath);
+        EntityDeathEvent ent_death = new EntityDeathEvent(p, null);
+        Bukkit.getPluginManager().callEvent(ent_death);
+        PlayerDeathEvent player_death = new PlayerDeathEvent(p, null, 0, null);
+        Bukkit.getPluginManager().callEvent(player_death);
     }
 
     public static void dropInventory(Player p) {
