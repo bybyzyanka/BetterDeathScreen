@@ -44,6 +44,7 @@ public class TitleAPI {
                 e.printStackTrace();
                 BetterDeathScreen.logger(title_error.replace("%player%", p.getDisplayName()));
             }
+            return;
         }
 
         // Envio da TitleBar para versões antigas (1.12 até 1.16) e versões MUITO antigas (1.8 até 1.11).

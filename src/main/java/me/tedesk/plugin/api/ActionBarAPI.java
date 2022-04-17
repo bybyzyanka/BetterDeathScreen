@@ -31,6 +31,7 @@ public class ActionBarAPI {
                 e.printStackTrace();
                 BetterDeathScreen.logger(ab_error.replace("%player%", p.getDisplayName()));
             }
+            return;
         }
 
         // Envio da ActionBar para versões antigas. (1.12 até 1.16)
@@ -44,6 +45,7 @@ public class ActionBarAPI {
                 e.printStackTrace();
                 BetterDeathScreen.logger(ab_error.replace("%player%", p.getDisplayName()));
             }
+            return;
         }
 
         // Envio da ActionBar para versões MUITO antigas. (1.8 até 1.11)

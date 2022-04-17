@@ -18,7 +18,7 @@ public class PlayerEvent extends Listeners {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
         // Reinicia a contagem ou mostra a mensagem do modo de jogo hardcore ao reconectar.
-        if (p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) {
+        if ((p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) || Config.DEAD_PLAYERS.contains(p.getName())) {
             if (Bukkit.getServer().isHardcore()) {
                 Timer.hardcore(p);
             }
