@@ -1,15 +1,15 @@
-package me.tedesk.plugin.events.entity;
+package me.tedesk.events.entity;
 
-import me.tedesk.plugin.animations.Animation;
-import me.tedesk.plugin.api.ActionBarAPI;
-import me.tedesk.plugin.api.SoundAPI;
-import me.tedesk.plugin.api.TitleAPI;
-import me.tedesk.plugin.configs.Config;
-import me.tedesk.plugin.configs.Messages;
-import me.tedesk.plugin.events.Listeners;
-import me.tedesk.plugin.systems.FakeMechanics;
-import me.tedesk.plugin.systems.Randomizer;
-import me.tedesk.plugin.systems.Timer;
+import me.tedesk.api.SoundAPI;
+import me.tedesk.configs.Config;
+import me.tedesk.events.Listeners;
+import me.tedesk.animations.Animation;
+import me.tedesk.api.ActionBarAPI;
+import me.tedesk.api.TitleAPI;
+import me.tedesk.configs.Messages;
+import me.tedesk.systems.FakeMechanics;
+import me.tedesk.systems.Randomizer;
+import me.tedesk.systems.Tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.block.Block;
@@ -25,48 +25,49 @@ public class DeathScreen extends Listeners {
 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onEntityDamage(EntityDamageEvent event) {
+    public void onEntityDamage(EntityDamageEvent e) {
 
-        Entity ent_victim = event.getEntity();
+        Entity ent_victim = e.getEntity();
 
         int time = Config.TIME;
         if (time <= 0) {
             time = 1;
         }
 
-        if (event.getEntity() instanceof Player) {
+        if (e.getEntity() instanceof Player) {
             Player pv = (Player) ent_victim;
 
             if (pv.getGameMode() == GameMode.SPECTATOR || Config.DEAD_PLAYERS.contains(pv.getName())) {
-                event.setCancelled(true);
+                e.setCancelled(true);
                 return;
             }
 
-            if (event.getFinalDamage() >= pv.getHealth()) {
+            if (e.getFinalDamage() >= pv.getHealth()) {
                 if (!(pv.getGameMode() == GameMode.SPECTATOR) || !(Config.DEAD_PLAYERS.contains(pv.getName()))) {
-                    event.setCancelled(true);
+                    e.setCancelled(true);
                     Config.DEAD_PLAYERS.add(pv.getName());
                     pv.setHealth(0.1); // Algo coméstico, utilizado para alterar as placeholders relacionadas à vida do jogador.
-                    EntityDamageEvent fake_damage = new EntityDamageEvent(event.getEntity(), event.getCause(), event.getDamage());
+                    EntityDamageEvent fake_damage = new EntityDamageEvent(e.getEntity(), e.getCause(), e.getDamage());
                     Bukkit.getPluginManager().callEvent(fake_damage);
                     // Usado caso o dano que mata o jogador é causado por um bloco.
-                    if (event instanceof EntityDamageByBlockEvent) {
-                        Block b_damager = ((EntityDamageByBlockEvent) event).getDamager();
-                        EntityDamageByBlockEvent fake_block_damage = new EntityDamageByBlockEvent(b_damager, ent_victim, event.getCause(), event.getDamage());
+                    if (e instanceof EntityDamageByBlockEvent) {
+                        Block b_damager = ((EntityDamageByBlockEvent) e).getDamager();
+                        EntityDamageByBlockEvent fake_block_damage = new EntityDamageByBlockEvent(b_damager, ent_victim, e.getCause(), e.getDamage());
                         Bukkit.getPluginManager().callEvent(fake_block_damage);
                     }
-                    // Usado caso o dano que mata o jogador é causado por um entidade.
-                    if (event instanceof EntityDamageByEntityEvent) {
-                        Entity ent_damager = ((EntityDamageByEntityEvent) event).getDamager();
-                        EntityDamageByEntityEvent fake_entity_damage = new EntityDamageByEntityEvent(ent_damager, ent_victim, event.getCause(), event.getDamage());
+                    // Usado caso o dano que mata o jogador é causado por uma entidade.
+                    if (e instanceof EntityDamageByEntityEvent) {
+                        Entity ent_damager = ((EntityDamageByEntityEvent) e).getDamager();
+                        EntityDamageByEntityEvent fake_entity_damage = new EntityDamageByEntityEvent(ent_damager, ent_victim, e.getCause(), e.getDamage());
                         Bukkit.getPluginManager().callEvent(fake_entity_damage);
-                        // Usado caso o dano que mata o jogador é causado por outro jogador.
+                        // Usado caso a entidade é um jogador.
                         if (ent_damager instanceof Player) {
                             Player pd = (Player) ent_damager;
 
                             String kill_ab = Messages.ACTIONBAR_KILL.replace("&", "§").replace("%player%", pv.getDisplayName());
                             ActionBarAPI.sendActionBar(pd, kill_ab);
                             FakeMechanics.changeStatisticsKiller(pd);
+                            SoundAPI.sendSound(pd, pd.getLocation(), Config.SOUND_KILL, 1,1);
                         }
                     }
                     FakeMechanics.sendDeath(pv);
@@ -76,11 +77,12 @@ public class DeathScreen extends Listeners {
                     pv.setGameMode(GameMode.SPECTATOR);
                     SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
                     TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.customtitles(), Randomizer.customsubtitles());
-                    if (Bukkit.getServer().isHardcore()) {
-                        Timer.hardcore(pv);
-                    }
                     if (!Bukkit.getServer().isHardcore()) {
-                        Timer.normal(pv);
+                        Tasks.normalTimer(pv);
+                        return;
+                    }
+                    if (Bukkit.getServer().isHardcore()) {
+                        Tasks.hardcoreTimer(pv);
                     }
                 }
             }

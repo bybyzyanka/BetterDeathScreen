@@ -1,7 +1,7 @@
 actionbar:
   death: '&7Você ressurgirá em &6%time%.'
   hardcore: '&7Você não irá renascer...'
-  kill: '&c&lELIMINADO! &f%player%'
+  kill: '&cVocê matou &f%player%!'
 titles:
   - "&cVOCÊ FOI ELIMINADO"
   - "&cVOCÊ MORREU"
@@ -16,10 +16,15 @@ subtitles:
 time:
   singular: " segundo"
   plural: " segundos"
-misc:
-  reload: "&a[BDS] Plugin recarregado com sucesso."
-  no-perm: "&c[BDS] Você não tem permissão para usar esse comando."
 errors:
   actionbar: "&cNão foi possivel enviar a actionbar para o jogador %player%"
   title: "&cNão foi possivel enviar o title para o jogador %player%"
   sound: "&cEsse som não existe na versão de seu servidor. Verifique sua config.yml"
+commands:
+  help:
+    - '&cBetterDeathScreen &7- Comandos'
+    - ''
+    - '&c/bds reload &7- &fRecarrega a configuração do plugin.'
+    - ''
+  reload: "&a[BDS] Plugin recarregado com sucesso."
+  no-perm: "&c[BDS] Você não tem permissão para usar esse comando."

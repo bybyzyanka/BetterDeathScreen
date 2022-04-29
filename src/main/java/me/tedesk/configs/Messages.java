@@ -1,4 +1,4 @@
-package me.tedesk.plugin.configs;
+package me.tedesk.configs;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -12,6 +12,7 @@ public class Messages {
     public static List<String> SUBTITLES;
     public static String SINGULAR;
     public static String PLURAL;
+    public static List<String> HELP;
     public static String RELOAD;
     public static String NO_PERM;
     public static String AB_ERROR;
@@ -25,12 +26,17 @@ public class Messages {
         ACTIONBAR_DEATH = messages.getString("actionbar.death");
         ACTIONBAR_KILL = messages.getString("actionbar.kill");
         ACTIONBAR_HC = messages.getString("actionbar.hardcore");
+
         TITLES = messages.getStringList("titles");
         SUBTITLES = messages.getStringList("subtitles");
+
         SINGULAR = messages.getString("time.singular");
         PLURAL = messages.getString("time.plural");
-        RELOAD = messages.getString("misc.reload");
-        NO_PERM = messages.getString("misc.no-perm");
+
+        HELP = messages.getStringList("commands.help");
+        RELOAD = messages.getString("commands.reload");
+        NO_PERM = messages.getString("commands.no-perm");
+
         AB_ERROR = messages.getString("errors.actionbar");
         TITLE_ERROR = messages.getString("errors.title");
         SOUND_ERROR = messages.getString("errors.sound");

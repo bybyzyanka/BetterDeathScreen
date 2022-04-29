@@ -1,7 +1,7 @@
-package me.tedesk.plugin.api;
+package me.tedesk.api;
 
-import me.tedesk.plugin.BetterDeathScreen;
-import me.tedesk.plugin.configs.Messages;
+import me.tedesk.BetterDeathScreen;
+import me.tedesk.configs.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;

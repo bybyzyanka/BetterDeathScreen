@@ -1,7 +1,7 @@
 actionbar:
   death: '&7You will respawn in &6%time%.'
   hardcore: '&7You will never respawn again...'
-  kill: '&c&lELIMINATED! &f%player%'
+  kill: '&cYou killed &f%player%!'
 titles:
   - "&cYOU HAVE BEEN SLAIN"
   - "&cYOU DIED"
@@ -16,10 +16,15 @@ subtitles:
 time:
   singular: " second"
   plural: " seconds"
-misc:
-  reload: "&a[BDS] Plugin successfully reload."
-  no-perm: "&c[BDS] You don´t have permission to reload the plugin."
 errors:
   actionbar: "&cCould not send the actionbar to the player %player%"
   title: "&cCould not send the title message to the player %player%"
   sound: "&cThis sound does not exist in your server version. Check your config.yml"
+commands:
+  help:
+    - '&cBetterDeathScreen &7- Commands'
+    - ''
+    - '&c/bds reload &7- &fReloads the configuration of the plugin.'
+    - ''
+  reload: "&a[BDS] Plugin successfully reload."
+  no-perm: "&c[BDS] You don´t have permission use this command."

@@ -1,6 +1,6 @@
-package me.tedesk.plugin.configs;
+package me.tedesk.configs;
 
-import me.tedesk.plugin.BetterDeathScreen;
+import me.tedesk.BetterDeathScreen;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

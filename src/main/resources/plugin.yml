@@ -1,8 +1,7 @@
 name: BetterDeathScreen
-main: me.tedesk.plugin.BetterDeathScreen
+main: me.tedesk.BetterDeathScreen
 version: ${project.version}
 author: Tedesk
-load: POSTWORLD
 depend: [ ProtocolLib ]
 api-version: 1.13
 

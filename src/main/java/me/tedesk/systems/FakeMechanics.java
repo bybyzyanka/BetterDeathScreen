@@ -1,6 +1,6 @@
-package me.tedesk.plugin.systems;
+package me.tedesk.systems;
 
-import me.tedesk.plugin.configs.Config;
+import me.tedesk.configs.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;

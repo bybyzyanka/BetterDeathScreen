@@ -1,10 +1,9 @@
-package me.tedesk.plugin.commands;
+package me.tedesk.commands;
 
-import me.tedesk.plugin.BetterDeathScreen;
-import me.tedesk.plugin.configs.Config;
-import me.tedesk.plugin.configs.Messages;
+import me.tedesk.BetterDeathScreen;
+import me.tedesk.configs.Config;
+import me.tedesk.configs.Messages;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,32 +14,33 @@ public class MainCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender s, Command cnd, String lbl, String[] args) {
 
-        String reloaded = ChatColor.translateAlternateColorCodes('&', Messages.RELOAD);
-        String noperm = ChatColor.translateAlternateColorCodes('&', Messages.NO_PERM);
-
         if (!(s instanceof Player)) {
             if (args[0].equals("reload")) {
                 BetterDeathScreen.createAndLoadConfigs();
-                s.sendMessage(reloaded);
+                s.sendMessage(Messages.RELOAD.replace("&", "§"));
             }
             if (!args[0].equals("reload")) {
-                s.sendMessage("§cUnico comando disponível: /bds reload");
+                for (String help : Messages.HELP) {
+                    s.sendMessage(help.replace("&", "§"));
+                }
             }
         }
         if (s instanceof Player) {
             if (args.length != 1) {
-                s.sendMessage("§cUnico comando disponível: /bds reload");
+                for (String help : Messages.HELP) {
+                    s.sendMessage(help.replace("&", "§"));
+                }
             }
             if (args.length == 1) {
                 if (args[0].equals("reload")) {
                     if (!s.hasPermission(Config.ADMIN)) {
-                        s.sendMessage(noperm);
+                        s.sendMessage(Messages.NO_PERM.replace("&", "§"));
                         return true;
                     }
                     if (s.hasPermission(Config.ADMIN)) {
                         try {
                             BetterDeathScreen.createAndLoadConfigs();
-                            s.sendMessage(reloaded);
+                            s.sendMessage(Messages.RELOAD.replace("&", "§"));
                         } catch (Throwable e) {
                             e.printStackTrace();
                             Bukkit.getConsoleSender().sendMessage("§cO arquivo não pôde ser salvo.");
@@ -49,7 +49,9 @@ public class MainCommand implements CommandExecutor {
                     }
                 }
                 if (!args[0].equals("reload")){
-                    s.sendMessage("§cUnico comando disponível: /bds reload");
+                    for (String help : Messages.HELP) {
+                        s.sendMessage(help.replace("&", "§"));
+                    }
                     return true;
                 }
             }

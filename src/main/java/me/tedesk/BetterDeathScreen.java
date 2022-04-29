@@ -1,12 +1,13 @@
-package me.tedesk.plugin;
+package me.tedesk;
 
-import me.tedesk.plugin.commands.MainCommand;
-import me.tedesk.plugin.configs.Config;
-import me.tedesk.plugin.configs.ConfigHandler;
-import me.tedesk.plugin.configs.Messages;
-import me.tedesk.plugin.events.Listeners;
-import me.tedesk.plugin.utils.Metrics;
-import me.tedesk.plugin.utils.Version;
+import me.tedesk.commands.MainCommand;
+import me.tedesk.configs.Config;
+import me.tedesk.configs.ConfigHandler;
+import me.tedesk.configs.Messages;
+import me.tedesk.events.Listeners;
+import me.tedesk.systems.Tasks;
+import me.tedesk.utils.Metrics;
+import me.tedesk.utils.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -71,9 +72,6 @@ public class BetterDeathScreen extends JavaPlugin {
         plugin = this;
         version = Version.getServerVersion();
 
-        Listeners.setup();
-        createAndLoadConfigs();
-
         if (version == Version.UNKNOWN) {
             logger("§cYour server version is behind 1.8! §f" + "(" + plugin.getServer().getBukkitVersion() + ")");
             logger("§cIf you think this is an error, contact the author: " + pdf.getAuthors());
@@ -81,13 +79,20 @@ public class BetterDeathScreen extends JavaPlugin {
             plugin.getPluginLoader().disablePlugin(this);
             return;
         }
+
         if (veryNewVersion() || newVersion() || oldVersion()) {
+            Listeners.setup();
+            createAndLoadConfigs();
+
+            if (!Config.CHANGE_VIEW_SPECTATOR) {
+                Tasks.blockSpectatorView();
+            }
+
+            plugin.getCommand("bds").setExecutor(new MainCommand());
+            Metrics metrics = new Metrics(this, 14729);
             logger("§aPlugin enabled! (v" + pdf.getVersion() + ")");
             logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
         }
-
-        this.getCommand("bds").setExecutor(new MainCommand());
-        Metrics metrics = new Metrics(this, 14729);
     }
 
     @Override

@@ -1,10 +1,10 @@
-package me.tedesk.plugin.systems;
+package me.tedesk.systems;
 
-import me.tedesk.plugin.BetterDeathScreen;
-import me.tedesk.plugin.api.ActionBarAPI;
-import me.tedesk.plugin.api.SoundAPI;
-import me.tedesk.plugin.configs.Config;
-import me.tedesk.plugin.configs.Messages;
+import me.tedesk.BetterDeathScreen;
+import me.tedesk.api.SoundAPI;
+import me.tedesk.api.ActionBarAPI;
+import me.tedesk.configs.Config;
+import me.tedesk.configs.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -12,9 +12,9 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Timer {
+public class Tasks {
 
-    public static void normal(Player p) {
+    public static void normalTimer(Player p) {
 
         new BukkitRunnable() {
             int time = Config.TIME;
@@ -62,7 +62,7 @@ public class Timer {
     }
 
     // Esse timer nunca chegará ao fim, somente quando o jogador mudar seu modo de jogo.
-    public static void hardcore(Player p) {
+    public static void hardcoreTimer(Player p) {
 
         new BukkitRunnable() {
 
@@ -87,5 +87,18 @@ public class Timer {
                 }
             }
         }.runTaskTimer(BetterDeathScreen.plugin, 20, 20);
+    }
+
+    public static void blockSpectatorView() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (p.getGameMode() == GameMode.SPECTATOR && Config.DEAD_PLAYERS.contains(p.getName())) {
+                        p.setSpectatorTarget(null);
+                    }
+                }
+            }
+        }.runTaskTimer(BetterDeathScreen.plugin, 1, 1);
     }
 }

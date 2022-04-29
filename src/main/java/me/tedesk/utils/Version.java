@@ -1,4 +1,4 @@
-package me.tedesk.plugin.utils;
+package me.tedesk.utils;
 
 import org.bukkit.Bukkit;
 

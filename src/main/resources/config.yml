@@ -15,11 +15,14 @@ sound:
   death: BLAZE_DEATH
   countdown: NOTE_BASS_DRUM
   respawn: NOTE_PLING
+  kill: SKELETON_DEATH
 animation: #Available types: DISABLED, BLOOD, EXPLOSION, LIGHTNING
   type: "BLOOD"
 time:
   duration: 10
 perms:
-  keepxp: 'bds.xp'
+  keep-xp: 'bds.xp'
   admin: 'bds.admin'
-
+spectator:
+  change-view: false
+  teleport-with-keys: false

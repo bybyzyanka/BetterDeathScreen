@@ -1,8 +1,8 @@
-package me.tedesk.plugin.events;
+package me.tedesk.events;
 
-import me.tedesk.plugin.BetterDeathScreen;
-import me.tedesk.plugin.events.entity.DeathScreen;
-import me.tedesk.plugin.events.entity.PlayerEvent;
+import me.tedesk.BetterDeathScreen;
+import me.tedesk.events.entity.DeathScreen;
+import me.tedesk.events.entity.PlayerEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;

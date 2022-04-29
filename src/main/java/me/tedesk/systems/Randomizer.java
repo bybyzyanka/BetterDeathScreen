@@ -1,6 +1,6 @@
-package me.tedesk.plugin.systems;
+package me.tedesk.systems;
 
-import me.tedesk.plugin.configs.Messages;
+import me.tedesk.configs.Messages;
 import org.bukkit.ChatColor;
 
 import java.util.List;
