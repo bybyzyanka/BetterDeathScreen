@@ -1,5 +1,6 @@
 package me.tedesk;
 
+import me.tedesk.api.PacketAPI;
 import me.tedesk.commands.MainCommand;
 import me.tedesk.configs.Config;
 import me.tedesk.configs.ConfigHandler;
@@ -16,8 +17,8 @@ public class BetterDeathScreen extends JavaPlugin {
     /* Primeiramente, um olá para você que está lendo o código, acho que a parte mais interessante são as classes ActionBarAPI e
     TitleAPI, então se você precisar de algo assim, fique a vontade para se inspirar.
      */
-    public static Version version;
     public static BetterDeathScreen plugin;
+    public static Version version;
     PluginDescriptionFile pdf = this.getDescription();
 
     public static void logger(String text) {
@@ -63,7 +64,13 @@ public class BetterDeathScreen extends JavaPlugin {
     public static void createAndLoadConfigs() {
         ConfigHandler.createConfig("config");
         Config.loadConfigs();
-        ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
+        try {
+            ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
+        } catch (IllegalArgumentException e) {
+            logger("The plugin will use English (en-US) as base language, because " + Config.LANGUAGE + " does not exist in the configurations.");
+            logger("O plugin irá usar Inglês (en-US) como linguagem base, porquê " + Config.LANGUAGE + " não existe nas configurações.");
+            ConfigHandler.createConfig("messages_en-US");
+        }
         Messages.loadMessages();
     }
 
@@ -73,30 +80,35 @@ public class BetterDeathScreen extends JavaPlugin {
         version = Version.getServerVersion();
 
         if (version == Version.UNKNOWN) {
-            logger("§cYour server version is behind 1.8! §f" + "(" + plugin.getServer().getBukkitVersion() + ")");
-            logger("§cIf you think this is an error, contact the author: " + pdf.getAuthors());
-            logger("§cThe plugin will now shutdown.");
-            plugin.getPluginLoader().disablePlugin(this);
+            for (String incompatible : Messages.INCOMPATIBLE) {
+                logger(incompatible.replace("&", "§").replace("%server_version%", "(" + plugin.getServer().getBukkitVersion() + ")"));
+            }
+            plugin.getPluginLoader().disablePlugin(plugin);
             return;
         }
 
         if (veryNewVersion() || newVersion() || oldVersion()) {
-            Listeners.setup();
             createAndLoadConfigs();
+            Listeners.setup();
 
             if (!Config.CHANGE_VIEW_SPECTATOR) {
+                PacketAPI.cancelCameraPacket();
                 Tasks.blockSpectatorView();
             }
 
             plugin.getCommand("bds").setExecutor(new MainCommand());
             Metrics metrics = new Metrics(this, 14729);
-            logger("§aPlugin enabled! (v" + pdf.getVersion() + ")");
+            for (String enabled : Messages.ENABLED) {
+                logger(enabled.replace("&", "§").replace("%plugin_version%", "(v" + pdf.getVersion() + ")"));
+            }
             logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
         }
     }
 
     @Override
     public void onDisable() {
-        logger("§cPlugin disabled! (v" + pdf.getVersion() + ")");
+        for (String disabled : Messages.DISABLE) {
+            logger(disabled.replace("&", "§"));
+        }
     }
 }

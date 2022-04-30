@@ -8,7 +8,6 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import me.tedesk.BetterDeathScreen;
 import me.tedesk.configs.Messages;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +17,6 @@ public class ActionBarAPI {
     @SuppressWarnings("deprecation")
     public static void sendActionBar(Player p, String message) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-        String ab_error = ChatColor.translateAlternateColorCodes('&', Messages.AB_ERROR);
 
         // Envio da ActionBar para versões novas. (1.17 até 1.19)
         if (BetterDeathScreen.veryNewVersion()) {
@@ -28,8 +26,7 @@ public class ActionBarAPI {
             try {
                 protocolManager.sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
-                e.printStackTrace();
-                BetterDeathScreen.logger(ab_error.replace("%player%", p.getDisplayName()));
+                BetterDeathScreen.logger(Messages.AB_ERROR.replace("&", "§").replace("%player%", p.getDisplayName()));
             }
             return;
         }
@@ -42,8 +39,7 @@ public class ActionBarAPI {
             try {
                 protocolManager.sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
-                e.printStackTrace();
-                BetterDeathScreen.logger(ab_error.replace("%player%", p.getDisplayName()));
+                BetterDeathScreen.logger(Messages.AB_ERROR.replace("&", "§").replace("%player%", p.getDisplayName()));
             }
             return;
         }
@@ -56,8 +52,7 @@ public class ActionBarAPI {
             try {
                 protocolManager.sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
-                e.printStackTrace();
-                BetterDeathScreen.logger(ab_error.replace("%player%", p.getDisplayName()));
+                BetterDeathScreen.logger(Messages.AB_ERROR.replace("&", "§").replace("%player%", p.getDisplayName()));
             }
         }
     }

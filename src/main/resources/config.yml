@@ -12,10 +12,21 @@
 misc: #Available languages: en-US, pt-BR
   language: 'en-US'
 sound:
-  death: BLAZE_DEATH
-  countdown: NOTE_BASS_DRUM
-  respawn: NOTE_PLING
-  kill: SKELETON_DEATH
+  type:
+    death: BLAZE_DEATH
+    countdown: NOTE_BASS_DRUM
+    respawn: NOTE_PLING
+    kill: SKELETON_DEATH
+  volume:
+    death: 1.0
+    countdown: 1.0
+    respawn: 1.0
+    kill: 1.0
+  pitch:
+    death: 1.0
+    countdown: 1.0
+    respawn: 1.0
+    kill: 1.0
 animation: #Available types: DISABLED, BLOOD, EXPLOSION, LIGHTNING
   type: "BLOOD"
 time:

@@ -1,12 +1,11 @@
 package me.tedesk.events.entity;
 
-import me.tedesk.api.SoundAPI;
-import me.tedesk.configs.Config;
-import me.tedesk.events.Listeners;
 import me.tedesk.animations.Animation;
 import me.tedesk.api.ActionBarAPI;
+import me.tedesk.api.SoundAPI;
 import me.tedesk.api.TitleAPI;
-import me.tedesk.configs.Messages;
+import me.tedesk.configs.Config;
+import me.tedesk.events.Listeners;
 import me.tedesk.systems.FakeMechanics;
 import me.tedesk.systems.Randomizer;
 import me.tedesk.systems.Tasks;
@@ -64,10 +63,9 @@ public class DeathScreen extends Listeners {
                         if (ent_damager instanceof Player) {
                             Player pd = (Player) ent_damager;
 
-                            String kill_ab = Messages.ACTIONBAR_KILL.replace("&", "§").replace("%player%", pv.getDisplayName());
-                            ActionBarAPI.sendActionBar(pd, kill_ab);
+                            ActionBarAPI.sendActionBar(pd, Randomizer.customKillActionBar(pv));
                             FakeMechanics.changeStatisticsKiller(pd);
-                            SoundAPI.sendSound(pd, pd.getLocation(), Config.SOUND_KILL, 1,1);
+                            SoundAPI.sendSound(pd, pd.getLocation(), Config.SOUND_KILL, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
                         }
                     }
                     FakeMechanics.sendDeath(pv);
@@ -75,11 +73,10 @@ public class DeathScreen extends Listeners {
                     FakeMechanics.dropInventory(pv);
                     Animation.sendAnimation(pv);
                     pv.setGameMode(GameMode.SPECTATOR);
-                    SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, 3, 1);
-                    TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.customtitles(), Randomizer.customsubtitles());
+                    SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, Config.SOUND_DEATH_VOLUME, Config.SOUND_DEATH_PITCH);
+                    TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.customTitles(), Randomizer.customSubtitles());
                     if (!Bukkit.getServer().isHardcore()) {
                         Tasks.normalTimer(pv);
-                        return;
                     }
                     if (Bukkit.getServer().isHardcore()) {
                         Tasks.hardcoreTimer(pv);

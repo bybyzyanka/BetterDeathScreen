@@ -27,7 +27,7 @@ public class Animation {
                 write(0, p.getLocation().getX()).
                 write(1, p.getLocation().getY()).
                 write(2, p.getLocation().getZ());
-        fakeExplosion.getFloat().write(0, 3.0F);
+        fakeExplosion.getFloat().write(0, 2.0F);
 
         try {
             protocolManager.sendServerPacket(p, fakeExplosion);
