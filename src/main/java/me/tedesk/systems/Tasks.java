@@ -88,17 +88,4 @@ public class Tasks {
             }
         }.runTaskTimer(BetterDeathScreen.plugin, 20, 20);
     }
-
-    public static void blockSpectatorView() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (p.getGameMode() == GameMode.SPECTATOR && Config.DEAD_PLAYERS.contains(p.getName())) {
-                        p.setSpectatorTarget(null);
-                    }
-                }
-            }
-        }.runTaskTimer(BetterDeathScreen.plugin, 1, 1);
-    }
 }

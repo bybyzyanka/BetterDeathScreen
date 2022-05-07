@@ -3,7 +3,6 @@ package me.tedesk.commands;
 import me.tedesk.BetterDeathScreen;
 import me.tedesk.configs.Config;
 import me.tedesk.configs.Messages;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,11 +16,11 @@ public class MainCommand implements CommandExecutor {
         // Odeio usar else, mas tive que usar para facilitar.
         if (!(s instanceof Player)) {
             if (args.length == 1) {
-                if (args[0].equals("reload")) {
+                if (args[0].equalsIgnoreCase("reload")) {
                     BetterDeathScreen.createAndLoadConfigs();
                     s.sendMessage(Messages.RELOAD.replace("&", "§"));
                 }
-                if (!args[0].equals("reload")) {
+                if (!args[0].equalsIgnoreCase("reload")) {
                     for (String help : Messages.HELP) {
                         s.sendMessage(help.replace("&", "§"));
                     }
@@ -34,7 +33,7 @@ public class MainCommand implements CommandExecutor {
         }
         if (s instanceof Player) {
             if (args.length == 1) {
-                if (args[0].equals("reload")) {
+                if (args[0].equalsIgnoreCase("reload")) {
                     if (!s.hasPermission(Config.ADMIN)) {
                         s.sendMessage(Messages.NO_PERM.replace("&", "§"));
                     }
@@ -44,11 +43,10 @@ public class MainCommand implements CommandExecutor {
                             s.sendMessage(Messages.RELOAD.replace("&", "§"));
                         } catch (Throwable e) {
                             e.printStackTrace();
-                            Bukkit.getConsoleSender().sendMessage("§cO arquivo não pôde ser salvo.");
                         }
                     }
                 }
-                if (!args[0].equals("reload")){
+                if (!args[0].equalsIgnoreCase("reload")) {
                     for (String help : Messages.HELP) {
                         s.sendMessage(help.replace("&", "§"));
                     }

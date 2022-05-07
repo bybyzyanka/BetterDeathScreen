@@ -12,10 +12,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class PlayerEvent extends Listeners {
+public class PlayerEventsListener extends Listeners {
 
     // Criado para jogadores que são considerados mortos (no modo espectador) ao reconectarem.
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         // Reinicia a contagem ou mostra a mensagem do modo de jogo hardcore ao reconectar.
@@ -35,7 +35,7 @@ public class PlayerEvent extends Listeners {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerTeleport (PlayerTeleportEvent e) {
         Player p = e.getPlayer();
 

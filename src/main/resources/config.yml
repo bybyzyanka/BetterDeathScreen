@@ -35,5 +35,4 @@ perms:
   keep-xp: 'bds.xp'
   admin: 'bds.admin'
 spectator:
-  change-view: false
   teleport-with-keys: false

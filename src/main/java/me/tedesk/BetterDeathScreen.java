@@ -1,12 +1,10 @@
 package me.tedesk;
 
-import me.tedesk.api.PacketAPI;
 import me.tedesk.commands.MainCommand;
 import me.tedesk.configs.Config;
 import me.tedesk.configs.ConfigHandler;
 import me.tedesk.configs.Messages;
 import me.tedesk.events.Listeners;
-import me.tedesk.systems.Tasks;
 import me.tedesk.utils.Metrics;
 import me.tedesk.utils.Version;
 import org.bukkit.Bukkit;
@@ -90,14 +88,9 @@ public class BetterDeathScreen extends JavaPlugin {
         if (veryNewVersion() || newVersion() || oldVersion()) {
             createAndLoadConfigs();
             Listeners.setup();
-
-            if (!Config.CHANGE_VIEW_SPECTATOR) {
-                PacketAPI.cancelCameraPacket();
-                Tasks.blockSpectatorView();
-            }
-
             plugin.getCommand("bds").setExecutor(new MainCommand());
             Metrics metrics = new Metrics(this, 14729);
+
             for (String enabled : Messages.ENABLED) {
                 logger(enabled.replace("&", "§").replace("%plugin_version%", "(v" + pdf.getVersion() + ")"));
             }

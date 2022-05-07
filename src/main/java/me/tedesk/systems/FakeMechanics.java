@@ -38,12 +38,10 @@ public class FakeMechanics {
         if (w.getGameRuleValue("keepInventory").equals("false")) {
             p.updateInventory();
             try {
-                int remove = 0;
                 for (ItemStack stack : p.getInventory().getArmorContents().clone()) {
                     if (stack == null)
                         continue;
                     if (stack.getType() != Material.AIR) {
-                        remove++;
                         p.getWorld().dropItemNaturally(p.getLocation(), stack);
                         p.getInventory().removeItem(stack);
                     }
@@ -55,12 +53,10 @@ public class FakeMechanics {
             } catch (RuntimeException ignored) {
             }
             try {
-                int remove = 0;
                 for (ItemStack stack : p.getInventory().getContents().clone()) {
                     if (stack == null)
                         continue;
                     if (stack.getType() != Material.AIR) {
-                        remove++;
                         p.getWorld().dropItemNaturally(p.getLocation(), stack);
                         p.getInventory().removeItem(stack);
                     }
@@ -80,11 +76,11 @@ public class FakeMechanics {
     }
 
     public static void changeStatisticsVictim(Player p) {
-        p.setStatistic(Statistic.DEATHS, p.getStatistic(Statistic.DEATHS) + 1);
+        p.incrementStatistic(Statistic.DEATHS, 1);
         p.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
     }
 
     public static void changeStatisticsKiller(Player p) {
-        p.setStatistic(Statistic.PLAYER_KILLS, p.getStatistic(Statistic.PLAYER_KILLS) + 1);
+        p.incrementStatistic(Statistic.PLAYER_KILLS, 1);
     }
 }
