@@ -65,8 +65,8 @@ public class BetterDeathScreen extends JavaPlugin {
         try {
             ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
         } catch (IllegalArgumentException e) {
-            logger("The plugin will use English (en-US) as base language, because " + Config.LANGUAGE + " does not exist in the configurations.");
-            logger("O plugin irá usar Inglês (en-US) como linguagem base, porquê " + Config.LANGUAGE + " não existe nas configurações.");
+            logger("The plugin will use English (en-US) as base language, because " + Config.LANGUAGE + " does not exist on the configurations.");
+            logger("O plugin irá usar Inglês (en-US) como linguagem base, porque " + Config.LANGUAGE + " não existe nas configurações.");
             ConfigHandler.createConfig("messages_en-US");
         }
         Messages.loadMessages();
@@ -100,7 +100,7 @@ public class BetterDeathScreen extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        for (String disabled : Messages.DISABLE) {
+        for (String disabled : Messages.DISABLED) {
             logger(disabled.replace("&", "§"));
         }
     }

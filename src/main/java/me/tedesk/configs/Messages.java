@@ -7,7 +7,7 @@ import java.util.List;
 public class Messages {
     public static List<String> INCOMPATIBLE;
     public static List<String> ENABLED;
-    public static List<String> DISABLE;
+    public static List<String> DISABLED;
     public static String ACTIONBAR_DEATH;
     public static String ACTIONBAR_HC;
     public static List<String> ACTIONBAR_KILL;
@@ -28,7 +28,7 @@ public class Messages {
 
         INCOMPATIBLE = messages.getStringList("plugin.incompatible");
         ENABLED = messages.getStringList("plugin.enabled");
-        DISABLE = messages.getStringList("plugin.disabled");
+        DISABLED = messages.getStringList("plugin.disabled");
 
         ACTIONBAR_DEATH = messages.getString("actionbar.death");
         ACTIONBAR_HC = messages.getString("actionbar.hardcore");

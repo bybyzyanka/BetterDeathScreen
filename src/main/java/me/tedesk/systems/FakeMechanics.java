@@ -50,9 +50,6 @@ public class FakeMechanics {
                 p.getInventory().setChestplate(null);
                 p.getInventory().setLeggings(null);
                 p.getInventory().setBoots(null);
-            } catch (RuntimeException ignored) {
-            }
-            try {
                 for (ItemStack stack : p.getInventory().getContents().clone()) {
                     if (stack == null)
                         continue;
@@ -61,9 +58,6 @@ public class FakeMechanics {
                         p.getInventory().removeItem(stack);
                     }
                 }
-            } catch (RuntimeException ignored) {
-            }
-            try {
                 if (p.getItemOnCursor() == null)
                     return;
                 if (p.getItemOnCursor() != null) {
@@ -71,6 +65,7 @@ public class FakeMechanics {
                     p.setItemOnCursor(null);
                 }
             } catch (RuntimeException ignored) {
+
             }
         }
     }
