@@ -18,7 +18,9 @@ public class MainCommand implements CommandExecutor {
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("reload")) {
                     BetterDeathScreen.createAndLoadConfigs();
-                    s.sendMessage(Messages.RELOAD.replace("&", "§"));
+                    if (Config.LANGUAGE.equals("en_US") || Config.LANGUAGE.equals("pt_BR")) {
+                        s.sendMessage(Messages.RELOAD.replace("&", "§"));
+                    }
                 }
                 if (!args[0].equalsIgnoreCase("reload")) {
                     for (String help : Messages.HELP) {
@@ -40,7 +42,9 @@ public class MainCommand implements CommandExecutor {
                     if (s.hasPermission(Config.ADMIN)) {
                         try {
                             BetterDeathScreen.createAndLoadConfigs();
-                            s.sendMessage(Messages.RELOAD.replace("&", "§"));
+                            if (Config.LANGUAGE.equals("en_US") || Config.LANGUAGE.equals("pt_BR")) {
+                                s.sendMessage(Messages.RELOAD.replace("&", "§"));
+                            }
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }

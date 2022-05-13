@@ -37,5 +37,5 @@ plugin:
     - "&cO plugin será desativado."
   enabled:
     - "&aPlugin ativado! &f%plugin_version%"
-  disable:
+  disabled:
     - "&cPlugin desativado! &f%plugin_version%"

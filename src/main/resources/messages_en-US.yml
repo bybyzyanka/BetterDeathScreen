@@ -37,5 +37,5 @@ plugin:
     - "&cThe plugin will be disabled."
   enabled:
     - "&aPlugin enabled! &f%plugin_version%"
-  disable:
+  disabled:
     - "&cPlugin disabled! &f%plugin_version%"

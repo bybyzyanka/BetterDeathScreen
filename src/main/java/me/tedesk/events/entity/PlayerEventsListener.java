@@ -36,7 +36,7 @@ public class PlayerEventsListener extends Listeners {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerTeleport (PlayerTeleportEvent e) {
+    public void onPlayerTeleport(PlayerTeleportEvent e) {
         Player p = e.getPlayer();
 
         if (!Config.HOTBAR_TELEPORT_SPECTATOR) {
