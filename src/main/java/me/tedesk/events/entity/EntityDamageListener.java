@@ -12,6 +12,7 @@ import me.tedesk.systems.Tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -66,6 +67,18 @@ public class EntityDamageListener extends Listeners {
                             ActionBarAPI.sendActionBar(pd, Randomizer.customKillActionBar(pv));
                             FakeMechanics.changeStatisticsKiller(pd);
                             SoundAPI.sendSound(pd, pd.getLocation(), Config.SOUND_KILL, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                        }
+                        // Caso a entidade seja uma flecha.
+                        if (ent_damager instanceof Arrow) {
+                            Arrow a = (Arrow) ent_damager;
+                            // Caso quem atirou a flecha é um jogador.
+                            if (a.getShooter() instanceof Player) {
+                                Player pd = (Player) a.getShooter();
+
+                                ActionBarAPI.sendActionBar(pd, Randomizer.customKillActionBar(pv));
+                                FakeMechanics.changeStatisticsKiller(pd);
+                                SoundAPI.sendSound(pd, pd.getLocation(), Config.SOUND_KILL, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                            }
                         }
                     }
                     FakeMechanics.sendDeath(pv);
