@@ -35,7 +35,7 @@ public class PlayerEventsListener extends Listeners {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent e) {
         Player p = e.getPlayer();
 

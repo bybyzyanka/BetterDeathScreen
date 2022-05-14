@@ -1,5 +1,6 @@
 package me.tedesk;
 
+import me.tedesk.api.PacketAPI;
 import me.tedesk.commands.MainCommand;
 import me.tedesk.configs.Config;
 import me.tedesk.configs.ConfigHandler;
@@ -61,7 +62,6 @@ public class BetterDeathScreen extends JavaPlugin {
     }
 
     public static void createAndLoadConfigs() {
-        boolean invalid = false;
         ConfigHandler.createConfig("config");
         Config.loadConfigs();
         try {
@@ -92,6 +92,9 @@ public class BetterDeathScreen extends JavaPlugin {
             try {
                 createAndLoadConfigs();
                 Listeners.setup();
+                if (!Config.CHANGE_VIEW_SPECTATOR) {
+                    PacketAPI.cancelCameraAndTeleport();
+                }
                 plugin.getCommand("bds").setExecutor(new MainCommand());
                 Metrics metrics = new Metrics(this, 14729);
 
