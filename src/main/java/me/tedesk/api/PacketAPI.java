@@ -13,8 +13,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class PacketAPI {
 
     public static void cancelCameraAndTeleport() {
-        ProtocolManager manager = ProtocolLibrary.getProtocolManager();
-        manager.addPacketListener(new PacketAdapter(BetterDeathScreen.plugin, PacketType.Play.Server.CAMERA) {
+        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+        protocolManager.addPacketListener(new PacketAdapter(BetterDeathScreen.plugin, PacketType.Play.Server.CAMERA) {
             @Override
             public void onPacketSending(PacketEvent event) {
                 Player p = event.getPlayer();
@@ -30,7 +30,7 @@ public class PacketAPI {
                 }
             }
         });
-        manager.addPacketListener(new PacketAdapter(BetterDeathScreen.plugin, PacketType.Play.Client.USE_ENTITY) {
+        protocolManager.addPacketListener(new PacketAdapter(BetterDeathScreen.plugin, PacketType.Play.Client.USE_ENTITY) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 Player p = event.getPlayer();

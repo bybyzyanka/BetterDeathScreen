@@ -22,17 +22,17 @@ public class Animation {
 
     private static void explosionAnimation(Player p) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-        PacketContainer fakeExplosion = new PacketContainer(PacketType.Play.Server.EXPLOSION);
-        fakeExplosion.getDoubles().
-                write(0, p.getLocation().getX()).
-                write(1, p.getLocation().getY()).
-                write(2, p.getLocation().getZ());
-        fakeExplosion.getFloat().write(0, 2.0F);
-
-        try {
-            protocolManager.sendServerPacket(p, fakeExplosion);
-        } catch (InvocationTargetException e) {
-            BetterDeathScreen.logger("§cThe death animation could not be send to: " + p.getDisplayName());
+        if (BetterDeathScreen.newVersion() || BetterDeathScreen.veryNewVersion()) {
+            PacketContainer fakeExplosion = new PacketContainer(PacketType.Play.Server.EXPLOSION);
+            fakeExplosion.getDoubles().write(0, p.getLocation().getX());
+            fakeExplosion.getDoubles().write(1, p.getLocation().getY());
+            fakeExplosion.getDoubles().write(2, p.getLocation().getZ());
+            fakeExplosion.getFloat().write(0, 3.0F);
+            try {
+                protocolManager.sendServerPacket(p, fakeExplosion);
+            } catch (InvocationTargetException e) {
+                BetterDeathScreen.logger("§cThe death animation could not be send to: " + p.getDisplayName());
+            }
         }
     }
 
@@ -47,9 +47,11 @@ public class Animation {
         }
         if (Config.ANIMATION.equals("BLOOD")) {
             bloodAnimation(p);
+            return;
         }
         if (Config.ANIMATION.equals("EXPLOSION")) {
             explosionAnimation(p);
+            return;
         }
         if (Config.ANIMATION.equals("LIGHTNING")) {
             lightningAnimation(p);
