@@ -9,7 +9,7 @@
 
 #The config.yml was created with 1.8.8 in mind.
 #Please check the Sounds for your server version!
-misc: #Available languages: en-US, pt-BR
+misc: #Available languages: en-US, pt-BR, zh-TW
   language: 'en-US'
 sound:
   type:
