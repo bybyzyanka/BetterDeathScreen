@@ -83,7 +83,6 @@ public class EntityDamageListener extends Listeners {
                     }
                     FakeMechanics.sendDeath(pv);
                     FakeMechanics.changeStatisticsVictim(pv);
-                    FakeMechanics.dropInventory(pv);
                     pv.setGameMode(GameMode.SPECTATOR);
                     SoundAPI.sendSound(pv, pv.getLocation(), Config.SOUND_DEATH, Config.SOUND_DEATH_VOLUME, Config.SOUND_DEATH_PITCH);
                     TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.customTitles(), Randomizer.customSubtitles());

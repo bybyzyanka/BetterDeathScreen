@@ -1,72 +1,69 @@
 package me.tedesk.systems;
 
+import me.tedesk.BetterDeathScreen;
+import me.tedesk.api.PlayerAPI;
 import me.tedesk.configs.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.World;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FakeMechanics {
 
     public static void sendDeath(Player p) {
         World w = Bukkit.getServer().getWorld(p.getWorld().getName());
 
-        if (!p.hasPermission(Config.KEEP_XP)) {
-            if (w.getGameRuleValue("keepInventory").equals("false")) {
-                p.setLevel(0);
-                p.setExp(0);
-            }
-        }
         for (PotionEffect effect : p.getActivePotionEffects()) {
             p.removePotionEffect(effect.getType());
         }
-        EntityDeathEvent ent_death = new EntityDeathEvent(p, null);
-        Bukkit.getPluginManager().callEvent(ent_death);
-        PlayerDeathEvent player_death = new PlayerDeathEvent(p, null, 0, null);
-        Bukkit.getPluginManager().callEvent(player_death);
-    }
-
-    public static void dropInventory(Player p) {
-
-        World w = Bukkit.getServer().getWorld(p.getWorld().getName());
-
         if (w.getGameRuleValue("keepInventory").equals("false")) {
-            p.updateInventory();
-            try {
-                for (ItemStack stack : p.getInventory().getArmorContents().clone()) {
-                    if (stack == null)
+            p.closeInventory();
+            List<ItemStack> items = Arrays.stream(p.getInventory().getContents())
+                    .filter(stack -> !PlayerAPI.isStackEmpty(stack))
+                    .collect(Collectors.toList());
+            if (!p.hasPermission(Config.KEEP_XP)) {
+                PlayerDeathEvent player_death = new PlayerDeathEvent(p, items, PlayerAPI.dropExpOnDeath(p), "");
+                p.getWorld().spawn(p.getLocation(), ExperienceOrb.class).setExperience(PlayerAPI.dropExpOnDeath(p));
+                Bukkit.getPluginManager().callEvent(player_death);
+                p.setLevel(0);
+                p.setExp(0);
+            }
+            if (p.hasPermission(Config.KEEP_XP)) {
+                PlayerDeathEvent player_death = new PlayerDeathEvent(p, items, 0, "");
+                Bukkit.getPluginManager().callEvent(player_death);
+            }
+            for (ItemStack drops : items) {
+                p.getWorld().dropItemNaturally(p.getLocation(), drops);
+            }
+            p.getInventory().clear();
+            if (BetterDeathScreen.oldVersion()) {
+                for (ItemStack armor : p.getInventory().getArmorContents()) {
+                    if (armor.getType() == Material.AIR) {
                         continue;
-                    if (stack.getType() != Material.AIR) {
-                        p.getWorld().dropItemNaturally(p.getLocation(), stack);
-                        p.getInventory().removeItem(stack);
+                    }
+                    if (armor.getType() != Material.AIR) {
+                        p.getWorld().dropItemNaturally(p.getLocation(), armor);
                     }
                 }
                 p.getInventory().setHelmet(null);
                 p.getInventory().setChestplate(null);
                 p.getInventory().setLeggings(null);
                 p.getInventory().setBoots(null);
-                for (ItemStack stack : p.getInventory().getContents().clone()) {
-                    if (stack == null)
-                        continue;
-                    if (stack.getType() != Material.AIR) {
-                        p.getWorld().dropItemNaturally(p.getLocation(), stack);
-                        p.getInventory().removeItem(stack);
-                    }
-                }
-                if (p.getItemOnCursor() == null)
-                    return;
-                if (p.getItemOnCursor() != null) {
-                    p.getWorld().dropItemNaturally(p.getLocation(), p.getItemOnCursor());
-                    p.setItemOnCursor(null);
-                }
-            } catch (RuntimeException ignored) {
-
             }
+        }
+        if (w.getGameRuleValue("keepInventory").equals("true")) {
+            PlayerDeathEvent player_death = new PlayerDeathEvent(p, new ArrayList<>(), 0, "");
+            Bukkit.getPluginManager().callEvent(player_death);
         }
     }
 
