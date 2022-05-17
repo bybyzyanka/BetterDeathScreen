@@ -2,6 +2,7 @@ package me.tedesk.api;
 
 import me.tedesk.BetterDeathScreen;
 import me.tedesk.configs.Messages;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -12,7 +13,7 @@ public class SoundAPI {
         try {
             p.playSound(loc, Sound.valueOf(sound), volume, pitch);
         } catch (IllegalArgumentException e) {
-            BetterDeathScreen.logger(Messages.SOUND_ERROR.replace("&", "§").replace("%sound%", sound));
+            BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR.replace("%sound%", sound)));
         }
     }
 }

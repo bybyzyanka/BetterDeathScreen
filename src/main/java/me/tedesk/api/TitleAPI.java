@@ -8,6 +8,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import me.tedesk.BetterDeathScreen;
 import me.tedesk.configs.Messages;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -39,7 +40,7 @@ public class TitleAPI {
                 protocolManager.sendServerPacket(p, subtitle_packet);
                 protocolManager.sendServerPacket(p, title_packet);
             } catch (InvocationTargetException e) {
-                BetterDeathScreen.logger(Messages.TITLE_ERROR.replace("&", "§").replace("%player%", p.getDisplayName()));
+                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.TITLE_ERROR.replace("%player%", p.getDisplayName())));
             }
             return;
         }
@@ -65,7 +66,7 @@ public class TitleAPI {
                 protocolManager.sendServerPacket(p, subtitle_packet);
                 protocolManager.sendServerPacket(p, title_packet);
             } catch (InvocationTargetException e) {
-                BetterDeathScreen.logger(Messages.TITLE_ERROR.replace("&", "§").replace("%player%", p.getDisplayName()));
+                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.TITLE_ERROR.replace("%player%", p.getDisplayName())));
             }
         }
     }

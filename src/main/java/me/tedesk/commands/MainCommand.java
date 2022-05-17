@@ -3,6 +3,7 @@ package me.tedesk.commands;
 import me.tedesk.BetterDeathScreen;
 import me.tedesk.configs.Config;
 import me.tedesk.configs.Messages;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,18 +19,16 @@ public class MainCommand implements CommandExecutor {
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("reload")) {
                     BetterDeathScreen.createAndLoadConfigs();
-                    if (Config.LANGUAGE.equals("en-US") || Config.LANGUAGE.equals("pt-BR")) {
-                        s.sendMessage(Messages.RELOAD.replace("&", "§"));
-                    }
+                    s.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.RELOAD));
                 }
                 if (!args[0].equalsIgnoreCase("reload")) {
                     for (String help : Messages.HELP) {
-                        s.sendMessage(help.replace("&", "§"));
+                        s.sendMessage(ChatColor.translateAlternateColorCodes('&', help));
                     }
                 }
             } else {
                 for (String help : Messages.HELP) {
-                    s.sendMessage(help.replace("&", "§"));
+                    s.sendMessage(ChatColor.translateAlternateColorCodes('&', help));
                 }
             }
         }
@@ -37,14 +36,12 @@ public class MainCommand implements CommandExecutor {
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!s.hasPermission(Config.ADMIN)) {
-                        s.sendMessage(Messages.NO_PERM.replace("&", "§"));
+                        s.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.NO_PERM));
                     }
                     if (s.hasPermission(Config.ADMIN)) {
                         try {
                             BetterDeathScreen.createAndLoadConfigs();
-                            if (Config.LANGUAGE.equals("en-US") || Config.LANGUAGE.equals("pt-BR")) {
-                                s.sendMessage(Messages.RELOAD.replace("&", "§"));
-                            }
+                            s.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.RELOAD));
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }
@@ -52,12 +49,12 @@ public class MainCommand implements CommandExecutor {
                 }
                 if (!args[0].equalsIgnoreCase("reload")) {
                     for (String help : Messages.HELP) {
-                        s.sendMessage(help.replace("&", "§"));
+                        s.sendMessage(ChatColor.translateAlternateColorCodes('&', help));
                     }
                 }
             } else {
                 for (String help : Messages.HELP) {
-                    s.sendMessage(help.replace("&", "§"));
+                    s.sendMessage(ChatColor.translateAlternateColorCodes('&', help));
                 }
             }
         }

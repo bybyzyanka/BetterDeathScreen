@@ -1,4 +1,4 @@
-package me.tedesk.events.entity;
+package me.tedesk.events.bukkit;
 
 import me.tedesk.configs.Config;
 import me.tedesk.events.Listeners;
@@ -10,16 +10,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class PlayerEventsListener extends Listeners {
+public class PlayerJoinListener extends Listeners {
 
-    // Criado para jogadores que são considerados mortos (no modo espectador) ao reconectarem.
+    // Usado para jogadores que são considerados mortos (no modo espectador) ao reconectarem.
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         // Reinicia a contagem ou mostra a mensagem do modo de jogo hardcore ao reconectar.
-        if ((p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) || Config.DEAD_PLAYERS.contains(p.getName())) {
+        if ((p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) || Config.DEAD_PLAYERS.contains(p.getUniqueId())) {
             if (!Bukkit.getServer().isHardcore()) {
                 Tasks.normalTimer(p);
             }
@@ -31,17 +30,6 @@ public class PlayerEventsListener extends Listeners {
         if (p.getBedSpawnLocation() != null) {
             if (p.getBedSpawnLocation().getWorld().getEnvironment() != World.Environment.NORMAL) {
                 p.setBedSpawnLocation(null);
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerTeleport(PlayerTeleportEvent e) {
-        Player p = e.getPlayer();
-
-        if (!Config.HOTBAR_TELEPORT_SPECTATOR) {
-            if (Config.DEAD_PLAYERS.contains(p.getName()) && e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
-                e.setCancelled(true);
             }
         }
     }

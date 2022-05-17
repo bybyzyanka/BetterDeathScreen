@@ -1,6 +1,8 @@
 package me.tedesk;
 
-import me.tedesk.api.PacketAPI;
+import me.tedesk.api.ActionBarAPI;
+import me.tedesk.api.SoundAPI;
+import me.tedesk.api.TitleAPI;
 import me.tedesk.commands.MainCommand;
 import me.tedesk.configs.Config;
 import me.tedesk.configs.ConfigHandler;
@@ -9,14 +11,14 @@ import me.tedesk.events.Listeners;
 import me.tedesk.utils.Version;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.IllegalPluginAccessException;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BetterDeathScreen extends JavaPlugin {
-    /* Primeiramente, um olá para você que está lendo o código, acho que a parte mais interessante são as classes ActionBarAPI e
-    TitleAPI, então se você precisar de algo assim, fique a vontade para se inspirar.
-     */
     public static BetterDeathScreen plugin;
     public static Version version;
     PluginDescriptionFile pdf = this.getDescription();
@@ -82,40 +84,55 @@ public class BetterDeathScreen extends JavaPlugin {
 
         if (version == Version.UNKNOWN) {
             for (String incompatible : Messages.INCOMPATIBLE) {
-                logger(incompatible.replace("&", "§").replace("%server_version%", "(" + plugin.getServer().getBukkitVersion() + ")"));
+                logger(incompatible.replace("&", "§").replace("%server_version%", "(" + Version.getServerVersion() + ")"));
             }
             plugin.getPluginLoader().disablePlugin(plugin);
             return;
         }
-
-        if (veryNewVersion() || newVersion() || oldVersion()) {
-            try {
-                createAndLoadConfigs();
-                Listeners.setup();
-                if (!Config.CHANGE_VIEW_SPECTATOR) {
-                    PacketAPI.cancelCameraAndTeleport();
-                }
-                plugin.getCommand("bds").setExecutor(new MainCommand());
-                Metrics metrics = new Metrics(this, 14729);
-
-                for (String enabled : Messages.ENABLED) {
-                    logger(enabled.replace("&", "§").replace("%plugin_version%", "(v" + pdf.getVersion() + ")"));
-                }
-                logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
-            } catch (IllegalPluginAccessException ignored) {
-
-            }
+        createAndLoadConfigs();
+        Listeners.setup();
+        plugin.getCommand("bds").setExecutor(new MainCommand());
+        Metrics metrics = new Metrics(this, 14729);
+        for (String enabled : Messages.ENABLED) {
+            logger(enabled.replace("&", "§").replace("%plugin_version%", "(v" + pdf.getVersion() + ")"));
         }
+        logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
     }
 
     @Override
     public void onDisable() {
-        try {
-            for (String disabled : Messages.DISABLED) {
-                logger(disabled.replace("&", "§").replace("%plugin_version%", "(v" + pdf.getVersion() + ")"));
+        for (String disabled : Messages.DISABLED) {
+            logger(disabled.replace("&", "§").replace("%plugin_version%", "(v" + pdf.getVersion() + ")"));
+        }
+        for (Player ps : Bukkit.getOnlinePlayers()) {
+            if (Config.DEAD_PLAYERS.contains(ps.getUniqueId())) {
+                if (!Bukkit.getServer().isHardcore()) {
+                    Config.DEAD_PLAYERS.remove(ps.getUniqueId());
+                    ps.spigot().respawn();
+                    TitleAPI.sendTitle(ps, 1, 1,1, "", "");
+                    ActionBarAPI.sendActionBar(ps, "§r");
+                    double health = ps.getMaxHealth();
+                    if (!Config.MOVE_SPECTATOR) {
+                        ps.setWalkSpeed(0.2F);
+                        ps.setFlySpeed(0.2F);
+                    }
+                    ps.setHealth(health);
+                    ps.setFoodLevel(20);
+                    ps.setGameMode(GameMode.SURVIVAL);
+                    if (ps.getBedSpawnLocation() == null) {
+                        PlayerRespawnEvent world_respawn = new PlayerRespawnEvent(ps, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
+                        Bukkit.getPluginManager().callEvent(world_respawn);
+                        ps.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    }
+                    if (ps.getBedSpawnLocation() != null) {
+                        PlayerRespawnEvent bed_respawn = new PlayerRespawnEvent(ps, ps.getBedSpawnLocation(), true);
+                        Bukkit.getPluginManager().callEvent(bed_respawn);
+                        ps.teleport(ps.getBedSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    }
+                    SoundAPI.sendSound(ps, ps.getLocation(), Config.SOUND_RESPAWN, Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
+                    ps.updateInventory();
+                }
             }
-        } catch (NullPointerException ignored) {
-
         }
     }
 }

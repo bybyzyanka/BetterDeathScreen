@@ -6,10 +6,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Config {
 
-    public static List<String> DEAD_PLAYERS = new ArrayList<>();
+    public static List<UUID> DEAD_PLAYERS = new ArrayList<>();
     public static Location DEFAULT_WORLD_SPAWN;
     public static String LANGUAGE;
     public static String SOUND_DEATH;
@@ -28,8 +29,9 @@ public class Config {
     public static String KEEP_XP;
     public static String ADMIN;
     public static String ANIMATION;
-    public static boolean CHANGE_VIEW_SPECTATOR;
+    public static boolean SPECTATE_ENTITY;
     public static boolean HOTBAR_TELEPORT_SPECTATOR;
+    public static boolean MOVE_SPECTATOR;
 
     public static void loadConfigs() {
         FileConfiguration config = ConfigHandler.getConfig("config");
@@ -54,12 +56,13 @@ public class Config {
 
         TIME = config.getInt("time.duration");
 
-        KEEP_XP = config.getString("perms.keep-xp");
-        ADMIN = config.getString("perms.admin");
+        KEEP_XP = config.getString("permissions.keep-xp");
+        ADMIN = config.getString("permissions.admin");
 
         ANIMATION = config.getString("animation.type");
 
-        CHANGE_VIEW_SPECTATOR = config.getBoolean("spectator.change-view");
-        HOTBAR_TELEPORT_SPECTATOR = config.getBoolean("spectator.teleport-with-keys");
+        SPECTATE_ENTITY = config.getBoolean("spectator-settings.allow-spectate");
+        HOTBAR_TELEPORT_SPECTATOR = config.getBoolean("spectator-settings.allow-teleport-with-keys");
+        MOVE_SPECTATOR = config.getBoolean("spectator-settings.allow-move");
     }
 }

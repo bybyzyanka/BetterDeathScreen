@@ -8,6 +8,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import me.tedesk.BetterDeathScreen;
 import me.tedesk.configs.Messages;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,7 +18,6 @@ public class ActionBarAPI {
     @SuppressWarnings("deprecation")
     public static void sendActionBar(Player p, String message) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-
         // Envio da ActionBar para versões novas. (1.17 até 1.19)
         if (BetterDeathScreen.veryNewVersion()) {
             PacketContainer ab_packet = new PacketContainer(PacketType.Play.Server.SET_ACTION_BAR_TEXT);
@@ -26,11 +26,10 @@ public class ActionBarAPI {
             try {
                 protocolManager.sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
-                BetterDeathScreen.logger(Messages.AB_ERROR.replace("&", "§").replace("%player%", p.getDisplayName()));
+                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.AB_ERROR.replace("%player%", p.getDisplayName())));
             }
             return;
         }
-
         // Envio da ActionBar para versões antigas. (1.12 até 1.16)
         if (BetterDeathScreen.newVersion()) {
             PacketContainer ab_packet = new PacketContainer(PacketType.Play.Server.TITLE);
@@ -39,11 +38,10 @@ public class ActionBarAPI {
             try {
                 protocolManager.sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
-                BetterDeathScreen.logger(Messages.AB_ERROR.replace("&", "§").replace("%player%", p.getDisplayName()));
+                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.AB_ERROR.replace("%player%", p.getDisplayName())));
             }
             return;
         }
-
         // Envio da ActionBar para versões MUITO antigas. (1.8 até 1.11)
         if (BetterDeathScreen.oldVersion()) {
             PacketContainer ab_packet = new PacketContainer(PacketType.Play.Server.CHAT);
@@ -52,7 +50,7 @@ public class ActionBarAPI {
             try {
                 protocolManager.sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
-                BetterDeathScreen.logger(Messages.AB_ERROR.replace("&", "§").replace("%player%", p.getDisplayName()));
+                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.AB_ERROR.replace("%player%", p.getDisplayName())));
             }
         }
     }

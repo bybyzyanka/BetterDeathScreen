@@ -27,13 +27,14 @@ sound:
     countdown: 1.0
     respawn: 1.0
     kill: 1.0
-animation: #Available types: DISABLED, BLOOD, EXPLOSION, LIGHTNING
+animation: #Available types: DISABLED, BLOOD, LIGHTNING
   type: "BLOOD"
 time:
   duration: 10
-perms:
+permissions:
   keep-xp: 'bds.xp'
   admin: 'bds.admin'
-spectator:
-  change-view: false
-  teleport-with-keys: false
+spectator-settings:
+  allow-spectate: false
+  allow-teleport-with-keys: false
+  allow-move: true
