@@ -17,14 +17,13 @@ public class ActionBarAPI {
 
     @SuppressWarnings("deprecation")
     public static void sendActionBar(Player p, String message) {
-        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         // Envio da ActionBar para versões novas. (1.17 até 1.19)
         if (BetterDeathScreen.veryNewVersion()) {
             PacketContainer ab_packet = new PacketContainer(PacketType.Play.Server.SET_ACTION_BAR_TEXT);
             ab_packet.getTitleActions().write(0, EnumWrappers.TitleAction.ACTIONBAR);
             ab_packet.getChatComponents().write(0, WrappedChatComponent.fromText(message));
             try {
-                protocolManager.sendServerPacket(p, ab_packet);
+                PacketAPI.getProtocolManager().sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
                 BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.AB_ERROR.replace("%player%", p.getDisplayName())));
             }
@@ -36,7 +35,7 @@ public class ActionBarAPI {
             ab_packet.getTitleActions().write(0, EnumWrappers.TitleAction.ACTIONBAR);
             ab_packet.getChatComponents().write(0, WrappedChatComponent.fromText(message));
             try {
-                protocolManager.sendServerPacket(p, ab_packet);
+                PacketAPI.getProtocolManager().sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
                 BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.AB_ERROR.replace("%player%", p.getDisplayName())));
             }
@@ -48,7 +47,7 @@ public class ActionBarAPI {
             ab_packet.getBytes().write(0, (byte) 2);
             ab_packet.getChatComponents().write(0, WrappedChatComponent.fromText(message));
             try {
-                protocolManager.sendServerPacket(p, ab_packet);
+                PacketAPI.getProtocolManager().sendServerPacket(p, ab_packet);
             } catch (InvocationTargetException e) {
                 BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.AB_ERROR.replace("%player%", p.getDisplayName())));
             }

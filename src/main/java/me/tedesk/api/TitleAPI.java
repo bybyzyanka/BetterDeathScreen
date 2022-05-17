@@ -17,8 +17,6 @@ public class TitleAPI {
 
     @SuppressWarnings("deprecation")
     public static void sendTitle(Player p, Integer fadeIn, Integer stay, Integer fadeOut, String title, String subtitle) {
-        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-
         // Envio da TitleBar para versões novas. (1.17 até 1.19)
         if (BetterDeathScreen.veryNewVersion()) {
             PacketContainer title_packet = new PacketContainer(PacketType.Play.Server.SET_TITLE_TEXT);
@@ -36,9 +34,9 @@ public class TitleAPI {
             subtitle_packet.getChatComponents().write(0, WrappedChatComponent.fromText(subtitle));
 
             try {
-                protocolManager.sendServerPacket(p, time_packet);
-                protocolManager.sendServerPacket(p, subtitle_packet);
-                protocolManager.sendServerPacket(p, title_packet);
+                PacketAPI.getProtocolManager().sendServerPacket(p, time_packet);
+                PacketAPI.getProtocolManager().sendServerPacket(p, subtitle_packet);
+                PacketAPI.getProtocolManager().sendServerPacket(p, title_packet);
             } catch (InvocationTargetException e) {
                 BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.TITLE_ERROR.replace("%player%", p.getDisplayName())));
             }
@@ -62,9 +60,9 @@ public class TitleAPI {
             subtitle_packet.getChatComponents().write(0, WrappedChatComponent.fromText(subtitle));
 
             try {
-                protocolManager.sendServerPacket(p, time_packet);
-                protocolManager.sendServerPacket(p, subtitle_packet);
-                protocolManager.sendServerPacket(p, title_packet);
+                PacketAPI.getProtocolManager().sendServerPacket(p, time_packet);
+                PacketAPI.getProtocolManager().sendServerPacket(p, subtitle_packet);
+                PacketAPI.getProtocolManager().sendServerPacket(p, title_packet);
             } catch (InvocationTargetException e) {
                 BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.TITLE_ERROR.replace("%player%", p.getDisplayName())));
             }

@@ -13,7 +13,7 @@ public class PlayerDeathListener extends Listeners {
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
 
-        if (p.hasPermission(Config.KEEP_XP)) {
+        if (p.hasPermission(Config.KEEP_XP) || p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
             e.setDroppedExp(0);
         }
     }

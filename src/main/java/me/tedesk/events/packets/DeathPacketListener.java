@@ -29,6 +29,10 @@ public class DeathPacketListener {
             Config.DEAD_PLAYERS.add(p.getUniqueId());
             e.setCancelled(true);
             p.setHealth(0.1);
+            if (!Config.MOVE_SPECTATOR) {
+                p.setWalkSpeed(0F);
+                p.setFlySpeed(0F);
+            }
             for (PotionEffect pe : p.getActivePotionEffects()) {
                 p.removePotionEffect(pe.getType());
             }

@@ -114,7 +114,7 @@ public class BetterDeathScreen extends JavaPlugin {
                     double health = ps.getMaxHealth();
                     if (!Config.MOVE_SPECTATOR) {
                         ps.setWalkSpeed(0.2F);
-                        ps.setFlySpeed(0.2F);
+                        ps.setFlySpeed(0.1F);
                     }
                     ps.setHealth(health);
                     ps.setFoodLevel(20);

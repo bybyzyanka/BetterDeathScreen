@@ -28,10 +28,6 @@ public class Tasks {
                     String ab_plural = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
                     ActionBarAPI.sendActionBar(p, ab_plural);
                     SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_COUNTDOWN, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
-                    if (!Config.MOVE_SPECTATOR) {
-                        p.setWalkSpeed(0F);
-                        p.setFlySpeed(0F);
-                    }
                 }
                 if (time == 1) {
                     String ab_singular = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
@@ -45,7 +41,7 @@ public class Tasks {
                     double health = p.getMaxHealth();
                     if (!Config.MOVE_SPECTATOR) {
                         p.setWalkSpeed(0.2F);
-                        p.setFlySpeed(0.2F);
+                        p.setFlySpeed(0.1F);
                     }
                     p.setHealth(health);
                     p.setFoodLevel(20);
