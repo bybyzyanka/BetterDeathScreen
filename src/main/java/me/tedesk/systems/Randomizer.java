@@ -4,9 +4,15 @@ import me.tedesk.configs.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Random;
 
 public class Randomizer {
+
+    public static String randomSound(List<String> sound) {
+        Random r = new Random();
+        return sound.get(r.nextInt(sound.size()));
+    }
 
     public static String customTitles() {
         Random r = new Random();

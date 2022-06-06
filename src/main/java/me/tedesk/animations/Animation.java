@@ -17,12 +17,8 @@ public class Animation {
     }
 
     public static void sendAnimation(Player p) {
-        if (Config.ANIMATION.equals("DISABLED")) {
-            return;
-        }
         if (Config.ANIMATION.equals("BLOOD")) {
             bloodAnimation(p);
-            return;
         }
         if (Config.ANIMATION.equals("LIGHTNING")) {
             lightningAnimation(p);

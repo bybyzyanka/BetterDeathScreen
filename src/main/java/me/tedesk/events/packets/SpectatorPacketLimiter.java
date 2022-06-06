@@ -6,6 +6,8 @@ import com.comphenix.protocol.events.PacketEvent;
 import me.tedesk.BetterDeathScreen;
 import me.tedesk.api.PacketAPI;
 import me.tedesk.configs.Config;
+import me.tedesk.configs.Messages;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -16,7 +18,7 @@ public class SpectatorPacketLimiter {
             @Override
             public void onPacketSending(PacketEvent e) {
                 Player p = e.getPlayer();
-                if (Config.DEAD_PLAYERS.contains(p.getUniqueId())) {
+                if (Config.DEAD_PLAYERS.contains(p.getName()) && !Config.SPECTATE_ENTITY) {
                     e.setCancelled(true);
                     p.setSneaking(true);
                     new BukkitRunnable() {
@@ -32,8 +34,9 @@ public class SpectatorPacketLimiter {
             @Override
             public void onPacketReceiving(PacketEvent e) {
                 Player p = e.getPlayer();
-                if (Config.DEAD_PLAYERS.contains(p.getUniqueId())) {
+                if (Config.DEAD_PLAYERS.contains(p.getName()) && !Config.SPECTATE_ENTITY) {
                     e.setCancelled(true);
+                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.SPECTATE_BLOCKED));
                 }
             }
         });

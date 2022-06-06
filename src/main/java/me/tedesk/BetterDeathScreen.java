@@ -1,24 +1,21 @@
 package me.tedesk;
 
-import me.tedesk.api.ActionBarAPI;
-import me.tedesk.api.SoundAPI;
-import me.tedesk.api.TitleAPI;
 import me.tedesk.commands.MainCommand;
 import me.tedesk.configs.Config;
 import me.tedesk.configs.ConfigHandler;
 import me.tedesk.configs.Messages;
 import me.tedesk.events.Listeners;
+import me.tedesk.systems.Tasks;
 import me.tedesk.utils.Version;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BetterDeathScreen extends JavaPlugin {
+
     public static BetterDeathScreen plugin;
     public static Version version;
     PluginDescriptionFile pdf = this.getDescription();
@@ -65,6 +62,7 @@ public class BetterDeathScreen extends JavaPlugin {
 
     public static void createAndLoadConfigs() {
         ConfigHandler.createConfig("config");
+        ConfigHandler.createConfig("locations");
         Config.loadConfigs();
         try {
             ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
@@ -84,7 +82,7 @@ public class BetterDeathScreen extends JavaPlugin {
 
         if (version == Version.UNKNOWN) {
             for (String incompatible : Messages.INCOMPATIBLE) {
-                logger(incompatible.replace("&", "§").replace("%server_version%", "(" + Version.getServerVersion() + ")"));
+                logger(ChatColor.translateAlternateColorCodes('&', incompatible.replace("%server_version%", "(" + Version.getServerVersion() + ")")));
             }
             plugin.getPluginLoader().disablePlugin(plugin);
             return;
@@ -94,7 +92,7 @@ public class BetterDeathScreen extends JavaPlugin {
         plugin.getCommand("bds").setExecutor(new MainCommand());
         Metrics metrics = new Metrics(this, 14729);
         for (String enabled : Messages.ENABLED) {
-            logger(enabled.replace("&", "§").replace("%plugin_version%", "(v" + pdf.getVersion() + ")"));
+            logger(ChatColor.translateAlternateColorCodes('&', enabled.replace("%plugin_version%", "(v" + pdf.getVersion() + ")")));
         }
         logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
     }
@@ -102,36 +100,11 @@ public class BetterDeathScreen extends JavaPlugin {
     @Override
     public void onDisable() {
         for (String disabled : Messages.DISABLED) {
-            logger(disabled.replace("&", "§").replace("%plugin_version%", "(v" + pdf.getVersion() + ")"));
+            logger(ChatColor.translateAlternateColorCodes('&', disabled.replace("%plugin_version%", "(v" + pdf.getVersion() + ")")));
         }
         for (Player ps : Bukkit.getOnlinePlayers()) {
-            if (Config.DEAD_PLAYERS.contains(ps.getUniqueId())) {
-                if (!Bukkit.getServer().isHardcore()) {
-                    Config.DEAD_PLAYERS.remove(ps.getUniqueId());
-                    ps.spigot().respawn();
-                    TitleAPI.sendTitle(ps, 1, 1,1, "", "");
-                    ActionBarAPI.sendActionBar(ps, "§r");
-                    double health = ps.getMaxHealth();
-                    if (!Config.MOVE_SPECTATOR) {
-                        ps.setWalkSpeed(0.2F);
-                        ps.setFlySpeed(0.1F);
-                    }
-                    ps.setHealth(health);
-                    ps.setFoodLevel(20);
-                    ps.setGameMode(GameMode.SURVIVAL);
-                    if (ps.getBedSpawnLocation() == null) {
-                        PlayerRespawnEvent world_respawn = new PlayerRespawnEvent(ps, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
-                        Bukkit.getPluginManager().callEvent(world_respawn);
-                        ps.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                    }
-                    if (ps.getBedSpawnLocation() != null) {
-                        PlayerRespawnEvent bed_respawn = new PlayerRespawnEvent(ps, ps.getBedSpawnLocation(), true);
-                        Bukkit.getPluginManager().callEvent(bed_respawn);
-                        ps.teleport(ps.getBedSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                    }
-                    SoundAPI.sendSound(ps, ps.getLocation(), Config.SOUND_RESPAWN, Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
-                    ps.updateInventory();
-                }
+            if (Config.DEAD_PLAYERS.contains(ps.getName())) {
+                Tasks.performRespawn(ps);
             }
         }
     }

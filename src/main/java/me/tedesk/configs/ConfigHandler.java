@@ -18,5 +18,13 @@ public class ConfigHandler {
         File new_file = new File(BetterDeathScreen.plugin.getDataFolder() + File.separator + file + ".yml");
         return YamlConfiguration.loadConfiguration(new_file);
     }
+
+    public static FileConfiguration getSavedConfiguration(File file) {
+        return YamlConfiguration.loadConfiguration(file);
+    }
+
+    public static File getFile(String file) {
+        return new File(BetterDeathScreen.plugin.getDataFolder() + File.separator + file + ".yml");
+    }
 }
 

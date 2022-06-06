@@ -10,26 +10,31 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerJoinListener extends Listeners {
+public class PlayerConnectionListener extends Listeners {
 
-    // Usado para jogadores que são considerados mortos (no modo espectador) ao reconectarem.
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        // Reinicia a contagem ou mostra a mensagem do modo de jogo hardcore ao reconectar.
-        if ((p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) || Config.DEAD_PLAYERS.contains(p.getUniqueId())) {
-            if (!Bukkit.getServer().isHardcore()) {
-                Tasks.normalTimer(p);
-            }
-            if (Bukkit.getServer().isHardcore()) {
-                Tasks.hardcoreTimer(p);
-            }
+        if (Bukkit.getServer().isHardcore()) {
+            Tasks.hardcoreTimer(p);
         }
         // Desbugando o respawn em outras dimensões.
         if (p.getBedSpawnLocation() != null) {
             if (p.getBedSpawnLocation().getWorld().getEnvironment() != World.Environment.NORMAL) {
                 p.setBedSpawnLocation(null);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        Player p = e.getPlayer();
+        // Para evitar bugs, o jogador renasce ao desconectar.
+        if ((p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) || Config.DEAD_PLAYERS.contains(p.getName())) {
+            if (!Bukkit.getServer().isHardcore()) {
+                Tasks.performRespawn(p);
             }
         }
     }

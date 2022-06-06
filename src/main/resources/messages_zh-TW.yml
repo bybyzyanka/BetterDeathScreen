@@ -1,3 +1,7 @@
+misc:
+  commands-blocked: "&c你不能使用命令，你已经死了。"
+  spectate-blocked: "&c你不能进入其他玩家或生物的视野。"
+  hotbar-tp-blocked: "&c您不能使用观众模式菜单传送到其他玩家。"
 actionbar:
   death: '&7你將在&6%time%&7後復活。'
   hardcore: '&7你永遠不會再復活...'
@@ -28,8 +32,10 @@ commands:
     - "&cBetterDeathScreen &7- 指令"
     - ""
     - "&c/bds reload &7- &f重新加載插件設定。"
-  reload: "&a[BDS] 插件已成功重新加載。"
-  no-perm: "&c[BDS] 你沒有權限使用這個指令。" 
+    - "&c/bds setspawn &7 - &f设置主生成 &7&o（仅在设置中启用时有效）"
+  reload: "&7[BDS] &a插件已成功重新加載。"
+  no-perm: "&7[BDS] &c你沒有權限使用這個指令。"
+  spawn-set: "&7[BDS] &a主重生重置。"
 plugin:
   incompatible:
     - "&c你的伺服器版本低於1.8！ §f%server_version%"

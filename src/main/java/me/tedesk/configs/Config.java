@@ -6,17 +6,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Config {
 
-    public static List<UUID> DEAD_PLAYERS = new ArrayList<>();
-    public static Location DEFAULT_WORLD_SPAWN;
+    public static List<String> DEAD_PLAYERS = new ArrayList<>();
     public static String LANGUAGE;
-    public static String SOUND_DEATH;
+    public static boolean USE_DEFAULT_WORLD_SPAWN;
+    public static Location SPAWN;
+    public static List<String> SOUND_DEATH;
     public static String SOUND_COUNTDOWN;
-    public static String SOUND_RESPAWN;
-    public static String SOUND_KILL;
+    public static List<String> SOUND_RESPAWN;
+    public static List<String> SOUND_KILL;
     public static Float SOUND_DEATH_VOLUME;
     public static Float SOUND_COUNTDOWN_VOLUME;
     public static Float SOUND_RESPAWN_VOLUME;
@@ -29,20 +29,28 @@ public class Config {
     public static String KEEP_XP;
     public static String ADMIN;
     public static String ANIMATION;
+    public static boolean QUEUE_TELEPORT;
     public static boolean SPECTATE_ENTITY;
     public static boolean HOTBAR_TELEPORT_SPECTATOR;
     public static boolean MOVE_SPECTATOR;
+    public static boolean ALLOW_COMMANDS_WHILE_DEAD;
 
     public static void loadConfigs() {
         FileConfiguration config = ConfigHandler.getConfig("config");
+        FileConfiguration locations = ConfigHandler.getConfig("locations");
 
         LANGUAGE = config.getString("misc.language");
-        DEFAULT_WORLD_SPAWN = new Location(Bukkit.getWorlds().get(0), Bukkit.getWorlds().get(0).getSpawnLocation().getX(), Bukkit.getWorlds().get(0).getSpawnLocation().getY(), Bukkit.getWorlds().get(0).getSpawnLocation().getZ(), Bukkit.getWorlds().get(0).getSpawnLocation().getYaw(), Bukkit.getWorlds().get(0).getSpawnLocation().getPitch());
+        USE_DEFAULT_WORLD_SPAWN = config.getBoolean("misc.use-default-world-spawn");
+        try {
+            SPAWN = new Location(Bukkit.getWorld(locations.getString("spawn.world")), locations.getDouble("spawn.X"), locations.getDouble("spawn.Y"), locations.getDouble("spawn.Z"), (float) locations.getDouble("spawn.yaw"), (float) locations.getDouble("spawn.pitch"));
+        } catch (Exception e) {
+            SPAWN = Bukkit.getWorlds().get(0).getSpawnLocation();
+        }
 
-        SOUND_DEATH = config.getString("sound.type.death");
+        SOUND_DEATH = config.getStringList("sound.type.death");
         SOUND_COUNTDOWN = config.getString("sound.type.countdown");
-        SOUND_RESPAWN = config.getString("sound.type.respawn");
-        SOUND_KILL = config.getString("sound.type.kill");
+        SOUND_RESPAWN = config.getStringList("sound.type.respawn");
+        SOUND_KILL = config.getStringList("sound.type.kill");
 
         SOUND_DEATH_VOLUME = (float) config.getDouble("sound.volume.death");
         SOUND_COUNTDOWN_VOLUME = (float) config.getDouble("sound.volume.countdown");
@@ -61,8 +69,10 @@ public class Config {
 
         ANIMATION = config.getString("animation.type");
 
+        QUEUE_TELEPORT = config.getBoolean("spectator-settings.queue-teleport");
         SPECTATE_ENTITY = config.getBoolean("spectator-settings.allow-spectate");
         HOTBAR_TELEPORT_SPECTATOR = config.getBoolean("spectator-settings.allow-teleport-with-keys");
         MOVE_SPECTATOR = config.getBoolean("spectator-settings.allow-move");
+        ALLOW_COMMANDS_WHILE_DEAD = config.getBoolean("spectator-settings.allow-commands");
     }
 }

@@ -1,3 +1,7 @@
+misc:
+  commands-blocked: "&cVocê não pode usar comandos, você está morto."
+  spectate-blocked: "&cVocê não pode entrar na visão de outros jogadores ou mobs."
+  hotbar-tp-blocked: "&cVocê não pode se teleportar para outros jogadores usando o menu do modo espectador."
 actionbar:
   death: '&7Você ressurgirá em &6%time%.'
   hardcore: '&7Você não irá renascer...'
@@ -28,8 +32,10 @@ commands:
     - "&cBetterDeathScreen &7- Comandos"
     - ""
     - "&c/bds reload &7- &fRecarrega a configuração do plugin."
-  reload: "&a[BDS] Plugin recarregado com sucesso."
-  no-perm: "&c[BDS] Você não tem permissão para usar esse comando."
+    - "&c/bds setspawn &7 - &fDefine o spawn principal &7&o(Só funciona quando ativado nas configurações)"
+  reload: "&7[BDS] &aPlugin recarregado com sucesso."
+  no-perm: "&7[BDS] &cVocê não tem permissão para usar esse comando."
+  spawn-set: "&7[BDS] &aSpawn principal redefinido."
 plugin:
   incompatible:
     - "&cA versão do seu servidor está atrás da 1.8! §f%server_version%"

@@ -11,12 +11,23 @@
 #Please check the Sounds for your server version!
 misc: #Available languages: en-US, pt-BR, zh-TW
   language: 'en-US'
+  use-default-world-spawn: true
+  #If the option above is enabled, the spawn section on locations.yml will be ignored.
 sound:
   type:
-    death: BLAZE_DEATH
+    death:
+    - BLAZE_DEATH
+    - ANVIL_LAND
+    - ITEM_PICKUP
+    - ENDERMAN_DEATH
     countdown: NOTE_BASS_DRUM
-    respawn: NOTE_PLING
-    kill: SKELETON_DEATH
+    respawn:
+    - NOTE_PLING
+    - ORB_PICKUP
+    - LEVEL_UP
+    kill:
+    - SKELETON_DEATH
+    - GLASS
   volume:
     death: 1.0
     countdown: 1.0
@@ -27,7 +38,7 @@ sound:
     countdown: 1.0
     respawn: 1.0
     kill: 1.0
-animation: #Available types: DISABLED, BLOOD, LIGHTNING
+animation: #Available types: NONE, BLOOD, LIGHTNING
   type: "BLOOD"
 time:
   duration: 10
@@ -35,6 +46,8 @@ permissions:
   keep-xp: 'bds.xp'
   admin: 'bds.admin'
 spectator-settings:
+  queue-teleport: true
   allow-spectate: false
   allow-teleport-with-keys: false
   allow-move: true
+  allow-commands: false
