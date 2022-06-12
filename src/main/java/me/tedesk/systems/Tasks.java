@@ -3,6 +3,7 @@ package me.tedesk.systems;
 import me.tedesk.BetterDeathScreen;
 import me.tedesk.api.ActionBarAPI;
 import me.tedesk.api.SoundAPI;
+import me.tedesk.api.TitleAPI;
 import me.tedesk.configs.Config;
 import me.tedesk.configs.Messages;
 import me.tedesk.events.bukkit.PlayerTeleportListener;
@@ -21,6 +22,8 @@ public class Tasks {
             Config.DEAD_PLAYERS.remove(p.getName());
             ActionBarAPI.sendActionBar(p, "§r");
             double health = p.getMaxHealth();
+            p.setHealth(health);
+            p.setFoodLevel(20);
             if (!Config.MOVE_SPECTATOR) {
                 p.setWalkSpeed(0.2F);
                 p.setFlySpeed(0.1F);
@@ -30,36 +33,61 @@ public class Tasks {
                     if (p.getBedSpawnLocation() == null) {
                         PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
                         Bukkit.getPluginManager().callEvent(non_bed_respawn);
-                        Locations.teleportSafeLocation(p, Bukkit.getWorlds().get(0).getSpawnLocation());
+                        if (Config.USE_SAFE_TELEPORT) {
+                            Locations.teleportSafeLocation(p, Bukkit.getWorlds().get(0).getSpawnLocation());
+                        }
+                        if (!Config.USE_SAFE_TELEPORT) {
+                            p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        }
                     }
                     if (p.getBedSpawnLocation() != null) {
                         PlayerRespawnEvent bed_respawn = new PlayerRespawnEvent(p, p.getBedSpawnLocation(), true);
                         Bukkit.getPluginManager().callEvent(bed_respawn);
-                        Locations.teleportSafeLocation(p, p.getBedSpawnLocation());
+                        if (Config.USE_SAFE_TELEPORT) {
+                            Locations.teleportSafeLocation(p, p.getBedSpawnLocation());
+                        }
+                        if (!Config.USE_SAFE_TELEPORT) {
+                            p.teleport(p.getBedSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        }
                     }
                 }
                 if (!Config.USE_DEFAULT_WORLD_SPAWN) {
                     if (p.getBedSpawnLocation() == null) {
-                        PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Config.SPAWN, false);
-                        Bukkit.getPluginManager().callEvent(non_bed_respawn);
-                        p.teleport(Config.SPAWN, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        if (p.hasPermission(Config.VIP)) {
+                            PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Config.VIP_SPAWN, false);
+                            Bukkit.getPluginManager().callEvent(non_bed_respawn);
+                            p.teleport(Config.VIP_SPAWN, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        }
+                        if (!p.hasPermission(Config.VIP)) {
+                            PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Config.SPAWN, false);
+                            Bukkit.getPluginManager().callEvent(non_bed_respawn);
+                            p.teleport(Config.SPAWN, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        }
                     }
                     if (p.getBedSpawnLocation() != null) {
                         PlayerRespawnEvent bed_respawn = new PlayerRespawnEvent(p, p.getBedSpawnLocation(), true);
                         Bukkit.getPluginManager().callEvent(bed_respawn);
-                        Locations.teleportSafeLocation(p, p.getBedSpawnLocation());
+                        if (Config.USE_SAFE_TELEPORT) {
+                            Locations.teleportSafeLocation(p, p.getBedSpawnLocation());
+                        }
+                        if (!Config.USE_SAFE_TELEPORT) {
+                            p.teleport(p.getBedSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        }
                     }
                 }
             }
             if (PlayerTeleportListener.WOULD_TELEPORT.containsKey(p.getName())) {
                 PlayerRespawnEvent queued_teleport = new PlayerRespawnEvent(p, PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()), false);
                 Bukkit.getPluginManager().callEvent(queued_teleport);
-                Locations.teleportSafeLocation(p, PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()));
+                if (Config.USE_SAFE_TELEPORT) {
+                    Locations.teleportSafeLocation(p, PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()));
+                }
+                if (!Config.USE_SAFE_TELEPORT) {
+                    p.teleport(PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                }
                 PlayerTeleportListener.WOULD_TELEPORT.remove(p.getName());
                 PlayerTeleportListener.TELEPORT_LOCATION.remove(p.getName());
             }
-            p.setHealth(health);
-            p.setFoodLevel(20);
             p.setGameMode(GameMode.SURVIVAL);
             SoundAPI.sendSound(p, p.getLocation(), Randomizer.randomSound(Config.SOUND_RESPAWN), Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
             p.updateInventory();
@@ -71,7 +99,12 @@ public class Tasks {
                 double health = p.getMaxHealth();
                 p.setHealth(health);
                 p.setFoodLevel(20);
-                Locations.teleportSafeLocation(p, Bukkit.getWorlds().get(0).getSpawnLocation());
+                if (Config.USE_SAFE_TELEPORT) {
+                    Locations.teleportSafeLocation(p, Bukkit.getWorlds().get(0).getSpawnLocation());
+                }
+                if (!Config.USE_SAFE_TELEPORT) {
+                    p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                }
                 p.updateInventory();
             }
         }
@@ -84,6 +117,11 @@ public class Tasks {
                 time--;
 
                 if (!p.isOnline()){
+                    cancel();
+                }
+                if (p.hasPermission(Config.INSTANT_RESPAWN)) {
+                    TitleAPI.sendTitle(p, 1, 20, 1, "", "");
+                    performRespawn(p);
                     cancel();
                 }
                 if (time > 1) {

@@ -6,20 +6,27 @@ actionbar:
   death: '&7你將在&6%time%&7後復活。'
   hardcore: '&7你永遠不會再復活...'
   kill:
-  - "&c你殺死了 &f%player%！"
-  - "&6恭喜你殺死了 &f%player%"
-  - "&b你非常擅長這個！ &f%player% &7對你感到印象深刻。"
+    - "&c你殺死了 &f%player%！"
+    - "&6恭喜你殺死了 &f%player%"
+    - "&b你非常擅長這個！ &f%player% &7對你感到印象深刻。"
 titles:
-  - "&c你被殺死了"
-  - "&c你死了"
+  killed:
+    - "&c你被殺死了"
+    - "&c你死了"
+  killed-by-player:
+    - "&c你被殺死了"
+    - "&c你死了"
 subtitles:
-  - "&7勝利女神覺得你不夠努力。"
-  - "&7耐心是優秀獵人與死者的區別。"
-  - "&7你已被遺忘..."
-  - "&7四捨五入頂多算你及格。"
-  - "&7你不是這個故事的主角，你甚麼都不是！"
-  - "&7光說不做只會帶來無情的結果。"
-  - "&7專心點！"
+  killed:
+    - "&7勝利女神覺得你不夠努力。"
+    - "&7耐心是優秀獵人與死者的區別。"
+    - "&7你已被遺忘..."
+    - "&7四捨五入頂多算你及格。"
+    - "&7你不是這個故事的主角，你甚麼都不是！"
+    - "&7光說不做只會帶來無情的結果。"
+    - "&7專心點！"
+  killer-by-player:
+
 time:
   singular: "秒"
   plural: "秒"
@@ -32,10 +39,10 @@ commands:
     - "&cBetterDeathScreen &7- 指令"
     - ""
     - "&c/bds reload &7- &f重新加載插件設定。"
-    - "&c/bds setspawn &7 - &f设置主生成 &7&o（仅在设置中启用时有效）"
+    - "&c/bds setspawn normal/vip &7 - &f设置主生成 &7&o（仅在设置中启用时有效）"
   reload: "&7[BDS] &a插件已成功重新加載。"
   no-perm: "&7[BDS] &c你沒有權限使用這個指令。"
-  spawn-set: "&7[BDS] &a主重生重置。"
+  spawn-set: "&7[BDS] &a产卵 %type% 重置。"
 plugin:
   incompatible:
     - "&c你的伺服器版本低於1.8！ §f%server_version%"

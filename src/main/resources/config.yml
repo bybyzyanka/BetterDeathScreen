@@ -11,6 +11,7 @@
 #Please check the Sounds for your server version!
 misc: #Available languages: en-US, pt-BR, zh-TW
   language: 'en-US'
+  use-safe-teleport: true
   use-default-world-spawn: true
   #If the option above is enabled, the spawn section on locations.yml will be ignored.
 sound:
@@ -43,7 +44,9 @@ animation: #Available types: NONE, BLOOD, LIGHTNING
 time:
   duration: 10
 permissions:
+  instant-respawn: 'bds.respawn'
   keep-xp: 'bds.xp'
+  vip-spawn: 'bds.vip'
   admin: 'bds.admin'
 spectator-settings:
   queue-teleport: true

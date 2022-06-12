@@ -18,6 +18,7 @@ public class BetterDeathScreen extends JavaPlugin {
 
     public static BetterDeathScreen plugin;
     public static Version version;
+    public static boolean PLACEHOLDERAPI = false;
     PluginDescriptionFile pdf = this.getDescription();
 
     public static void logger(String text) {
@@ -79,17 +80,20 @@ public class BetterDeathScreen extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         version = Version.getServerVersion();
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            PLACEHOLDERAPI = true;
+        }
 
         if (version == Version.UNKNOWN) {
             for (String incompatible : Messages.INCOMPATIBLE) {
                 logger(ChatColor.translateAlternateColorCodes('&', incompatible.replace("%server_version%", "(" + Version.getServerVersion() + ")")));
             }
-            plugin.getPluginLoader().disablePlugin(plugin);
+            getPluginLoader().disablePlugin(plugin);
             return;
         }
         createAndLoadConfigs();
         Listeners.setup();
-        plugin.getCommand("bds").setExecutor(new MainCommand());
+        getCommand("bds").setExecutor(new MainCommand());
         Metrics metrics = new Metrics(this, 14729);
         for (String enabled : Messages.ENABLED) {
             logger(ChatColor.translateAlternateColorCodes('&', enabled.replace("%plugin_version%", "(v" + pdf.getVersion() + ")")));

@@ -12,7 +12,9 @@ public class Config {
     public static List<String> DEAD_PLAYERS = new ArrayList<>();
     public static String LANGUAGE;
     public static boolean USE_DEFAULT_WORLD_SPAWN;
+    public static boolean USE_SAFE_TELEPORT;
     public static Location SPAWN;
+    public static Location VIP_SPAWN;
     public static List<String> SOUND_DEATH;
     public static String SOUND_COUNTDOWN;
     public static List<String> SOUND_RESPAWN;
@@ -26,6 +28,8 @@ public class Config {
     public static Float SOUND_RESPAWN_PITCH;
     public static Float SOUND_KILL_PITCH;
     public static int TIME;
+    public static String INSTANT_RESPAWN;
+    public static String VIP;
     public static String KEEP_XP;
     public static String ADMIN;
     public static String ANIMATION;
@@ -41,10 +45,16 @@ public class Config {
 
         LANGUAGE = config.getString("misc.language");
         USE_DEFAULT_WORLD_SPAWN = config.getBoolean("misc.use-default-world-spawn");
+        USE_SAFE_TELEPORT = config.getBoolean("misc.use-safe-teleport");
         try {
-            SPAWN = new Location(Bukkit.getWorld(locations.getString("spawn.world")), locations.getDouble("spawn.X"), locations.getDouble("spawn.Y"), locations.getDouble("spawn.Z"), (float) locations.getDouble("spawn.yaw"), (float) locations.getDouble("spawn.pitch"));
+            SPAWN = new Location(Bukkit.getWorld(locations.getString("normal.world")), locations.getDouble("normal.X"), locations.getDouble("normal.Y"), locations.getDouble("normal.Z"), (float) locations.getDouble("normal.yaw"), (float) locations.getDouble("normal.pitch"));
         } catch (Exception e) {
             SPAWN = Bukkit.getWorlds().get(0).getSpawnLocation();
+        }
+        try {
+            VIP_SPAWN = new Location(Bukkit.getWorld(locations.getString("vip.world")), locations.getDouble("vip.X"), locations.getDouble("vip.Y"), locations.getDouble("vip.Z"), (float) locations.getDouble("vip.yaw"), (float) locations.getDouble("vip.pitch"));
+        } catch (Exception e) {
+            VIP_SPAWN = Bukkit.getWorlds().get(0).getSpawnLocation();
         }
 
         SOUND_DEATH = config.getStringList("sound.type.death");
@@ -64,6 +74,8 @@ public class Config {
 
         TIME = config.getInt("time.duration");
 
+        INSTANT_RESPAWN = config.getString("permissions.instant-respawn");
+        VIP = config.getString("permissions.vip-spawn");
         KEEP_XP = config.getString("permissions.keep-xp");
         ADMIN = config.getString("permissions.admin");
 

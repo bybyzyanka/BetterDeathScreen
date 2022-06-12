@@ -10,16 +10,26 @@ actionbar:
     - "&6Parabéns por matar &f%player%"
     - "&bVocê é muito bom nisso! &f%player% &7está impressionado."
 titles:
-  - "&cVOCÊ FOI ELIMINADO"
-  - "&cVOCÊ MORREU"
+  killed:
+    - "&cVOCÊ FOI ELIMINADO"
+    - "&cVOCÊ MORREU"
+  killed-by-player:
+    - "&cVOCÊ FOI ELIMINADO"
+    - "&cVOCÊ MORREU"
 subtitles:
-  - "&7Vencer significa ser melhor."
-  - "&7Paciência é o que separa os caçadores bons dos mortos."
-  - "&7Já caiu no esquecimento."
-  - "&7Isso foi no máximo... mediocre."
-  - "&7Você não é o herói desse história, você não é nada!"
-  - "&7Resultados dizem mais do que palavras."
-  - "&7Preste atenção!"
+  killed:
+    - "&7Vencer significa ser melhor."
+    - "&7Paciência é o que separa os caçadores bons dos mortos."
+    - "&7Já caiu no esquecimento."
+    - "&7Isso foi no máximo... mediocre."
+    - "&7Você não é o herói desse história, você não é nada!"
+    - "&7Resultados dizem mais do que palavras."
+    - "&7Preste atenção!"
+  killed-by-player:
+    - "&7Alguém te deu uma aula."
+    - "&7%player_name% disse bom dia."
+    - "&7%player_name% só é melhor."
+    - "&7Seu inimigo ficou vivo com &c%player_health_rounded% ❤"
 time:
   singular: " segundo"
   plural: " segundos"
@@ -32,10 +42,10 @@ commands:
     - "&cBetterDeathScreen &7- Comandos"
     - ""
     - "&c/bds reload &7- &fRecarrega a configuração do plugin."
-    - "&c/bds setspawn &7 - &fDefine o spawn principal &7&o(Só funciona quando ativado nas configurações)"
+    - "&c/bds setspawn normal/vip &7 - &fDefine o spawn principal &7&o(Só funciona quando ativado nas configurações)"
   reload: "&7[BDS] &aPlugin recarregado com sucesso."
   no-perm: "&7[BDS] &cVocê não tem permissão para usar esse comando."
-  spawn-set: "&7[BDS] &aSpawn principal redefinido."
+  spawn-set: "&7[BDS] &aSpawn %type% redefinido."
 plugin:
   incompatible:
     - "&cA versão do seu servidor está atrás da 1.8! §f%server_version%"

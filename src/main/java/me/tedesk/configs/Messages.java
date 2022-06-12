@@ -14,8 +14,10 @@ public class Messages {
     public static String ACTIONBAR_DEATH;
     public static String ACTIONBAR_HC;
     public static List<String> ACTIONBAR_KILL;
-    public static List<String> TITLES;
-    public static List<String> SUBTITLES;
+    public static List<String> KILLED_TITLES;
+    public static List<String> KILLED_BY_PLAYER_TITLES;
+    public static List<String> KILLED_SUBTITLES;
+    public static List<String> KILLED_BY_PLAYER_SUBTITLES;
     public static String SINGULAR;
     public static String PLURAL;
     public static List<String> HELP;
@@ -42,8 +44,10 @@ public class Messages {
         ACTIONBAR_HC = messages.getString("actionbar.hardcore");
         ACTIONBAR_KILL = messages.getStringList("actionbar.kill");
 
-        TITLES = messages.getStringList("titles");
-        SUBTITLES = messages.getStringList("subtitles");
+        KILLED_TITLES = messages.getStringList("titles.killed");
+        KILLED_BY_PLAYER_TITLES = messages.getStringList("titles.killed-by-player");
+        KILLED_SUBTITLES = messages.getStringList("subtitles.killed");
+        KILLED_BY_PLAYER_SUBTITLES = messages.getStringList("subtitles.killed-by-player");
 
         SINGULAR = messages.getString("time.singular");
         PLURAL = messages.getString("time.plural");

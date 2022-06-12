@@ -13,7 +13,7 @@ public class Locations {
             Location loc = new Location(location.getWorld(), location.getX(), i, location.getZ());
             Material type = loc.getBlock().getType();
             if (type != Material.AIR && type != Material.LAVA && type != Material.WATER) {
-                p.teleport(loc.add(0,1.5,0), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                p.teleport(loc.add(0,1.1,0), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 break;
             }
         }

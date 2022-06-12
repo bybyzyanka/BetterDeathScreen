@@ -1,6 +1,5 @@
 package me.tedesk.events.bukkit;
 
-import com.comphenix.protocol.events.PacketEvent;
 import me.tedesk.animations.Animation;
 import me.tedesk.api.ActionBarAPI;
 import me.tedesk.api.SoundAPI;
@@ -23,10 +22,6 @@ import org.bukkit.potion.PotionEffect;
 public class EntityDamageListener extends Listeners {
 
     private static void sendEvents(Player p) {
-        int time = Config.TIME;
-        if (time <= 0) {
-            time = 1;
-        }
         Config.DEAD_PLAYERS.add(p.getName());
         if (!Config.MOVE_SPECTATOR) {
             p.setWalkSpeed(0F);
@@ -43,7 +38,6 @@ public class EntityDamageListener extends Listeners {
         }
         p.setGameMode(GameMode.SPECTATOR);
         SoundAPI.sendSound(p, p.getLocation(), Randomizer.randomSound(Config.SOUND_DEATH), Config.SOUND_DEATH_VOLUME, Config.SOUND_DEATH_PITCH);
-        TitleAPI.sendTitle(p, 2, 20 * time, 2, Randomizer.customTitles(), Randomizer.customSubtitles());
         if (!Bukkit.getServer().isHardcore()) {
             Tasks.normalTimer(p);
         }
@@ -56,6 +50,10 @@ public class EntityDamageListener extends Listeners {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent e) {
         Entity victim = e.getEntity();
+        int time = Config.TIME;
+        if (time <= 0) {
+            time = 1;
+        }
 
         if (victim instanceof Player) {
             Player pv = (Player) victim;
@@ -63,26 +61,30 @@ public class EntityDamageListener extends Listeners {
                 e.setCancelled(true);
                 return;
             }
-            sendEvents(pv);
+            if (!(e instanceof EntityDamageByEntityEvent)) {
+                TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitle(pv), Randomizer.randomSubTitle(pv));
+            }
             if (e instanceof EntityDamageByEntityEvent) {
                 Entity damager = ((EntityDamageByEntityEvent) e).getDamager();
                 if (pv.getHealth() <= e.getFinalDamage()) {
                     if (damager instanceof Player) {
                         Player pd = (Player) damager;
-                        ActionBarAPI.sendActionBar(pd, Randomizer.customKillActionBar(pv));
+                        TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
+                        ActionBarAPI.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
                         SoundAPI.sendSound(pd, pd.getLocation(), Randomizer.randomSound(Config.SOUND_KILL), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
-                        return;
                     }
                     if (damager instanceof Projectile) {
                         Projectile pj = (Projectile) damager;
                         if (pj.getShooter() instanceof Player) {
                             Player pd = (Player) pj.getShooter();
-                            ActionBarAPI.sendActionBar(pd, Randomizer.customKillActionBar(pv));
+                            TitleAPI.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
+                            ActionBarAPI.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
                             SoundAPI.sendSound(pd, pd.getLocation(), Randomizer.randomSound(Config.SOUND_KILL), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
                         }
                     }
                 }
             }
+            sendEvents(pv);
         }
     }
 }

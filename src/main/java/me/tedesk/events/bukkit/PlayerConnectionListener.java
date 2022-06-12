@@ -17,8 +17,10 @@ public class PlayerConnectionListener extends Listeners {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if (Bukkit.getServer().isHardcore()) {
-            Tasks.hardcoreTimer(p);
+        if ((p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) || Config.DEAD_PLAYERS.contains(p.getName())) {
+            if (Bukkit.getServer().isHardcore()) {
+                Tasks.hardcoreTimer(p);
+            }
         }
         // Desbugando o respawn em outras dimensões.
         if (p.getBedSpawnLocation() != null) {
