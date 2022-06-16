@@ -5,19 +5,19 @@ misc:
 actionbar:
   death: '&7Você ressurgirá em &6%time%.'
   hardcore: '&7Você não irá renascer...'
-  kill:
+  kill: #A vítima será usada como base para as placeholders.
     - "&cVocê matou &f%player%!"
     - "&6Parabéns por matar &f%player%"
     - "&bVocê é muito bom nisso! &f%player% &7está impressionado."
 titles:
-  killed:
+  killed: #A vítima será usada como base para as placeholders.
     - "&cVOCÊ FOI ELIMINADO"
     - "&cVOCÊ MORREU"
-  killed-by-player:
+  killed-by-player: #O assassino será usado como base para as placeholders.
     - "&cVOCÊ FOI ELIMINADO"
     - "&cVOCÊ MORREU"
 subtitles:
-  killed:
+  killed: #A vítima será usada como base para as placeholders.
     - "&7Vencer significa ser melhor."
     - "&7Paciência é o que separa os caçadores bons dos mortos."
     - "&7Já caiu no esquecimento."
@@ -25,7 +25,7 @@ subtitles:
     - "&7Você não é o herói desse história, você não é nada!"
     - "&7Resultados dizem mais do que palavras."
     - "&7Preste atenção!"
-  killed-by-player:
+  killed-by-player: #O assassino será usado como base para as placeholders.
     - "&7Alguém te deu uma aula."
     - "&7%player_name% disse bom dia."
     - "&7%player_name% só é melhor."

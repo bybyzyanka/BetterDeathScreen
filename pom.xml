@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.tedesk</groupId>
+    <groupId>me.tedesk.bds</groupId>
     <artifactId>BetterDeathScreen</artifactId>
     <version>1.5</version>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -30,7 +30,7 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>me.tedesk.utils.bstats</shadedPattern>
+                            <shadedPattern>me.tedesk.bds.utils.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

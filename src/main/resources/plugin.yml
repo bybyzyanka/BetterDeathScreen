@@ -1,5 +1,5 @@
 name: BetterDeathScreen
-main: me.tedesk.BetterDeathScreen
+main: me.tedesk.bds.BetterDeathScreen
 description: Plugin that offers a wide variety of options to customize the death screen of Minecraft.
 version: ${project.version}
 author: Tedesk

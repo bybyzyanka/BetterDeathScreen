@@ -5,19 +5,19 @@ misc:
 actionbar:
   death: '&7你將在&6%time%&7後復活。'
   hardcore: '&7你永遠不會再復活...'
-  kill:
+  kill: #受害者将作为占位符的基础。
     - "&c你殺死了 &f%player%！"
     - "&6恭喜你殺死了 &f%player%"
     - "&b你非常擅長這個！ &f%player% &7對你感到印象深刻。"
 titles:
-  killed:
+  killed: #受害者将作为占位符的基础。
     - "&c你被殺死了"
     - "&c你死了"
-  killed-by-player:
+  killed-by-player: #杀手将作为占位符的基础。
     - "&c你被殺死了"
     - "&c你死了"
 subtitles:
-  killed:
+  killed: #受害者将作为占位符的基础。
     - "&7勝利女神覺得你不夠努力。"
     - "&7耐心是優秀獵人與死者的區別。"
     - "&7你已被遺忘..."
@@ -25,8 +25,11 @@ subtitles:
     - "&7你不是這個故事的主角，你甚麼都不是！"
     - "&7光說不做只會帶來無情的結果。"
     - "&7專心點！"
-  killer-by-player:
-
+  killer-by-player: #杀手将作为占位符的基础。
+    - "&7有人比你强。"
+    - "&7%player_name% 说再见。"
+    - "&7%player_name% 更好。"
+    - "&7你的敌人因为 &c%player_health_rounded% ❤ 而活着"
 time:
   singular: "秒"
   plural: "秒"
