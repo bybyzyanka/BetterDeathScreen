@@ -37,6 +37,7 @@ errors:
   actionbar: "&cNão foi possivel enviar a actionbar para o jogador %player%"
   title: "&cNão foi possivel enviar o title para o jogador %player%"
   sound: "&cO som %sound% não existe na versão de seu servidor. Verifique sua config.yml"
+  spawn: "&O teleporte de %player% para o spawn %type% falhou, ele foi teleportado para o spawn do mundo principal. Verifique sua locations.yml ou defina o spawn."
 commands:
   help:
     - "&cBetterDeathScreen &7- Comandos"

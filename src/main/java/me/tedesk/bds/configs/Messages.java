@@ -27,6 +27,7 @@ public class Messages {
     public static String AB_ERROR;
     public static String TITLE_ERROR;
     public static String SOUND_ERROR;
+    public static String SPAWN_ERROR;
 
 
     public static void loadMessages() {
@@ -60,5 +61,6 @@ public class Messages {
         AB_ERROR = messages.getString("errors.actionbar");
         TITLE_ERROR = messages.getString("errors.title");
         SOUND_ERROR = messages.getString("errors.sound");
+        SPAWN_ERROR = messages.getString("errors.spawn");
     }
 }

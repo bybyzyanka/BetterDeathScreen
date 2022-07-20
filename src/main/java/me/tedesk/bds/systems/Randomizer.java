@@ -23,10 +23,6 @@ public class Randomizer {
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_BY_PLAYER_TITLES.get(random_item));
         if (BetterDeathScreen.PLACEHOLDERAPI) {
             message = PlaceholderAPI.setPlaceholders(killer, message);
-        } else {
-            while (message.contains("%")) {
-                message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_BY_PLAYER_TITLES.get(random_item));
-            }
         }
         return message;
     }
@@ -37,10 +33,6 @@ public class Randomizer {
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_BY_PLAYER_SUBTITLES.get(random_item));
         if (BetterDeathScreen.PLACEHOLDERAPI) {
             message = PlaceholderAPI.setPlaceholders(killer, message);
-        } else {
-            while (message.contains("%")) {
-                message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_BY_PLAYER_SUBTITLES.get(random_item));
-            }
         }
         return message;
     }
@@ -51,10 +43,6 @@ public class Randomizer {
         String message = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_KILL.get(random_item));
         if (BetterDeathScreen.PLACEHOLDERAPI) {
             message = PlaceholderAPI.setPlaceholders(victim, message);
-        } else {
-            while (message.contains("%")) {
-                message = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_KILL.get(random_item));
-            }
         }
         return message;
     }
@@ -65,10 +53,6 @@ public class Randomizer {
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_TITLES.get(random_item));
         if (BetterDeathScreen.PLACEHOLDERAPI) {
             message = PlaceholderAPI.setPlaceholders(victim, message);
-        } else {
-            while (message.contains("%")) {
-                message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_TITLES.get(random_item));
-            }
         }
         return message;
     }
@@ -79,10 +63,6 @@ public class Randomizer {
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_SUBTITLES.get(random_item));
         if (BetterDeathScreen.PLACEHOLDERAPI) {
             message = PlaceholderAPI.setPlaceholders(victim, message);
-        } else {
-            while (message.contains("%")) {
-                message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_SUBTITLES.get(random_item));
-            }
         }
         return message;
     }

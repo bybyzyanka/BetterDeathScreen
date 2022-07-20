@@ -1,9 +1,10 @@
-package me.tedesk.bds.utils;
+package me.tedesk.bds.api;
 
 import org.bukkit.Bukkit;
 
 public enum Version {
 
+    v1_20(20),
     v1_19(19),
     v1_18(18),
     v1_17(17),
@@ -36,7 +37,9 @@ public enum Version {
     }
 
     public static Version getServerVersion(String ver) {
-        if (ver.contains("1.19"))
+        if (ver.contains("1.20"))
+            return v1_19;
+        else if (ver.contains("1.19"))
             return v1_19;
         else if (ver.contains("1.18"))
             return v1_18;

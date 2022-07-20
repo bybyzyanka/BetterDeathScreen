@@ -2,7 +2,7 @@
 Um simples plugin que altera a tela de morte do Minecraft.
 ## Observações
 Você obrigatoriamente precisa do plugin `ProtocolLib`, faça o download no [**repositório**](https://github.com/dmulloy2/ProtocolLib/releases) deles. Uma dependência opcional é o plugin `PlaceholderAPI`, faça o download [**aqui**](https://github.com/PlaceholderAPI/PlaceholderAPI/releases).<br /><br />Se você estiver usando o plugin `ViaVersion` e seu servidor estiver na 1.8, 
-você precisa obrigatoriamente desativar a configuração `use-new-death-messages` para o plugin funcionar corretamente.
+você precisa obrigatoriamente desativar a configuração `use-new-deathmessages` para o plugin funcionar corretamente.
 ## Download
 Você pode baixar o plugin [**aqui**](https://github.com/VictorTedesco/BetterDeathScreen/releases) ou clonar esse repositório e buildar o plugin.
 ## Configuração

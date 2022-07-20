@@ -10,7 +10,9 @@ import java.util.List;
 public class Config {
 
     public static List<String> DEAD_PLAYERS = new ArrayList<>();
+    public static boolean USE_DEATH_PACKET_HANDLER;
     public static String LANGUAGE;
+    public static boolean WORLD_BORDER_EFFECT;
     public static boolean USE_DEFAULT_WORLD_SPAWN;
     public static boolean USE_SAFE_TELEPORT;
     public static Location SPAWN;
@@ -44,26 +46,13 @@ public class Config {
         FileConfiguration locations = ConfigHandler.getConfig("locations");
 
         LANGUAGE = config.getString("misc.language");
-        try {
-            USE_DEFAULT_WORLD_SPAWN = config.getBoolean("misc.use-default-world-spawn");
-        } catch (Exception e) {
-            USE_DEFAULT_WORLD_SPAWN = true;
-        }
-        try {
-            USE_SAFE_TELEPORT = config.getBoolean("misc.use-safe-teleport");
-        } catch (Exception e) {
-            USE_SAFE_TELEPORT = true;
-        }
-        try {
-            SPAWN = new Location(Bukkit.getWorld(locations.getString("normal.world")), locations.getDouble("normal.X"), locations.getDouble("normal.Y"), locations.getDouble("normal.Z"), (float) locations.getDouble("normal.yaw"), (float) locations.getDouble("normal.pitch"));
-        } catch (Exception e) {
-            SPAWN = Bukkit.getWorlds().get(0).getSpawnLocation();
-        }
-        try {
-            VIP_SPAWN = new Location(Bukkit.getWorld(locations.getString("vip.world")), locations.getDouble("vip.X"), locations.getDouble("vip.Y"), locations.getDouble("vip.Z"), (float) locations.getDouble("vip.yaw"), (float) locations.getDouble("vip.pitch"));
-        } catch (Exception e) {
-            VIP_SPAWN = Bukkit.getWorlds().get(0).getSpawnLocation();
-        }
+        USE_DEATH_PACKET_HANDLER = config.getBoolean("misc.use-packet-event-handler");
+        WORLD_BORDER_EFFECT = config.getBoolean("misc.world-border-effect");
+        USE_DEFAULT_WORLD_SPAWN = config.getBoolean("misc.use-default-world-spawn");
+        USE_SAFE_TELEPORT = config.getBoolean("misc.use-safe-teleport");
+
+        SPAWN = new Location(Bukkit.getWorld(locations.getString("normal.world")), locations.getDouble("normal.X"), locations.getDouble("normal.Y"), locations.getDouble("normal.Z"), (float) locations.getDouble("normal.yaw"), (float) locations.getDouble("normal.pitch"));
+        VIP_SPAWN = new Location(Bukkit.getWorld(locations.getString("vip.world")), locations.getDouble("vip.X"), locations.getDouble("vip.Y"), locations.getDouble("vip.Z"), (float) locations.getDouble("vip.yaw"), (float) locations.getDouble("vip.pitch"));
 
         SOUND_DEATH = config.getStringList("sound.type.death");
         SOUND_COUNTDOWN = config.getString("sound.type.countdown");

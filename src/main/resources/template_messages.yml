@@ -37,6 +37,7 @@ errors:
   actionbar: "%player%"
   title: "%player%"
   sound: "%sound%"
+  spawn: "%player% %type%"
 commands:
   help:
     - ""

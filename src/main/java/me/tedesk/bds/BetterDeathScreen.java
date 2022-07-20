@@ -6,7 +6,7 @@ import me.tedesk.bds.configs.ConfigHandler;
 import me.tedesk.bds.configs.Messages;
 import me.tedesk.bds.events.Listeners;
 import me.tedesk.bds.systems.Tasks;
-import me.tedesk.bds.utils.Version;
+import me.tedesk.bds.api.Version;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,6 +26,8 @@ public class BetterDeathScreen extends JavaPlugin {
     }
 
     public static boolean veryNewVersion() {
+        if (version == Version.v1_20)
+            return true;
         if (version == Version.v1_19)
             return true;
         if (version == Version.v1_18)

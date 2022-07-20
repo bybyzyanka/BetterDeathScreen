@@ -1,11 +1,10 @@
 package me.tedesk.bds.systems;
 
+import com.cryptomorin.xseries.messages.ActionBar;
+import com.cryptomorin.xseries.messages.Titles;
 import me.tedesk.bds.BetterDeathScreen;
-import me.tedesk.bds.api.ActionBarAPI;
-import me.tedesk.bds.api.SoundAPI;
-import me.tedesk.bds.api.TitleAPI;
-import me.tedesk.bds.configs.Messages;
 import me.tedesk.bds.configs.Config;
+import me.tedesk.bds.configs.Messages;
 import me.tedesk.bds.events.bukkit.PlayerTeleportListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +19,7 @@ public class Tasks {
     public static void performRespawn(Player p) {
         if (!Bukkit.isHardcore()) {
             Config.DEAD_PLAYERS.remove(p.getName());
-            ActionBarAPI.sendActionBar(p, "§r");
+            ActionBar.sendActionBar(p, "§r");
             double health = p.getMaxHealth();
             p.setHealth(health);
             p.setFoodLevel(20);
@@ -54,14 +53,40 @@ public class Tasks {
                 if (!Config.USE_DEFAULT_WORLD_SPAWN) {
                     if (p.getBedSpawnLocation() == null) {
                         if (p.hasPermission(Config.VIP)) {
-                            PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Config.VIP_SPAWN, false);
-                            Bukkit.getPluginManager().callEvent(non_bed_respawn);
-                            p.teleport(Config.VIP_SPAWN, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                            try {
+                                PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Config.VIP_SPAWN, false);
+                                Bukkit.getPluginManager().callEvent(non_bed_respawn);
+                                p.teleport(Config.VIP_SPAWN, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                            } catch (Exception e) {
+                                PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
+                                Bukkit.getPluginManager().callEvent(non_bed_respawn);
+                                if (Config.USE_SAFE_TELEPORT) {
+                                    Locations.teleportSafeLocation(p, Bukkit.getWorlds().get(0).getSpawnLocation());
+                                }
+                                if (!Config.USE_SAFE_TELEPORT) {
+                                    p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                }
+                                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SPAWN_ERROR)
+                                        .replace("%player%", p.getName()).replace("%type%", "VIP"));
+                            }
                         }
                         if (!p.hasPermission(Config.VIP)) {
-                            PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Config.SPAWN, false);
-                            Bukkit.getPluginManager().callEvent(non_bed_respawn);
-                            p.teleport(Config.SPAWN, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                            try {
+                                PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Config.SPAWN, false);
+                                Bukkit.getPluginManager().callEvent(non_bed_respawn);
+                                p.teleport(Config.SPAWN, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                            } catch (Exception e) {
+                                PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
+                                Bukkit.getPluginManager().callEvent(non_bed_respawn);
+                                if (Config.USE_SAFE_TELEPORT) {
+                                    Locations.teleportSafeLocation(p, Bukkit.getWorlds().get(0).getSpawnLocation());
+                                }
+                                if (!Config.USE_SAFE_TELEPORT) {
+                                    p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                }
+                                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SPAWN_ERROR)
+                                        .replace("%player%", p.getName()).replace("%type%", "Normal"));
+                            }
                         }
                     }
                     if (p.getBedSpawnLocation() != null) {
@@ -89,13 +114,13 @@ public class Tasks {
                 PlayerTeleportListener.TELEPORT_LOCATION.remove(p.getName());
             }
             p.setGameMode(GameMode.SURVIVAL);
-            SoundAPI.sendSound(p, p.getLocation(), Randomizer.randomSound(Config.SOUND_RESPAWN), Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
+            p.playSound(p.getLocation(), Randomizer.randomSound(Config.SOUND_RESPAWN), Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
             p.updateInventory();
         }
         if (Bukkit.isHardcore()) {
             if (!(p.getGameMode() == GameMode.SPECTATOR)) {
                 Config.DEAD_PLAYERS.remove(p.getName());
-                ActionBarAPI.sendActionBar(p, "§r");
+                ActionBar.sendActionBar(p, "§r");
                 double health = p.getMaxHealth();
                 p.setHealth(health);
                 p.setFoodLevel(20);
@@ -109,9 +134,11 @@ public class Tasks {
             }
         }
     }
+
     public static void normalTimer(Player p) {
         new BukkitRunnable() {
             int time = Config.TIME;
+
             @Override
             public void run() {
                 time--;
@@ -119,21 +146,21 @@ public class Tasks {
                 if (!p.isOnline()){
                     cancel();
                 }
-                if (p.hasPermission(Config.INSTANT_RESPAWN)) {
-                    TitleAPI.sendTitle(p, 1, 20, 1, "", "");
-                    ActionBarAPI.sendActionBar(p, "");
+                if (time == Config.TIME - 2 && p.hasPermission(Config.INSTANT_RESPAWN)) {
+                    Titles.sendTitle(p, 1, 20, 1, "", "");
+                    ActionBar.sendActionBar(p, "");
                     performRespawn(p);
                     cancel();
                 }
                 if (time > 1 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
                     String ab_plural = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
-                    ActionBarAPI.sendActionBar(p, ab_plural);
-                    SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_COUNTDOWN, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                    ActionBar.sendActionBar(p, ab_plural);
+                    p.playSound(p.getLocation(), Config.SOUND_COUNTDOWN, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
                 }
                 if (time == 1 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
                     String ab_singular = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
-                    ActionBarAPI.sendActionBar(p, ab_singular);
-                    SoundAPI.sendSound(p, p.getLocation(), Config.SOUND_COUNTDOWN, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                    ActionBar.sendActionBar(p, ab_singular);
+                    p.playSound(p.getLocation(), Config.SOUND_COUNTDOWN, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
                 }
                 if (time <= 0 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
                     performRespawn(p);
@@ -149,7 +176,7 @@ public class Tasks {
             @Override
             public void run() {
                 String ab_hc = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_HC);
-                ActionBarAPI.sendActionBar(p, ab_hc);
+                ActionBar.sendActionBar(p, ab_hc);
 
                 if (!p.isOnline()) {
                     cancel();
