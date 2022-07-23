@@ -56,7 +56,7 @@ public class DeathPacketListener {
                 public void onPacketSending(PacketEvent e) {
                     Player p = e.getPlayer();
 
-                    if (Config.USE_DEATH_PACKET_HANDLER) {
+                    if (Config.USE_PACKET_EVENT_HANDLER) {
                         e.setCancelled(true);
                         sendEventsPackets(p);
                     }
@@ -71,7 +71,7 @@ public class DeathPacketListener {
                     Player p = e.getPlayer();
 
                     if (packet.getCombatEvents().read(0) == EnumWrappers.CombatEventType.ENTITY_DIED) {
-                        if (Config.USE_DEATH_PACKET_HANDLER) {
+                        if (Config.USE_PACKET_EVENT_HANDLER) {
                             e.setCancelled(true);
                             sendEventsPackets(p);
                         }
@@ -87,7 +87,7 @@ public class DeathPacketListener {
                 Player p = e.getPlayer();
 
                 if (packet.getFloat().read(0) <= 0.0) {
-                    if (Config.USE_DEATH_PACKET_HANDLER) {
+                    if (Config.USE_PACKET_EVENT_HANDLER) {
                         e.setCancelled(true);
                         sendEventsPackets(p);
                     }

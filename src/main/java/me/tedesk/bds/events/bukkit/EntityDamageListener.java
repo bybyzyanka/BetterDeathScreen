@@ -14,11 +14,13 @@ import me.tedesk.bds.api.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Statistic;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -83,7 +85,8 @@ public class EntityDamageListener extends Listeners {
         Animation.sendAnimation(victim);
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @SuppressWarnings("deprecation")
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity victim = event.getEntity();
         int time = Config.TIME;
@@ -98,41 +101,59 @@ public class EntityDamageListener extends Listeners {
                 return;
             }
             if (pv.getHealth() <= event.getFinalDamage() && handChecker(pv, event)) {
-                if (!Config.USE_DEATH_PACKET_HANDLER) {
+                if (!Config.USE_PACKET_EVENT_HANDLER) {
                     event.setCancelled(true);
-                    if (!(event instanceof EntityDamageByEntityEvent)) {
-                        Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitle(pv), Randomizer.randomSubTitle(pv));
+                    EntityDamageEvent fake_event = new EntityDamageEvent(victim, event.getCause(), event.getDamage());
+                    Bukkit.getPluginManager().callEvent(fake_event);
+                    try {
+                        pv.incrementStatistic(Statistic.DAMAGE_TAKEN, (int) Math.abs(event.getFinalDamage()));
+                    } catch (Exception ignored) {
                     }
-                    if (event instanceof EntityDamageByEntityEvent) {
-                        Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
-                        if (damager instanceof Player) {
-                            Player pd = (Player) damager;
+                }
+                if (event instanceof EntityDamageByBlockEvent) {
+                    Block damager = ((EntityDamageByBlockEvent) event).getDamager();
+                    Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitle(pv), Randomizer.randomSubTitle(pv));
+                    if (!Config.USE_PACKET_EVENT_HANDLER) {
+                        try {
+                            EntityDamageByBlockEvent block_damage = new EntityDamageByBlockEvent(damager, victim, event.getCause(), event.getDamage());
+                            Bukkit.getPluginManager().callEvent(block_damage);
+                        } catch (Exception ignored) {
+
+                        }
+                    }
+                }
+                if (event instanceof EntityDamageByEntityEvent) {
+                    Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+                    if (damager instanceof Player) {
+                        Player pd = (Player) damager;
+                        Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
+                        ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
+                        pd.playSound(pd.getLocation(), Randomizer.randomSound(Config.SOUND_KILL), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                        if (!Config.USE_PACKET_EVENT_HANDLER) {
+                            EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(damager, victim, event.getCause(), event.getDamage());
+                            Bukkit.getPluginManager().callEvent(entity_damage);
                             pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
-                            pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) event.getDamage());
+                            pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
+                        }
+                    }
+                    if (damager instanceof Projectile) {
+                        Projectile pj = (Projectile) damager;
+                        if (pj.getShooter() instanceof Player) {
+                            Player pd = (Player) pj.getShooter();
                             Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                             ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
                             pd.playSound(pd.getLocation(), Randomizer.randomSound(Config.SOUND_KILL), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
-                        }
-                        if (damager instanceof Projectile) {
-                            Projectile pj = (Projectile) damager;
-                            if (pj.getShooter() instanceof Player) {
-                                Player pd = (Player) pj.getShooter();
+                            if (!Config.USE_PACKET_EVENT_HANDLER) {
                                 pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
-                                try {
-                                    pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) Math.abs(event.getDamage()));
-                                } catch (Exception ignored) {
-                                }
-                                Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
-                                ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
-                                pd.playSound(pd.getLocation(), Randomizer.randomSound(Config.SOUND_KILL), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                                pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
+                                EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(pd, victim, event.getCause(), event.getDamage());
+                                Bukkit.getPluginManager().callEvent(entity_damage);
                             }
-                            pj.remove();
                         }
+                        pj.remove();
                     }
-                    try {
-                        pv.incrementStatistic(Statistic.DAMAGE_TAKEN, (int) Math.abs(event.getDamage()));
-                    } catch (Exception ignored) {
-                    }
+                }
+                if (!Config.USE_PACKET_EVENT_HANDLER) {
                     sendEventsBukkit(pv);
                 }
             }
