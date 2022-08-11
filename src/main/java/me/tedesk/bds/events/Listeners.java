@@ -15,6 +15,7 @@ public class Listeners implements Listener {
         PluginManager pm = Bukkit.getPluginManager();
         // Bukkit
         pm.registerEvents(new EntityDamageListener(), pl);
+        pm.registerEvents(new EntityRegainHealthListener(), pl);
         pm.registerEvents(new PlayerCommandListener(), pl);
         pm.registerEvents(new PlayerDeathListener(), pl);
         pm.registerEvents(new PlayerConnectionListener(), pl);

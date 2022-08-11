@@ -19,22 +19,6 @@ public class SpectatorPacketLimiter {
     public static List<String> SPECTATOR_MESSAGE_CD = new ArrayList<>();
 
     public static void cancelSpectate() {
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(BetterDeathScreen.plugin, PacketType.Play.Server.CAMERA) {
-            @Override
-            public void onPacketSending(PacketEvent e) {
-                Player p = e.getPlayer();
-                if (Config.DEAD_PLAYERS.contains(p.getName()) && !Config.SPECTATE_ENTITY) {
-                    e.setCancelled(true);
-                    p.setSneaking(true);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            p.setSneaking(false);
-                        }
-                    }.runTaskLater(BetterDeathScreen.plugin, 2);
-                }
-            }
-        });
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(BetterDeathScreen.plugin, PacketType.Play.Client.USE_ENTITY) {
             @Override
             public void onPacketReceiving(PacketEvent e) {
@@ -42,8 +26,8 @@ public class SpectatorPacketLimiter {
                 if (Config.DEAD_PLAYERS.contains(p.getName()) && !Config.SPECTATE_ENTITY) {
                     e.setCancelled(true);
                     if (!SPECTATOR_MESSAGE_CD.contains(p.getName())) {
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.SPECTATE_BLOCKED));
                         SPECTATOR_MESSAGE_CD.add(p.getName());
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.SPECTATE_BLOCKED));
                         new BukkitRunnable() {
                             @Override
                             public void run() {

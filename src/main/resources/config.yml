@@ -14,6 +14,7 @@ misc: #Available languages: en-US, pt-BR, zh-TW
   use-packet-event-handler: true #If this option is disabled, the plugin will change the events of Bukkit instead of events related to packets.
   use-safe-teleport: true
   use-default-world-spawn: true #If this option is enabled, the spawn section on locations.yml will be ignored.
+  use-kill-camera: true #If this option is enabled, the player will spectate the killer until respawning. (This does not work with Packet Event Handler)
 sound:
   type:
     death:

@@ -1,14 +1,15 @@
 package me.tedesk.bds.systems;
 
-import com.cryptomorin.xseries.messages.ActionBar;
-import com.cryptomorin.xseries.messages.Titles;
 import me.tedesk.bds.BetterDeathScreen;
+import me.tedesk.bds.api.ActionBar;
+import me.tedesk.bds.api.Titles;
 import me.tedesk.bds.configs.Config;
 import me.tedesk.bds.configs.Messages;
 import me.tedesk.bds.events.bukkit.PlayerTeleportListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -16,10 +17,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Tasks {
 
+    @SuppressWarnings("deprecation")
     public static void performRespawn(Player p) {
         if (!Bukkit.isHardcore()) {
             Config.DEAD_PLAYERS.remove(p.getName());
-            ActionBar.sendActionBar(p, "§r");
+            p.setSpectatorTarget(null);
+            Titles.sendTitle(p,1,1,1,"","");
+            ActionBar.sendActionBar(p, "");
             double health = p.getMaxHealth();
             p.setHealth(health);
             p.setFoodLevel(20);
@@ -27,7 +31,7 @@ public class Tasks {
                 p.setWalkSpeed(0.2F);
                 p.setFlySpeed(0.1F);
             }
-            if (!PlayerTeleportListener.WOULD_TELEPORT.containsKey(p.getName())) {
+            if (!PlayerTeleportListener.WOULD_TELEPORT.contains(p.getName())) {
                 if (Config.USE_DEFAULT_WORLD_SPAWN) {
                     if (p.getBedSpawnLocation() == null) {
                         PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
@@ -101,7 +105,7 @@ public class Tasks {
                     }
                 }
             }
-            if (PlayerTeleportListener.WOULD_TELEPORT.containsKey(p.getName())) {
+            if (PlayerTeleportListener.WOULD_TELEPORT.contains(p.getName())) {
                 PlayerRespawnEvent queued_teleport = new PlayerRespawnEvent(p, PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()), false);
                 Bukkit.getPluginManager().callEvent(queued_teleport);
                 if (Config.USE_SAFE_TELEPORT) {
@@ -114,13 +118,17 @@ public class Tasks {
                 PlayerTeleportListener.TELEPORT_LOCATION.remove(p.getName());
             }
             p.setGameMode(GameMode.SURVIVAL);
-            p.playSound(p.getLocation(), Randomizer.randomSound(Config.SOUND_RESPAWN), Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
+            try {
+                p.playSound(p.getLocation(), Sound.valueOf(Randomizer.randomSound(Config.SOUND_RESPAWN)), Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
+            } catch (Exception e) {
+                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", "RESPAWN"));
+            }
             p.updateInventory();
         }
         if (Bukkit.isHardcore()) {
             if (!(p.getGameMode() == GameMode.SPECTATOR)) {
                 Config.DEAD_PLAYERS.remove(p.getName());
-                ActionBar.sendActionBar(p, "§r");
+                ActionBar.sendActionBar(p, "");
                 double health = p.getMaxHealth();
                 p.setHealth(health);
                 p.setFoodLevel(20);
@@ -146,8 +154,7 @@ public class Tasks {
                 if (!p.isOnline()){
                     cancel();
                 }
-                if (time == Config.TIME - 2 && p.hasPermission(Config.INSTANT_RESPAWN)) {
-                    Titles.sendTitle(p, 1, 20, 1, "", "");
+                if (time == Config.TIME - 1 && p.hasPermission(Config.INSTANT_RESPAWN)) {
                     ActionBar.sendActionBar(p, "");
                     performRespawn(p);
                     cancel();
@@ -155,12 +162,20 @@ public class Tasks {
                 if (time > 1 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
                     String ab_plural = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
                     ActionBar.sendActionBar(p, ab_plural);
-                    p.playSound(p.getLocation(), Config.SOUND_COUNTDOWN, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                    try {
+                        p.playSound(p.getLocation(), Sound.valueOf(Config.SOUND_COUNTDOWN), Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                    } catch (Exception e) {
+                        BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR.replace("%sound%", Config.SOUND_COUNTDOWN)));
+                    }
                 }
                 if (time == 1 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
                     String ab_singular = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
                     ActionBar.sendActionBar(p, ab_singular);
-                    p.playSound(p.getLocation(), Config.SOUND_COUNTDOWN, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                    try {
+                        p.playSound(p.getLocation(), Sound.valueOf(Config.SOUND_COUNTDOWN), Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                    } catch (Exception e) {
+                        BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR.replace("%sound%", Config.SOUND_COUNTDOWN)));
+                    }
                 }
                 if (time <= 0 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
                     performRespawn(p);
@@ -187,6 +202,6 @@ public class Tasks {
                     cancel();
                 }
             }
-        }.runTaskTimer(BetterDeathScreen.plugin, 20, 20);
+        }.runTaskTimer(BetterDeathScreen.plugin, 1, 20);
     }
 }

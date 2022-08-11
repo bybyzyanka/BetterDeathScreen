@@ -15,6 +15,7 @@ public class Config {
     public static boolean WORLD_BORDER_EFFECT;
     public static boolean USE_DEFAULT_WORLD_SPAWN;
     public static boolean USE_SAFE_TELEPORT;
+    public static boolean USE_KILL_CAM;
     public static Location SPAWN;
     public static Location VIP_SPAWN;
     public static List<String> SOUND_DEATH;
@@ -50,6 +51,7 @@ public class Config {
         WORLD_BORDER_EFFECT = config.getBoolean("misc.world-border-effect");
         USE_DEFAULT_WORLD_SPAWN = config.getBoolean("misc.use-default-world-spawn");
         USE_SAFE_TELEPORT = config.getBoolean("misc.use-safe-teleport");
+        USE_KILL_CAM = config.getBoolean("misc.use-kill-camera");
 
         SPAWN = new Location(Bukkit.getWorld(locations.getString("normal.world")), locations.getDouble("normal.X"), locations.getDouble("normal.Y"), locations.getDouble("normal.Z"), (float) locations.getDouble("normal.yaw"), (float) locations.getDouble("normal.pitch"));
         VIP_SPAWN = new Location(Bukkit.getWorld(locations.getString("vip.world")), locations.getDouble("vip.X"), locations.getDouble("vip.Y"), locations.getDouble("vip.Z"), (float) locations.getDouble("vip.yaw"), (float) locations.getDouble("vip.pitch"));

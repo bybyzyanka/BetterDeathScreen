@@ -18,8 +18,8 @@ import java.util.List;
 
 public class PlayerTeleportListener extends Listeners {
 
-    public static HashMap<String, Boolean> WOULD_TELEPORT = new HashMap<>();
     public static HashMap<String, Location> TELEPORT_LOCATION = new HashMap<>();
+    public static List<String> WOULD_TELEPORT = new ArrayList<>();
     public static List<String> TELEPORT_MESSAGE_CD = new ArrayList<>();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -30,8 +30,8 @@ public class PlayerTeleportListener extends Listeners {
             if (Config.DEAD_PLAYERS.contains(p.getName()) && e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
                 e.setCancelled(true);
                 if (!TELEPORT_MESSAGE_CD.contains(p.getName())) {
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.HOTBAR_TELEPORT_BLOCKED));
                     TELEPORT_MESSAGE_CD.add(p.getName());
+                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.HOTBAR_TELEPORT_BLOCKED));
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -43,9 +43,9 @@ public class PlayerTeleportListener extends Listeners {
             }
         }
         if (Config.QUEUE_TELEPORT) {
-            if (Config.DEAD_PLAYERS.contains(p.getName())) {
+            if (Config.DEAD_PLAYERS.contains(p.getName()) && !(e.getCause() == PlayerTeleportEvent.TeleportCause.UNKNOWN && Config.USE_KILL_CAM)) {
                 e.setCancelled(true);
-                WOULD_TELEPORT.put(p.getName(), true);
+                WOULD_TELEPORT.add(p.getName());
                 TELEPORT_LOCATION.put(p.getName(), e.getTo());
             }
         }
