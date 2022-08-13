@@ -19,7 +19,7 @@ public class Config {
     public static Location SPAWN;
     public static Location VIP_SPAWN;
     public static List<String> SOUND_DEATH;
-    public static String SOUND_COUNTDOWN;
+    public static List<String> SOUND_COUNTDOWN;
     public static List<String> SOUND_RESPAWN;
     public static List<String> SOUND_KILL;
     public static Float SOUND_DEATH_VOLUME;
@@ -57,7 +57,7 @@ public class Config {
         VIP_SPAWN = new Location(Bukkit.getWorld(locations.getString("vip.world")), locations.getDouble("vip.X"), locations.getDouble("vip.Y"), locations.getDouble("vip.Z"), (float) locations.getDouble("vip.yaw"), (float) locations.getDouble("vip.pitch"));
 
         SOUND_DEATH = config.getStringList("sound.type.death");
-        SOUND_COUNTDOWN = config.getString("sound.type.countdown");
+        SOUND_COUNTDOWN = config.getStringList("sound.type.countdown");
         SOUND_RESPAWN = config.getStringList("sound.type.respawn");
         SOUND_KILL = config.getStringList("sound.type.kill");
 

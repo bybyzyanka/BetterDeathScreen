@@ -1,12 +1,13 @@
 package me.tedesk.bds;
 
+import me.tedesk.bds.api.Version;
 import me.tedesk.bds.commands.MainCommand;
+import me.tedesk.bds.commands.MainTabComplete;
 import me.tedesk.bds.configs.Config;
 import me.tedesk.bds.configs.ConfigHandler;
 import me.tedesk.bds.configs.Messages;
 import me.tedesk.bds.events.Listeners;
 import me.tedesk.bds.systems.Tasks;
-import me.tedesk.bds.api.Version;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -95,6 +96,7 @@ public class BetterDeathScreen extends JavaPlugin {
         createAndLoadConfigs();
         Listeners.setup();
         getCommand("bds").setExecutor(new MainCommand());
+        getCommand("bds").setTabCompleter(new MainTabComplete());
         Metrics metrics = new Metrics(this, 14729);
         for (String enabled : Messages.ENABLED) {
             logger(ChatColor.translateAlternateColorCodes('&', enabled.replace("%plugin_version%", "(v" + pdf.getVersion() + ")")));

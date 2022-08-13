@@ -1,9 +1,9 @@
 package me.tedesk.bds.commands;
 
 import me.tedesk.bds.BetterDeathScreen;
+import me.tedesk.bds.configs.Config;
 import me.tedesk.bds.configs.ConfigHandler;
 import me.tedesk.bds.configs.Messages;
-import me.tedesk.bds.configs.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

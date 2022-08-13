@@ -1,15 +1,12 @@
 package me.tedesk.bds.systems;
 
+import com.cryptomorin.xseries.messages.ActionBar;
+import com.cryptomorin.xseries.messages.Titles;
 import me.tedesk.bds.BetterDeathScreen;
-import me.tedesk.bds.api.ActionBar;
-import me.tedesk.bds.api.Titles;
 import me.tedesk.bds.configs.Config;
 import me.tedesk.bds.configs.Messages;
 import me.tedesk.bds.events.bukkit.PlayerTeleportListener;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -19,6 +16,8 @@ public class Tasks {
 
     @SuppressWarnings("deprecation")
     public static void performRespawn(Player p) {
+        String random_respawn_sound = Randomizer.randomSound(Config.SOUND_RESPAWN);
+
         if (!Bukkit.isHardcore()) {
             Config.DEAD_PLAYERS.remove(p.getName());
             p.setSpectatorTarget(null);
@@ -119,9 +118,9 @@ public class Tasks {
             }
             p.setGameMode(GameMode.SURVIVAL);
             try {
-                p.playSound(p.getLocation(), Sound.valueOf(Randomizer.randomSound(Config.SOUND_RESPAWN)), Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
+                p.playSound(p.getLocation(), Sound.valueOf(random_respawn_sound), Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
             } catch (Exception e) {
-                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", "RESPAWN"));
+                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", random_respawn_sound));
             }
             p.updateInventory();
         }
@@ -144,6 +143,13 @@ public class Tasks {
     }
 
     public static void normalTimer(Player p) {
+        String random_countdown_sound = Randomizer.randomSound(Config.SOUND_COUNTDOWN);
+        try {
+            p.playSound(new Location(Bukkit.getWorlds().get(0), 0, 2048, 0), Sound.valueOf(random_countdown_sound), 1, 1);
+        } catch (Exception e) {
+            BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR.replace("%sound%", random_countdown_sound)));
+        }
+
         new BukkitRunnable() {
             int time = Config.TIME;
 
@@ -163,18 +169,16 @@ public class Tasks {
                     String ab_plural = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
                     ActionBar.sendActionBar(p, ab_plural);
                     try {
-                        p.playSound(p.getLocation(), Sound.valueOf(Config.SOUND_COUNTDOWN), Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
-                    } catch (Exception e) {
-                        BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR.replace("%sound%", Config.SOUND_COUNTDOWN)));
+                        p.playSound(p.getLocation(), Sound.valueOf(random_countdown_sound), Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                    } catch (Exception ignored) {
                     }
                 }
                 if (time == 1 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
                     String ab_singular = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
                     ActionBar.sendActionBar(p, ab_singular);
                     try {
-                        p.playSound(p.getLocation(), Sound.valueOf(Config.SOUND_COUNTDOWN), Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
-                    } catch (Exception e) {
-                        BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR.replace("%sound%", Config.SOUND_COUNTDOWN)));
+                        p.playSound(p.getLocation(), Sound.valueOf(random_countdown_sound), Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                    } catch (Exception ignored) {
                     }
                 }
                 if (time <= 0 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
@@ -191,11 +195,12 @@ public class Tasks {
             @Override
             public void run() {
                 String ab_hc = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_HC);
-                ActionBar.sendActionBar(p, ab_hc);
-
                 if (!p.isOnline()) {
                     cancel();
                 }
+
+                ActionBar.sendActionBar(p, ab_hc);
+
                 // Ao mudar o modo de jogo do jogador, ele renasce.
                 if (!(p.getGameMode() == GameMode.SPECTATOR)) {
                     performRespawn(p);

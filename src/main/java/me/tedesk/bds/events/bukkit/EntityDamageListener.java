@@ -1,10 +1,11 @@
 package me.tedesk.bds.events.bukkit;
 
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.messages.ActionBar;
+import com.cryptomorin.xseries.messages.Titles;
 import me.tedesk.bds.BetterDeathScreen;
 import me.tedesk.bds.animations.Animation;
-import me.tedesk.bds.api.ActionBar;
 import me.tedesk.bds.api.PlayerAPI;
-import me.tedesk.bds.api.Titles;
 import me.tedesk.bds.api.Version;
 import me.tedesk.bds.configs.Config;
 import me.tedesk.bds.configs.Messages;
@@ -34,16 +35,19 @@ public class EntityDamageListener extends Listeners {
 
     private static boolean handChecker(Player player, EntityDamageEvent event) {
         if (!(BetterDeathScreen.version == Version.v1_8)) {
-            return ((player.getInventory().getItemInMainHand().getType() != Material.TOTEM && player.getInventory().getItemInOffHand().getType() != Material.TOTEM) || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID);
+            return ((player.getInventory().getItemInMainHand().getType() != XMaterial.TOTEM_OF_UNDYING.parseMaterial() && player.getInventory().getItemInOffHand().getType() != XMaterial.TOTEM_OF_UNDYING.parseMaterial()) || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID);
         }
         return true;
     }
 
     private static void sendEventsBukkit(Player victim) {
         Config.DEAD_PLAYERS.add(victim.getName());
+        String random_death_sound = Randomizer.randomSound(Config.SOUND_DEATH);
+
         for (PotionEffect pe : victim.getActivePotionEffects()) {
             victim.removePotionEffect(pe.getType());
         }
+        victim.closeInventory();
         if (victim.getWorld().getGameRuleValue("keepInventory").equals("false")) {
             List<ItemStack> filtered_inventory = Arrays.stream(victim.getInventory().getContents())
                     .filter(stack -> !PlayerAPI.isStackEmpty(stack)).collect(Collectors.toList());
@@ -76,7 +80,7 @@ public class EntityDamageListener extends Listeners {
         try {
             victim.playSound(victim.getLocation(), Sound.valueOf(Randomizer.randomSound(Config.SOUND_DEATH)), Config.SOUND_DEATH_VOLUME, Config.SOUND_DEATH_PITCH);
         } catch (Exception e) {
-            BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR));
+            BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", random_death_sound));
         }
         if (!Bukkit.getServer().isHardcore()) {
             Tasks.normalTimer(victim);
@@ -98,6 +102,8 @@ public class EntityDamageListener extends Listeners {
 
         if (victim instanceof Player) {
             Player pv = (Player) victim;
+            String random_kill_sound = Randomizer.randomSound(Config.SOUND_KILL);
+
             if (Config.DEAD_PLAYERS.contains(pv.getName())) {
                 event.setCancelled(true);
                 return;
@@ -134,7 +140,11 @@ public class EntityDamageListener extends Listeners {
                         Player pd = (Player) damager;
                         Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                         ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
-                        pd.playSound(pd.getLocation(), Sound.valueOf(Randomizer.randomSound(Config.SOUND_KILL)), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                        try {
+                            pd.playSound(pd.getLocation(), Sound.valueOf(random_kill_sound), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                        } catch (Exception e) {
+                            BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", random_kill_sound));
+                        }
                         if (!Config.USE_PACKET_EVENT_HANDLER) {
                             EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(damager, victim, event.getCause(), event.getDamage());
                             Bukkit.getPluginManager().callEvent(entity_damage);
@@ -153,7 +163,11 @@ public class EntityDamageListener extends Listeners {
                             Player pd = (Player) pj.getShooter();
                             Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                             ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
-                            pd.playSound(pd.getLocation(), Sound.valueOf(Randomizer.randomSound(Config.SOUND_KILL)), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                            try {
+                                pd.playSound(pd.getLocation(), Sound.valueOf(random_kill_sound), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                            } catch (Exception e) {
+                                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", random_kill_sound));
+                            }
                             if (!Config.USE_PACKET_EVENT_HANDLER) {
                                 EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(pd, victim, event.getCause(), event.getDamage());
                                 Bukkit.getPluginManager().callEvent(entity_damage);

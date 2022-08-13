@@ -1,8 +1,8 @@
 package me.tedesk.bds.events.bukkit;
 
 import me.tedesk.bds.BetterDeathScreen;
-import me.tedesk.bds.configs.Messages;
 import me.tedesk.bds.configs.Config;
+import me.tedesk.bds.configs.Messages;
 import me.tedesk.bds.events.Listeners;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

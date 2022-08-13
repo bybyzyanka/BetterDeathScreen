@@ -23,7 +23,9 @@ import org.bukkit.potion.PotionEffect;
 public class DeathPacketListener {
 
     private static void sendEventsPackets(Player p) {
+        String random_death_sound = Randomizer.randomSound(Config.SOUND_DEATH);
         p.setHealth(1);
+        p.closeInventory();
         Config.DEAD_PLAYERS.add(p.getName());
         for (PotionEffect pe : p.getActivePotionEffects()) {
             p.removePotionEffect(pe.getType());
@@ -40,9 +42,9 @@ public class DeathPacketListener {
             }
         }
         try {
-            p.playSound(p.getLocation(), Sound.valueOf(Randomizer.randomSound(Config.SOUND_DEATH)), Config.SOUND_DEATH_VOLUME, Config.SOUND_DEATH_PITCH);
+            p.playSound(p.getLocation(), Sound.valueOf(random_death_sound), Config.SOUND_DEATH_VOLUME, Config.SOUND_DEATH_PITCH);
         } catch (Exception e) {
-            BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", "DEATH"));
+            BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", random_death_sound));
         }
         if (!Bukkit.getServer().isHardcore()) {
             Tasks.normalTimer(p);

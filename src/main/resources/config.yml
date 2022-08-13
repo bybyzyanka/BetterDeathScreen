@@ -22,7 +22,9 @@ sound:
     - ANVIL_LAND
     - ITEM_PICKUP
     - ENDERMAN_DEATH
-    countdown: NOTE_BASS_DRUM
+    countdown:
+    - NOTE_BASS_DRUM
+    - CLICK
     respawn:
     - NOTE_PLING
     - ORB_PICKUP

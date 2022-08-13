@@ -31,7 +31,7 @@ public class PlayerConnectionListener extends Listeners {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
         // Para evitar bugs, o jogador renasce ao desconectar.
