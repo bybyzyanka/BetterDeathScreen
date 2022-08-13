@@ -6,9 +6,9 @@ actionbar:
   death: '&7你將在&6%time%&7後復活。'
   hardcore: '&7你永遠不會再復活...'
   kill: #受害者将作为占位符的基础。
-    - "&c你殺死了 &f%player%！"
-    - "&6恭喜你殺死了 &f%player%"
-    - "&b你非常擅長這個！ &f%player% &7對你感到印象深刻。"
+    - "&c你殺死了 &f%player_name%！"
+    - "&6恭喜你殺死了 &f%player_name%"
+    - "&b你非常擅長這個！ &f%player_name% &7對你感到印象深刻。"
 titles:
   killed: #受害者将作为占位符的基础。
     - "&c你被殺死了"

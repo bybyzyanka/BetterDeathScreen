@@ -47,7 +47,6 @@ public class EntityDamageListener extends Listeners {
         for (PotionEffect pe : victim.getActivePotionEffects()) {
             victim.removePotionEffect(pe.getType());
         }
-        victim.closeInventory();
         if (victim.getWorld().getGameRuleValue("keepInventory").equals("false")) {
             List<ItemStack> filtered_inventory = Arrays.stream(victim.getInventory().getContents())
                     .filter(stack -> !PlayerAPI.isStackEmpty(stack)).collect(Collectors.toList());
@@ -108,6 +107,7 @@ public class EntityDamageListener extends Listeners {
                 event.setCancelled(true);
                 return;
             }
+
             if (pv.getHealth() <= event.getFinalDamage() && handChecker(pv, event)) {
                 if (!Config.USE_PACKET_EVENT_HANDLER) {
                     event.setCancelled(true);
