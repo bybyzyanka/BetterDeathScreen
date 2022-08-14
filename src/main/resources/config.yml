@@ -42,7 +42,7 @@ sound:
     countdown: 1.0
     respawn: 1.0
     kill: 1.0
-animation: #Available types: NONE, BLOOD, LIGHTNING
+animation: #Available types: NONE, BLOOD, EXPLOSION, LIGHTNING
   type: "BLOOD"
 time:
   duration: 10
@@ -55,5 +55,6 @@ spectator-settings:
   queue-teleport: true
   allow-spectate: false
   allow-teleport-with-keys: false
+  ignore-walls: false
   allow-move: true
   allow-commands: false

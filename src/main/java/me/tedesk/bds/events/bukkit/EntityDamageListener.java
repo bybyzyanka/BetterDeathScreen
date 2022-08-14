@@ -34,14 +34,13 @@ import java.util.stream.Collectors;
 public class EntityDamageListener extends Listeners {
 
     private static boolean handChecker(Player player, EntityDamageEvent event) {
-        if (!(BetterDeathScreen.version == Version.v1_8)) {
+        if (BetterDeathScreen.version != Version.v1_8) {
             return ((player.getInventory().getItemInMainHand().getType() != XMaterial.TOTEM_OF_UNDYING.parseMaterial() && player.getInventory().getItemInOffHand().getType() != XMaterial.TOTEM_OF_UNDYING.parseMaterial()) || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID);
         }
         return true;
     }
 
     private static void sendEventsBukkit(Player victim) {
-        Config.DEAD_PLAYERS.add(victim.getName());
         String random_death_sound = Randomizer.randomSound(Config.SOUND_DEATH);
 
         for (PotionEffect pe : victim.getActivePotionEffects()) {
@@ -72,7 +71,7 @@ public class EntityDamageListener extends Listeners {
             victim.setWalkSpeed(0F);
             victim.setFlySpeed(0F);
         }
-        victim.setHealth(0.1);
+        victim.setHealth(1);
         victim.setGameMode(GameMode.SPECTATOR);
         victim.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
         victim.incrementStatistic(Statistic.DEATHS, 1);
@@ -109,12 +108,20 @@ public class EntityDamageListener extends Listeners {
             }
 
             if (pv.getHealth() <= event.getFinalDamage() && handChecker(pv, event)) {
+                Config.DEAD_PLAYERS.add(victim.getName());
                 if (!Config.USE_PACKET_EVENT_HANDLER) {
                     event.setCancelled(true);
                     try {
                         pv.incrementStatistic(Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage());
-                    } catch (Exception e) {
+                    } catch (IllegalArgumentException e) {
                         pv.incrementStatistic(Statistic.DAMAGE_TAKEN, (int) pv.getHealth());
+                    }
+                    try {
+                        EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), event.getDamage());
+                        Bukkit.getPluginManager().callEvent(fake_damage);
+                    } catch (IllegalArgumentException e) {
+                        EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), pv.getHealth());
+                        Bukkit.getPluginManager().callEvent(fake_damage);
                     }
                     sendEventsBukkit(pv);
                 }
@@ -125,7 +132,7 @@ public class EntityDamageListener extends Listeners {
                         try {
                             EntityDamageByBlockEvent block_damage = new EntityDamageByBlockEvent(damager, victim, event.getCause(), event.getDamage());
                             Bukkit.getPluginManager().callEvent(block_damage);
-                        } catch (Exception e) {
+                        } catch (IllegalArgumentException e) {
                             EntityDamageByBlockEvent block_damage = new EntityDamageByBlockEvent(damager, victim, event.getCause(), pv.getHealth());
                             Bukkit.getPluginManager().callEvent(block_damage);
                         }
@@ -148,7 +155,11 @@ public class EntityDamageListener extends Listeners {
                         if (!Config.USE_PACKET_EVENT_HANDLER) {
                             EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(damager, victim, event.getCause(), event.getDamage());
                             Bukkit.getPluginManager().callEvent(entity_damage);
-                            pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
+                            try {
+                                pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
+                            } catch (IllegalArgumentException e) {
+                                pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) pv.getHealth());
+                            }
                             pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
                         }
                     }
@@ -171,7 +182,11 @@ public class EntityDamageListener extends Listeners {
                             if (!Config.USE_PACKET_EVENT_HANDLER) {
                                 EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(pd, victim, event.getCause(), event.getDamage());
                                 Bukkit.getPluginManager().callEvent(entity_damage);
-                                pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
+                                try {
+                                    pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
+                                } catch (IllegalArgumentException e) {
+                                    pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) pv.getHealth());
+                                }
                                 pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
                             }
                         }

@@ -38,6 +38,7 @@ public class Config {
     public static String ANIMATION;
     public static boolean QUEUE_TELEPORT;
     public static boolean SPECTATE_ENTITY;
+    public static boolean IGNORE_WALLS;
     public static boolean HOTBAR_TELEPORT_SPECTATOR;
     public static boolean MOVE_SPECTATOR;
     public static boolean ALLOW_COMMANDS_WHILE_DEAD;
@@ -83,6 +84,7 @@ public class Config {
         QUEUE_TELEPORT = config.getBoolean("spectator-settings.queue-teleport");
         SPECTATE_ENTITY = config.getBoolean("spectator-settings.allow-spectate");
         HOTBAR_TELEPORT_SPECTATOR = config.getBoolean("spectator-settings.allow-teleport-with-keys");
+        IGNORE_WALLS = config.getBoolean("spectator-settings.ignore-walls");
         MOVE_SPECTATOR = config.getBoolean("spectator-settings.allow-move");
         ALLOW_COMMANDS_WHILE_DEAD = config.getBoolean("spectator-settings.allow-commands");
     }

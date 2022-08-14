@@ -30,7 +30,7 @@ public class Tasks {
                 p.setWalkSpeed(0.2F);
                 p.setFlySpeed(0.1F);
             }
-            if (!PlayerTeleportListener.WOULD_TELEPORT.contains(p.getName())) {
+            if (!PlayerTeleportListener.TELEPORT_LOCATION.containsKey(p.getName())) {
                 if (Config.USE_DEFAULT_WORLD_SPAWN) {
                     if (p.getBedSpawnLocation() == null) {
                         PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
@@ -104,7 +104,7 @@ public class Tasks {
                     }
                 }
             }
-            if (PlayerTeleportListener.WOULD_TELEPORT.contains(p.getName())) {
+            if (PlayerTeleportListener.TELEPORT_LOCATION.containsKey(p.getName())) {
                 PlayerRespawnEvent queued_teleport = new PlayerRespawnEvent(p, PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()), false);
                 Bukkit.getPluginManager().callEvent(queued_teleport);
                 if (Config.USE_SAFE_TELEPORT) {
@@ -113,7 +113,6 @@ public class Tasks {
                 if (!Config.USE_SAFE_TELEPORT) {
                     p.teleport(PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
-                PlayerTeleportListener.WOULD_TELEPORT.remove(p.getName());
                 PlayerTeleportListener.TELEPORT_LOCATION.remove(p.getName());
             }
             p.setGameMode(GameMode.SURVIVAL);
