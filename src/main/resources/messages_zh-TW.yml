@@ -1,23 +1,23 @@
 misc:
-  commands-blocked: "&c你不能使用命令，你已经死了。"
-  spectate-blocked: "&c你不能进入其他玩家或生物的视野。"
-  hotbar-tp-blocked: "&c您不能使用观众模式菜单传送到其他玩家。"
+  commands-blocked: "&c你不能使用指令，因為你已死亡。"
+  spectate-blocked: "&c你不能旁觀其它玩家或生物。"
+  hotbar-tp-blocked: "&c你不能使用旁觀者選單傳送到其他玩家。"
 actionbar:
   death: '&7你將在&6%time%&7後復活。'
   hardcore: '&7你永遠不會再復活...'
-  kill: #受害者将作为占位符的基础。
+  kill: #這部分的變數符號是對於被害者的。
     - "&c你殺死了 &f%player_name%！"
     - "&6恭喜你殺死了 &f%player_name%"
     - "&b你非常擅長這個！ &f%player_name% &7對你感到印象深刻。"
 titles:
-  killed: #受害者将作为占位符的基础。
+  killed: #這部分的變數符號是對於被害者的。
     - "&c你被殺死了"
     - "&c你死了"
-  killed-by-player: #杀手将作为占位符的基础。
+  killed-by-player: #這部分的變數符號是對於殺害者的。
     - "&c你被殺死了"
     - "&c你死了"
 subtitles:
-  killed: #受害者将作为占位符的基础。
+  killed: #這部分的變數符號是對於被害者的。
     - "&7勝利女神覺得你不夠努力。"
     - "&7耐心是優秀獵人與死者的區別。"
     - "&7你已被遺忘..."
@@ -25,28 +25,28 @@ subtitles:
     - "&7你不是這個故事的主角，你甚麼都不是！"
     - "&7光說不做只會帶來無情的結果。"
     - "&7專心點！"
-  killer-by-player: #杀手将作为占位符的基础。
-    - "&7有人比你强。"
-    - "&7%player_name% 说再见。"
-    - "&7%player_name% 更好。"
-    - "&7你的敌人因为 &c%player_health_rounded% ❤ 而活着"
+  killer-by-player: #這部分的變數符號是對於殺害者的。
+    - "&7有人遠勝過於你。"
+    - "&7%player_name% 跟你說今天是美好的一天。"
+    - "&7%player_name% 比你更好。"
+    - "&7你的敵人因還剩 &c%player_health_rounded% ❤ 而繼續活著"
 time:
   singular: "秒"
   plural: "秒"
 errors:
   actionbar: "&c無法將 Actionbar 傳送給玩家 %player%"
   title: "&c無法將標題訊息傳送給玩家 %player%"
-  sound: "&c聲音 %sound% 在你的伺服器版本中並未存在。 請檢查你的 config.yml"
+  sound: "&c聲音 %sound% 在你的伺服器版本中並未存在。請檢查你的 config.yml"
   spawn: ""
 commands:
   help:
     - "&cBetterDeathScreen &7- 指令"
     - ""
     - "&c/bds reload &7- &f重新加載插件設定。"
-    - "&c/bds setspawn normal/vip &7 - &f设置主生成 &7&o（仅在设置中启用时有效）"
+    - "&c/bds setspawn normal/vip &7 - &f設置預設重生點 &7&o（只有在 config.yml 中啟用該選項才會運作）"
   reload: "&7[BDS] &a插件已成功重新加載。"
   no-perm: "&7[BDS] &c你沒有權限使用這個指令。"
-  spawn-set: "&7[BDS] &a产卵 %type% 重置。"
+  spawn-set: "&7[BDS] &a%type% 重生點已設置。"
 plugin:
   incompatible:
     - "&c你的伺服器版本低於1.8！ §f%server_version%"
