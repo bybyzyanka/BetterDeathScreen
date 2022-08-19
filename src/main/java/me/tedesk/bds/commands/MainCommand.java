@@ -23,7 +23,7 @@ public class MainCommand implements CommandExecutor {
             if (args.length != 0) {
                 if (args[0].equalsIgnoreCase("reload")) {
                     BetterDeathScreen.createAndLoadConfigs();
-                    s.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.RELOAD));
+                    s.sendMessage(Messages.RELOAD);
                 } else {
                     for (String help : Messages.HELP) {
                         if (help.contains("setspawn")) {
@@ -45,12 +45,12 @@ public class MainCommand implements CommandExecutor {
             if (args.length != 0) {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!s.hasPermission(Config.ADMIN)) {
-                        s.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.NO_PERM));
+                        s.sendMessage(Messages.NO_PERM);
                     }
                     if (s.hasPermission(Config.ADMIN)) {
                         try {
                             BetterDeathScreen.createAndLoadConfigs();
-                            s.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.RELOAD));
+                            s.sendMessage(Messages.RELOAD);
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }
@@ -59,7 +59,7 @@ public class MainCommand implements CommandExecutor {
                 }
                 if (args[0].equalsIgnoreCase("setspawn")) {
                     if (!s.hasPermission(Config.ADMIN)) {
-                        s.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.NO_PERM));
+                        s.sendMessage(Messages.NO_PERM);
                     }
                     if (s.hasPermission(Config.ADMIN)) {
                         if (args[1].equalsIgnoreCase("normal")) {
@@ -77,7 +77,7 @@ public class MainCommand implements CommandExecutor {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            s.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.SPAWN_SET).replace("%type%", "Normal"));
+                            s.sendMessage(Messages.SPAWN_SET.replace("%type%", "Normal"));
                             return true;
                         }
                         if (args[1].equalsIgnoreCase("vip")) {
@@ -95,7 +95,7 @@ public class MainCommand implements CommandExecutor {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            s.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.SPAWN_SET).replace("%type%", "VIP"));
+                            s.sendMessage(Messages.SPAWN_SET.replace("%type%", "VIP"));
                         } else {
                             for (String help : Messages.HELP) {
                                 s.sendMessage(ChatColor.translateAlternateColorCodes('&', help));

@@ -19,6 +19,12 @@ public enum Version {
     v1_8(8),
     UNKNOWN(0);
 
+    public final int value;
+
+    Version(int value) {
+        this.value = value;
+    }
+
     public static Version getServerVersion() {
         Version version = getServerVersion(getMinecraftVersion());
         if (version == UNKNOWN) {
@@ -38,7 +44,7 @@ public enum Version {
 
     public static Version getServerVersion(String ver) {
         if (ver.contains("1.20"))
-            return v1_19;
+            return v1_20;
         else if (ver.contains("1.19"))
             return v1_19;
         else if (ver.contains("1.18"))
@@ -65,11 +71,5 @@ public enum Version {
             return v1_8;
         else
             return UNKNOWN;
-    }
-
-    public final int value;
-
-    Version(int value) {
-        this.value = value;
     }
 }

@@ -1,18 +1,19 @@
 package me.tedesk.bds.events.bukkit;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.messages.ActionBar;
 import com.cryptomorin.xseries.messages.Titles;
 import me.tedesk.bds.BetterDeathScreen;
 import me.tedesk.bds.animations.Animation;
 import me.tedesk.bds.api.PlayerAPI;
 import me.tedesk.bds.api.Version;
+import me.tedesk.bds.api.events.PlayerDropInventoryEvent;
 import me.tedesk.bds.configs.Config;
-import me.tedesk.bds.configs.Messages;
-import me.tedesk.bds.events.Listeners;
-import me.tedesk.bds.systems.Randomizer;
-import me.tedesk.bds.systems.Tasks;
-import org.bukkit.*;
+import me.tedesk.bds.events.Events;
+import me.tedesk.bds.utils.Randomizer;
+import me.tedesk.bds.utils.Tasks;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Statistic;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -26,67 +27,58 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EntityDamageListener extends Listeners {
+public class EntityDamageListener extends Events {
 
-    private static boolean handChecker(Player player, EntityDamageEvent event) {
+    private static boolean handChecker(Player p, EntityDamageEvent event) {
         if (BetterDeathScreen.version != Version.v1_8) {
-            return ((player.getInventory().getItemInMainHand().getType() != XMaterial.TOTEM_OF_UNDYING.parseMaterial() && player.getInventory().getItemInOffHand().getType() != XMaterial.TOTEM_OF_UNDYING.parseMaterial()) || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID);
+            return ((!p.getInventory().getItemInMainHand().getType().toString().contains("TOTEM") && !p.getInventory().getItemInOffHand().getType().toString().contains("TOTEM")) || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID);
         }
         return true;
     }
 
-    private static void sendEventsBukkit(Player victim) {
+    private static void sendEventsBukkit(Player p) {
         String random_death_sound = Randomizer.randomSound(Config.SOUND_DEATH);
+        p.closeInventory();
+        List<ItemStack> filtered_inventory = Arrays.stream(p.getInventory().getContents())
+                .filter(stack -> !PlayerAPI.isStackEmpty(stack)).collect(Collectors.toList());
+        if (BetterDeathScreen.version == Version.v1_8) {
+            List<ItemStack> armor = Arrays.stream(p.getInventory().getArmorContents())
+                    .filter(stack -> !PlayerAPI.isStackEmpty(stack))
+                    .collect(Collectors.toList());
+            filtered_inventory.addAll(armor);
+        }
 
-        for (PotionEffect pe : victim.getActivePotionEffects()) {
-            victim.removePotionEffect(pe.getType());
-        }
-        if (victim.getWorld().getGameRuleValue("keepInventory").equals("false")) {
-            List<ItemStack> filtered_inventory = Arrays.stream(victim.getInventory().getContents())
-                    .filter(stack -> !PlayerAPI.isStackEmpty(stack)).collect(Collectors.toList());
-            if (BetterDeathScreen.version == Version.v1_8) {
-                List<ItemStack> armor = Arrays.stream(victim.getInventory().getArmorContents())
-                        .filter(stack -> !PlayerAPI.isStackEmpty(stack))
-                        .collect(Collectors.toList());
-                filtered_inventory.addAll(armor);
-            }
-            PlayerDeathEvent death = new PlayerDeathEvent(victim, filtered_inventory, Math.min(100, victim.getLevel() * 7), null);
-            Bukkit.getPluginManager().callEvent(death);
-            if (!victim.hasPermission(Config.KEEP_XP)) {
-                victim.setLevel(0);
-                victim.setExp(0);
-            }
-            PlayerAPI.dropInventory(victim);
-        }
-        if (victim.getWorld().getGameRuleValue("keepInventory").equals("true")) {
-            PlayerDeathEvent death = new PlayerDeathEvent(victim, new ArrayList<>(), 0, null);
-            Bukkit.getPluginManager().callEvent(death);
+        for (PotionEffect pe : p.getActivePotionEffects()) {
+            p.removePotionEffect(pe.getType());
         }
         if (!Config.MOVE_SPECTATOR) {
-            victim.setWalkSpeed(0F);
-            victim.setFlySpeed(0F);
+            p.setWalkSpeed(0F);
+            p.setFlySpeed(0F);
         }
-        victim.setHealth(1);
-        victim.setGameMode(GameMode.SPECTATOR);
-        victim.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
-        victim.incrementStatistic(Statistic.DEATHS, 1);
-        try {
-            victim.playSound(victim.getLocation(), Sound.valueOf(Randomizer.randomSound(Config.SOUND_DEATH)), Config.SOUND_DEATH_VOLUME, Config.SOUND_DEATH_PITCH);
-        } catch (Exception e) {
-            BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", random_death_sound));
+
+        if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
+            PlayerDeathEvent death = new PlayerDeathEvent(p, filtered_inventory, Math.min(100, p.getLevel() * 7), null);
+            Bukkit.getPluginManager().callEvent(death);
+            PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, filtered_inventory);
+            Bukkit.getPluginManager().callEvent(drop_items);
         }
-        if (!Bukkit.getServer().isHardcore()) {
-            Tasks.normalTimer(victim);
+        if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
+            PlayerDeathEvent death = new PlayerDeathEvent(p, Collections.emptyList(), 0, null);
+            Bukkit.getPluginManager().callEvent(death);
+            PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, Collections.emptyList());
+            Bukkit.getPluginManager().callEvent(drop_items);
         }
-        if (Bukkit.getServer().isHardcore()) {
-            Tasks.hardcoreTimer(victim);
-        }
-        Animation.sendAnimation(victim);
+        p.setHealth(0.1);
+        p.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
+        p.incrementStatistic(Statistic.DEATHS, 1);
+        PlayerAPI.playSound(p, random_death_sound, Config.SOUND_DEATH_VOLUME, Config.SOUND_DEATH_PITCH);
+        Tasks.startTimer(p);
+        Animation.sendAnimation(p);
     }
 
     @SuppressWarnings("deprecation")
@@ -108,91 +100,66 @@ public class EntityDamageListener extends Listeners {
             }
 
             if (pv.getHealth() <= event.getFinalDamage() && handChecker(pv, event)) {
+                event.setCancelled(true);
                 Config.DEAD_PLAYERS.add(victim.getName());
-                if (!Config.USE_PACKET_EVENT_HANDLER) {
-                    event.setCancelled(true);
-                    try {
-                        pv.incrementStatistic(Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage());
-                    } catch (IllegalArgumentException e) {
-                        pv.incrementStatistic(Statistic.DAMAGE_TAKEN, (int) pv.getHealth());
-                    }
-                    try {
-                        EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), event.getDamage());
-                        Bukkit.getPluginManager().callEvent(fake_damage);
-                    } catch (IllegalArgumentException e) {
-                        EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), pv.getHealth());
-                        Bukkit.getPluginManager().callEvent(fake_damage);
-                    }
-                    sendEventsBukkit(pv);
-                }
+                pv.setGameMode(GameMode.SPECTATOR);
                 Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitle(pv), Randomizer.randomSubTitle(pv));
+                PlayerAPI.incrementStatistic(pv, Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage(), (int) pv.getHealth());
+                try {
+                    EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), event.getDamage());
+                    Bukkit.getPluginManager().callEvent(fake_damage);
+                } catch (IllegalArgumentException e) {
+                    EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), pv.getHealth());
+                    Bukkit.getPluginManager().callEvent(fake_damage);
+                }
                 if (event instanceof EntityDamageByBlockEvent) {
                     Block damager = ((EntityDamageByBlockEvent) event).getDamager();
-                    if (!Config.USE_PACKET_EVENT_HANDLER) {
-                        try {
-                            EntityDamageByBlockEvent block_damage = new EntityDamageByBlockEvent(damager, victim, event.getCause(), event.getDamage());
-                            Bukkit.getPluginManager().callEvent(block_damage);
-                        } catch (IllegalArgumentException e) {
-                            EntityDamageByBlockEvent block_damage = new EntityDamageByBlockEvent(damager, victim, event.getCause(), pv.getHealth());
-                            Bukkit.getPluginManager().callEvent(block_damage);
-                        }
+                    try {
+                        EntityDamageByBlockEvent block_damage = new EntityDamageByBlockEvent(damager, victim, event.getCause(), event.getDamage());
+                        Bukkit.getPluginManager().callEvent(block_damage);
+                    } catch (IllegalArgumentException e) {
+                        EntityDamageByBlockEvent block_damage = new EntityDamageByBlockEvent(damager, victim, event.getCause(), pv.getHealth());
+                        Bukkit.getPluginManager().callEvent(block_damage);
                     }
                 }
                 if (event instanceof EntityDamageByEntityEvent) {
                     Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
-                    if (Config.USE_KILL_CAM && !Config.USE_PACKET_EVENT_HANDLER) {
+                    if (Config.USE_KILL_CAM) {
                         pv.setSpectatorTarget(damager);
                     }
                     if (damager instanceof Player) {
                         Player pd = (Player) damager;
+                        EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(damager, victim, event.getCause(), event.getDamage());
+                        Bukkit.getPluginManager().callEvent(entity_damage);
+
                         Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                         ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
-                        try {
-                            pd.playSound(pd.getLocation(), Sound.valueOf(random_kill_sound), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
-                        } catch (Exception e) {
-                            BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", random_kill_sound));
-                        }
-                        if (!Config.USE_PACKET_EVENT_HANDLER) {
-                            EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(damager, victim, event.getCause(), event.getDamage());
-                            Bukkit.getPluginManager().callEvent(entity_damage);
-                            try {
-                                pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
-                            } catch (IllegalArgumentException e) {
-                                pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) pv.getHealth());
-                            }
-                            pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
-                        }
+                        PlayerAPI.playSound(pd, random_kill_sound, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                        PlayerAPI.incrementStatistic(pd, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), (int) pv.getHealth());
+                        pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
                     }
                     if (damager instanceof Projectile) {
                         Projectile pj = (Projectile) damager;
                         if (pj.getShooter() instanceof Entity) {
-                            if (Config.USE_KILL_CAM && !Config.USE_PACKET_EVENT_HANDLER) {
+                            if (Config.USE_KILL_CAM) {
                                 pv.setSpectatorTarget((Entity) pj.getShooter());
                             }
                         }
                         if (pj.getShooter() instanceof Player) {
                             Player pd = (Player) pj.getShooter();
+                            EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(pd, victim, event.getCause(), event.getDamage());
+                            Bukkit.getPluginManager().callEvent(entity_damage);
+
                             Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                             ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
-                            try {
-                                pd.playSound(pd.getLocation(), Sound.valueOf(random_kill_sound), Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
-                            } catch (Exception e) {
-                                BetterDeathScreen.logger(ChatColor.translateAlternateColorCodes('&', Messages.SOUND_ERROR).replace("%sound%", random_kill_sound));
-                            }
-                            if (!Config.USE_PACKET_EVENT_HANDLER) {
-                                EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(pd, victim, event.getCause(), event.getDamage());
-                                Bukkit.getPluginManager().callEvent(entity_damage);
-                                try {
-                                    pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
-                                } catch (IllegalArgumentException e) {
-                                    pd.incrementStatistic(Statistic.DAMAGE_DEALT, (int) pv.getHealth());
-                                }
-                                pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
-                            }
+                            PlayerAPI.playSound(pd, random_kill_sound, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                            PlayerAPI.incrementStatistic(pd, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), (int) pv.getHealth());
+                            pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
                         }
                         pj.remove();
                     }
                 }
+                sendEventsBukkit(pv);
             }
         }
     }

@@ -1,5 +1,6 @@
 package me.tedesk.bds.configs;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
@@ -29,7 +30,6 @@ public class Messages {
     public static String SOUND_ERROR;
     public static String SPAWN_ERROR;
 
-
     public static void loadMessages() {
         FileConfiguration messages = ConfigHandler.getConfig("messages_" + Config.LANGUAGE);
 
@@ -37,12 +37,12 @@ public class Messages {
         ENABLED = messages.getStringList("plugin.enabled");
         DISABLED = messages.getStringList("plugin.disabled");
 
-        COMMAND_BLOCKED = messages.getString("misc.commands-blocked");
-        SPECTATE_BLOCKED = messages.getString("misc.spectate-blocked");
-        HOTBAR_TELEPORT_BLOCKED = messages.getString("misc.hotbar-tp-blocked");
+        COMMAND_BLOCKED = ChatColor.translateAlternateColorCodes('&', messages.getString("misc.commands-blocked"));
+        SPECTATE_BLOCKED = ChatColor.translateAlternateColorCodes('&', messages.getString("misc.spectate-blocked"));
+        HOTBAR_TELEPORT_BLOCKED = ChatColor.translateAlternateColorCodes('&', messages.getString("misc.hotbar-tp-blocked"));
 
-        ACTIONBAR_DEATH = messages.getString("actionbar.death");
-        ACTIONBAR_HC = messages.getString("actionbar.hardcore");
+        ACTIONBAR_DEATH = ChatColor.translateAlternateColorCodes('&', messages.getString("actionbar.death"));
+        ACTIONBAR_HC = ChatColor.translateAlternateColorCodes('&', messages.getString("actionbar.hardcore"));
         ACTIONBAR_KILL = messages.getStringList("actionbar.kill");
 
         KILLED_TITLES = messages.getStringList("titles.killed");
@@ -50,17 +50,17 @@ public class Messages {
         KILLED_SUBTITLES = messages.getStringList("subtitles.killed");
         KILLED_BY_PLAYER_SUBTITLES = messages.getStringList("subtitles.killed-by-player");
 
-        SINGULAR = messages.getString("time.singular");
-        PLURAL = messages.getString("time.plural");
+        SINGULAR = ChatColor.translateAlternateColorCodes('&', messages.getString("time.singular"));
+        PLURAL = ChatColor.translateAlternateColorCodes('&', messages.getString("time.plural"));
 
         HELP = messages.getStringList("commands.help");
-        RELOAD = messages.getString("commands.reload");
-        NO_PERM = messages.getString("commands.no-perm");
-        SPAWN_SET = messages.getString("commands.spawn-set");
+        RELOAD = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.reload"));
+        NO_PERM = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.no-perm"));
+        SPAWN_SET = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.spawn-set"));
 
-        AB_ERROR = messages.getString("errors.actionbar");
-        TITLE_ERROR = messages.getString("errors.title");
-        SOUND_ERROR = messages.getString("errors.sound");
-        SPAWN_ERROR = messages.getString("errors.spawn");
+        AB_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.actionbar"));
+        TITLE_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.title"));
+        SOUND_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.sound"));
+        SPAWN_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.spawn"));
     }
 }

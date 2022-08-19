@@ -7,7 +7,6 @@ import com.comphenix.protocol.events.PacketEvent;
 import me.tedesk.bds.BetterDeathScreen;
 import me.tedesk.bds.configs.Config;
 import me.tedesk.bds.configs.Messages;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -27,13 +26,13 @@ public class SpectatorPacketLimiter {
                     e.setCancelled(true);
                     if (!SPECTATOR_MESSAGE_CD.contains(p.getName())) {
                         SPECTATOR_MESSAGE_CD.add(p.getName());
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.SPECTATE_BLOCKED));
+                        p.sendMessage(Messages.SPECTATE_BLOCKED);
                         new BukkitRunnable() {
                             @Override
                             public void run() {
                                 SPECTATOR_MESSAGE_CD.remove(p.getName());
                             }
-                        }.runTaskLaterAsynchronously(BetterDeathScreen.plugin, 20*3);
+                        }.runTaskLaterAsynchronously(BetterDeathScreen.plugin, 20 * 3);
                     }
                 }
             }

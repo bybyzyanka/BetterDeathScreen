@@ -6,8 +6,8 @@ import me.tedesk.bds.commands.MainTabComplete;
 import me.tedesk.bds.configs.Config;
 import me.tedesk.bds.configs.ConfigHandler;
 import me.tedesk.bds.configs.Messages;
-import me.tedesk.bds.events.Listeners;
-import me.tedesk.bds.systems.Tasks;
+import me.tedesk.bds.events.Events;
+import me.tedesk.bds.utils.Tasks;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -94,7 +94,7 @@ public class BetterDeathScreen extends JavaPlugin {
             return;
         }
         createAndLoadConfigs();
-        Listeners.setup();
+        Events.setup();
         getCommand("bds").setExecutor(new MainCommand());
         getCommand("bds").setTabCompleter(new MainTabComplete());
         Metrics metrics = new Metrics(this, 14729);

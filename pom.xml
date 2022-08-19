@@ -6,7 +6,9 @@
 
     <groupId>me.tedesk.bds</groupId>
     <artifactId>BetterDeathScreen</artifactId>
-    <version>1.5.1</version>
+    <name>BetterDeathScreen</name>
+    <description>Plugin made with the purpose of changing the death screen of Minecraft</description>
+    <version>1.6</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -25,7 +27,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.3.0</version>
                 <configuration>
                     <relocations>
                         <relocation>
@@ -41,6 +43,7 @@
                         <filter>
                             <artifact>*:*</artifact>
                             <excludes>
+                                <exclude>com/cryptomorin/xseries/XMaterial*</exclude>
                                 <exclude>com/cryptomorin/xseries/XSound*</exclude>
                                 <exclude>com/cryptomorin/xseries/XBlock*</exclude>
                                 <exclude>com/cryptomorin/xseries/XPotion*</exclude>

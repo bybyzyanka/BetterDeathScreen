@@ -3,8 +3,7 @@ package me.tedesk.bds.events.bukkit;
 import me.tedesk.bds.BetterDeathScreen;
 import me.tedesk.bds.configs.Config;
 import me.tedesk.bds.configs.Messages;
-import me.tedesk.bds.events.Listeners;
-import org.bukkit.ChatColor;
+import me.tedesk.bds.events.Events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,9 +13,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerCommandListener extends Listeners {
+public class PlayerCommandListener extends Events {
 
-    public static List<String> COMMAND_MESSAGE_CD = new ArrayList<>();
+    List<String> COMMAND_MESSAGE_CD = new ArrayList<>();
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onCommandPreProcess(PlayerCommandPreprocessEvent e) {
@@ -26,13 +25,13 @@ public class PlayerCommandListener extends Listeners {
             e.setCancelled(true);
             if (!COMMAND_MESSAGE_CD.contains(p.getName())) {
                 COMMAND_MESSAGE_CD.add(p.getName());
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.COMMAND_BLOCKED));
+                p.sendMessage(Messages.COMMAND_BLOCKED);
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         COMMAND_MESSAGE_CD.remove(p.getName());
                     }
-                }.runTaskLaterAsynchronously(BetterDeathScreen.plugin, 20*3);
+                }.runTaskLaterAsynchronously(BetterDeathScreen.plugin, 20 * 3);
             }
         }
     }

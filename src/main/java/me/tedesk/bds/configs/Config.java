@@ -10,7 +10,6 @@ import java.util.List;
 public class Config {
 
     public static List<String> DEAD_PLAYERS = new ArrayList<>();
-    public static boolean USE_PACKET_EVENT_HANDLER;
     public static String LANGUAGE;
     public static boolean WORLD_BORDER_EFFECT;
     public static boolean USE_DEFAULT_WORLD_SPAWN;
@@ -48,7 +47,6 @@ public class Config {
         FileConfiguration locations = ConfigHandler.getConfig("locations");
 
         LANGUAGE = config.getString("misc.language");
-        USE_PACKET_EVENT_HANDLER = config.getBoolean("misc.use-packet-event-handler");
         WORLD_BORDER_EFFECT = config.getBoolean("misc.world-border-effect");
         USE_DEFAULT_WORLD_SPAWN = config.getBoolean("misc.use-default-world-spawn");
         USE_SAFE_TELEPORT = config.getBoolean("misc.use-safe-teleport");

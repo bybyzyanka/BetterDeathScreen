@@ -1,4 +1,4 @@
-package me.tedesk.bds.systems;
+package me.tedesk.bds.utils;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.tedesk.bds.BetterDeathScreen;

@@ -1,8 +1,8 @@
 package me.tedesk.bds.events.bukkit;
 
 import me.tedesk.bds.configs.Config;
-import me.tedesk.bds.events.Listeners;
-import me.tedesk.bds.systems.Tasks;
+import me.tedesk.bds.events.Events;
+import me.tedesk.bds.utils.Tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -12,7 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerConnectionListener extends Listeners {
+public class PlayerConnectionListener extends Events {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent e) {
@@ -20,7 +20,7 @@ public class PlayerConnectionListener extends Listeners {
         if ((p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) || Config.DEAD_PLAYERS.contains(p.getName())) {
             if (Bukkit.getServer().isHardcore()) {
                 Config.DEAD_PLAYERS.add(p.getName());
-                Tasks.hardcoreTimer(p);
+                Tasks.startTimer(p);
             }
         }
         // Desbugando o respawn em outras dimensões.

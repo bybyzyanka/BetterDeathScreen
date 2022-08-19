@@ -3,8 +3,7 @@ package me.tedesk.bds.events.bukkit;
 import me.tedesk.bds.BetterDeathScreen;
 import me.tedesk.bds.configs.Config;
 import me.tedesk.bds.configs.Messages;
-import me.tedesk.bds.events.Listeners;
-import org.bukkit.ChatColor;
+import me.tedesk.bds.events.Events;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,9 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PlayerTeleportListener extends Listeners {
+public class PlayerTeleportListener extends Events {
 
     public static HashMap<String, Location> TELEPORT_LOCATION = new HashMap<>();
+
     List<String> TELEPORT_MESSAGE_CD = new ArrayList<>();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -30,13 +30,13 @@ public class PlayerTeleportListener extends Listeners {
                 e.setCancelled(true);
                 if (!TELEPORT_MESSAGE_CD.contains(p.getName())) {
                     TELEPORT_MESSAGE_CD.add(p.getName());
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.HOTBAR_TELEPORT_BLOCKED));
+                    p.sendMessage(Messages.HOTBAR_TELEPORT_BLOCKED);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             TELEPORT_MESSAGE_CD.remove(p.getName());
                         }
-                    }.runTaskLaterAsynchronously(BetterDeathScreen.plugin, 20*3);
+                    }.runTaskLaterAsynchronously(BetterDeathScreen.plugin, 20 * 3);
                 }
                 return;
             }
