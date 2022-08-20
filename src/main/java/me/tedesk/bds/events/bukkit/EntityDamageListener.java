@@ -25,6 +25,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -95,6 +96,7 @@ public class EntityDamageListener extends Events {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity victim = event.getEntity();
+
         int time = Config.TIME;
         if (time <= 0) {
             time = 1;
@@ -108,7 +110,34 @@ public class EntityDamageListener extends Events {
                 event.setCancelled(true);
                 return;
             }
+            if (pv.getHealth() > event.getFinalDamage()) {
+                if (!(event instanceof EntityDamageByEntityEvent) && !(event instanceof EntityDamageByBlockEvent)){
+                    ArrayList<Object> player_list = new ArrayList<>();
+                    player_list.add(event.getCause());
+                    player_list.add(event.getDamage());
+                    player_list.add(event.getFinalDamage());
 
+                    PlayerDeathListener.LAST_DAMAGE_BEFORE_DEATH.put(pv.getName(), player_list);
+                }
+                if (event instanceof EntityDamageByEntityEvent) {
+                    ArrayList<Object> player_list = new ArrayList<>();
+                    player_list.add(((EntityDamageByEntityEvent) event).getDamager());
+                    player_list.add(event.getCause());
+                    player_list.add(event.getDamage());
+                    player_list.add(event.getFinalDamage());
+
+                    PlayerDeathListener.LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.put(pv.getName(), player_list);
+                }
+                if (event instanceof EntityDamageByBlockEvent) {
+                    ArrayList<Object> player_list = new ArrayList<>();
+                    player_list.add(((EntityDamageByBlockEvent) event).getDamager());
+                    player_list.add(event.getCause());
+                    player_list.add(event.getDamage());
+                    player_list.add(event.getFinalDamage());
+
+                    PlayerDeathListener.LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.put(pv.getName(), player_list);
+                }
+            }
             if (pv.getHealth() <= event.getFinalDamage() && handChecker(pv, event)) {
                 event.setCancelled(true);
                 Config.DEAD_PLAYERS.add(victim.getName());

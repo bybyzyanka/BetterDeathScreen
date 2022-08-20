@@ -50,7 +50,7 @@ public class PlayerDropInventoryEvent extends Event implements Cancellable {
     /**
      * Change the drops of the event
      *
-     * @return Change the list of drops of the event
+     * @param drops Change the list of drops of the event
      */
     public void setDrops(List<ItemStack> drops) {
         this.drops = drops;
