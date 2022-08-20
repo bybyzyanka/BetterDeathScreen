@@ -25,7 +25,6 @@ public class BetterDeathScreen extends JavaPlugin {
     public static void logger(String text) {
         Bukkit.getConsoleSender().sendMessage("[BetterDeathScreen] " + text);
     }
-
     public static boolean veryNewVersion() {
         if (version == Version.v1_20)
             return true;
@@ -47,12 +46,12 @@ public class BetterDeathScreen extends JavaPlugin {
             return true;
         if (version == Version.v1_13)
             return true;
-        if (version == Version.v1_12)
-            return true;
         return false;
     }
 
     public static boolean oldVersion() {
+        if (version == Version.v1_12)
+            return true;
         if (version == Version.v1_11)
             return true;
         if (version == Version.v1_10)

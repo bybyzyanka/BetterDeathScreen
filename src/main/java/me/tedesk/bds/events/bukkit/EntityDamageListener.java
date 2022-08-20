@@ -9,6 +9,7 @@ import me.tedesk.bds.api.Version;
 import me.tedesk.bds.api.events.PlayerDropInventoryEvent;
 import me.tedesk.bds.configs.Config;
 import me.tedesk.bds.events.Events;
+import me.tedesk.bds.utils.DeathMessage;
 import me.tedesk.bds.utils.Randomizer;
 import me.tedesk.bds.utils.Tasks;
 import org.bukkit.Bukkit;
@@ -20,10 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
@@ -41,7 +39,8 @@ public class EntityDamageListener extends Events {
         return true;
     }
 
-    private static void sendEventsBukkit(Player p) {
+    @SuppressWarnings("deprecation")
+    private static void sendEventsBukkit(Player p, EntityDamageEvent e) {
         String random_death_sound = Randomizer.randomSound(Config.SOUND_DEATH);
         p.closeInventory();
         List<ItemStack> filtered_inventory = Arrays.stream(p.getInventory().getContents())
@@ -62,13 +61,25 @@ public class EntityDamageListener extends Events {
         }
 
         if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
-            PlayerDeathEvent death = new PlayerDeathEvent(p, filtered_inventory, Math.min(100, p.getLevel() * 7), null);
-            Bukkit.getPluginManager().callEvent(death);
+            if (p.hasPermission(Config.KEEP_XP)) {
+                EntityDeathEvent ent_death = new EntityDeathEvent(p, filtered_inventory, 0);
+                Bukkit.getPluginManager().callEvent(ent_death);
+                PlayerDeathEvent death = new PlayerDeathEvent(p, filtered_inventory, 0, (int) p.getExp(), p.getTotalExperience(), p.getLevel(), DeathMessage.sendMessage(p, e));
+                Bukkit.getPluginManager().callEvent(death);
+            }
+            if (!p.hasPermission(Config.KEEP_XP)) {
+                EntityDeathEvent ent_death = new EntityDeathEvent(p, filtered_inventory, Math.min(100, p.getLevel() * 7));
+                Bukkit.getPluginManager().callEvent(ent_death);
+                PlayerDeathEvent death = new PlayerDeathEvent(p, filtered_inventory, Math.min(100, p.getLevel() * 7), 0, p.getTotalExperience(), 0, DeathMessage.sendMessage(p, e));
+                Bukkit.getPluginManager().callEvent(death);
+            }
             PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, filtered_inventory);
             Bukkit.getPluginManager().callEvent(drop_items);
         }
         if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
-            PlayerDeathEvent death = new PlayerDeathEvent(p, Collections.emptyList(), 0, null);
+            EntityDeathEvent ent_death = new EntityDeathEvent(p, Collections.emptyList(), 0);
+            Bukkit.getPluginManager().callEvent(ent_death);
+            PlayerDeathEvent death = new PlayerDeathEvent(p, Collections.emptyList(), 0, DeathMessage.sendMessage(p, e));
             Bukkit.getPluginManager().callEvent(death);
             PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, Collections.emptyList());
             Bukkit.getPluginManager().callEvent(drop_items);
@@ -81,7 +92,6 @@ public class EntityDamageListener extends Events {
         Animation.sendAnimation(p);
     }
 
-    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity victim = event.getEntity();
@@ -104,7 +114,7 @@ public class EntityDamageListener extends Events {
                 Config.DEAD_PLAYERS.add(victim.getName());
                 pv.setGameMode(GameMode.SPECTATOR);
                 Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitle(pv), Randomizer.randomSubTitle(pv));
-                PlayerAPI.incrementStatistic(pv, Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage(), (int) pv.getHealth());
+                PlayerAPI.incrementStatistic(pv, Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage());
                 try {
                     EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), event.getDamage());
                     Bukkit.getPluginManager().callEvent(fake_damage);
@@ -135,7 +145,7 @@ public class EntityDamageListener extends Events {
                         Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                         ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
                         PlayerAPI.playSound(pd, random_kill_sound, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
-                        PlayerAPI.incrementStatistic(pd, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), (int) pv.getHealth());
+                        PlayerAPI.incrementStatistic(pd, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
                         pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
                     }
                     if (damager instanceof Projectile) {
@@ -153,13 +163,13 @@ public class EntityDamageListener extends Events {
                             Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                             ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
                             PlayerAPI.playSound(pd, random_kill_sound, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
-                            PlayerAPI.incrementStatistic(pd, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), (int) pv.getHealth());
+                            PlayerAPI.incrementStatistic(pd, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
                             pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
                         }
                         pj.remove();
                     }
                 }
-                sendEventsBukkit(pv);
+                sendEventsBukkit(pv, event);
             }
         }
     }

@@ -18,7 +18,6 @@ public class MainCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender s, Command cnd, String lbl, String[] args) {
 
-        // Odeio usar else, mas tive que usar para facilitar.
         if (!(s instanceof Player)) {
             if (args.length != 0) {
                 if (args[0].equalsIgnoreCase("reload")) {

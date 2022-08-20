@@ -11,6 +11,7 @@ import java.util.Collections;
 
 public class PlayerDropInventoryListener extends Events {
 
+    @SuppressWarnings("deprecation")
     @EventHandler(ignoreCancelled = true)
     public void onDrop(PlayerDropInventoryEvent e) {
         Player p = e.getPlayer();

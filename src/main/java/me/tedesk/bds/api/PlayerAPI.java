@@ -16,11 +16,11 @@ public class PlayerAPI {
         return stack == null || stack.getType() == Material.AIR || stack.getAmount() == 0;
     }
 
-    public static void incrementStatistic(Player p, Statistic stat, int value, int safe_value) {
+    public static void incrementStatistic(Player p, Statistic stat, int value) {
         try {
             p.incrementStatistic(stat, (int) Math.min(p.getHealth(), value));
         } catch (IllegalArgumentException e) {
-            p.incrementStatistic(stat, safe_value);
+            p.incrementStatistic(stat, 1);
         }
     }
 

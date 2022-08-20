@@ -160,7 +160,9 @@ public class Tasks {
         if (!Bukkit.getServer().isHardcore()) {
             String random_countdown_sound = Randomizer.randomSound(Config.SOUND_COUNTDOWN);
             try {
-                p.playSound(new Location(Bukkit.getWorlds().get(0), 0, 2048, 0), Sound.valueOf(random_countdown_sound), 1, 1);
+                if (!random_countdown_sound.contains(".")) {
+                    p.playSound(new Location(Bukkit.getWorlds().get(0), 0, 2048, 0), Sound.valueOf(random_countdown_sound), 1, 1);
+                }
             } catch (Exception e) {
                 BetterDeathScreen.logger(Messages.SOUND_ERROR.replace("%sound%", random_countdown_sound));
             }
