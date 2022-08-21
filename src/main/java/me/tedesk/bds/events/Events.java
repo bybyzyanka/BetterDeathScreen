@@ -23,6 +23,7 @@ public class Events implements Listener {
         pm.registerEvents(new PlayerConnectionListener(), pl);
         pm.registerEvents(new PlayerDeathListener(), pl);
         pm.registerEvents(new PlayerMoveListener(), pl);
+        pm.registerEvents(new PlayerRespawnListener(), pl);
         pm.registerEvents(new PlayerTeleportListener(), pl);
 
         // Packets
