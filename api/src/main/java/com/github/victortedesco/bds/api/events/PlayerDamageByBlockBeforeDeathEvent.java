@@ -82,7 +82,6 @@ public class PlayerDamageByBlockBeforeDeathEvent extends Event implements Cancel
     public void setDamage(double damage) {
         this.damage = damage;
     }
-
     /**
      * Get the amount of damage reduced by armor, potions caused by the event.
      *

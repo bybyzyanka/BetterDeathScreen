@@ -1,7 +1,7 @@
 package com.github.victortedesco.bds.listener.bukkit;
 
-import com.github.victortedesco.bds.api.events.Events;
 import com.github.victortedesco.bds.configs.Config;
+import com.github.victortedesco.bds.listener.Events;
 import com.github.victortedesco.bds.utils.Tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

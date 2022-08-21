@@ -1,12 +1,12 @@
 package com.github.victortedesco.bds;
 
+import com.github.victortedesco.bds.listener.Events;
 import com.github.victortedesco.bds.utils.Version;
 import com.github.victortedesco.bds.commands.MainCommand;
 import com.github.victortedesco.bds.commands.MainTabComplete;
 import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.configs.ConfigHandler;
 import com.github.victortedesco.bds.configs.Messages;
-import com.github.victortedesco.bds.api.events.Events;
 import com.github.victortedesco.bds.utils.Tasks;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;

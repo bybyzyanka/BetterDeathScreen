@@ -5,7 +5,7 @@ import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.configs.Messages;
-import com.github.victortedesco.bds.api.events.bukkit.PlayerTeleportListener;
+import com.github.victortedesco.bds.listener.bukkit.PlayerTeleportListener;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;

@@ -1,7 +1,7 @@
 package com.github.victortedesco.bds.listener.bds;
 
-import com.github.victortedesco.bds.api.events.Events;
 import com.github.victortedesco.bds.api.events.PlayerDropInventoryEvent;
+import com.github.victortedesco.bds.listener.Events;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

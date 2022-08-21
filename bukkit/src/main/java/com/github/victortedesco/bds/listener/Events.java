@@ -1,10 +1,9 @@
-package com.github.victortedesco.bds.api.events;
+package com.github.victortedesco.bds.listener;
 
 import com.github.victortedesco.bds.BetterDeathScreen;
-import com.github.victortedesco.bds.api.events.bukkit.*;
-import com.github.victortedesco.bds.api.events.bds.PlayerDropInventoryListener;
-import me.tedesk.bds.events.bukkit.*;
-import com.github.victortedesco.bds.api.events.packets.SpectatorPacketLimiter;
+import com.github.victortedesco.bds.listener.bds.PlayerDropInventoryListener;
+import com.github.victortedesco.bds.listener.bukkit.*;
+import com.github.victortedesco.bds.listener.packets.SpectatorPacketLimiter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;

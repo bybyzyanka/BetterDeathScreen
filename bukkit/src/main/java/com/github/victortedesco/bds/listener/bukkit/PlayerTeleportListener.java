@@ -3,7 +3,7 @@ package com.github.victortedesco.bds.listener.bukkit;
 import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.configs.Messages;
-import com.github.victortedesco.bds.api.events.Events;
+import com.github.victortedesco.bds.listener.Events;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
