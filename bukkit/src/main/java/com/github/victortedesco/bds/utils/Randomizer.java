@@ -1,8 +1,8 @@
 package com.github.victortedesco.bds.utils;
 
 import com.github.victortedesco.bds.BetterDeathScreen;
-import me.clip.placeholderapi.PlaceholderAPI;
 import com.github.victortedesco.bds.configs.Messages;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

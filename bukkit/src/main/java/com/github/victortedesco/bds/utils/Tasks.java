@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Tasks {
 
+    @SuppressWarnings("deprecation")
     public static void teleportToSpawnPoint(Player p) {
         if (!PlayerTeleportListener.TELEPORT_LOCATION.containsKey(p.getName())) {
             if (Config.USE_DEFAULT_WORLD_SPAWN) {
@@ -182,11 +183,11 @@ public class Tasks {
                     }
                     if (time > 1 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
                         ActionBar.sendActionBar(p, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
-                        PlayerAPI.playSound(p, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                        PlayerAPI.playSoundNoExceptions(p, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
                     }
                     if (time == 1 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
                         ActionBar.sendActionBar(p, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
-                        PlayerAPI.playSound(p, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                        PlayerAPI.playSoundNoExceptions(p, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
                     }
                     if (time <= 0 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
                         performRespawn(p);

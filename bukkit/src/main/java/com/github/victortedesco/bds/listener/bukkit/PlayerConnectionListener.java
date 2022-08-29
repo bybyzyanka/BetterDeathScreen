@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerConnectionListener extends Events {
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if ((p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) || Config.DEAD_PLAYERS.contains(p.getName())) {
@@ -31,7 +31,7 @@ public class PlayerConnectionListener extends Events {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
         // Para evitar bugs, o jogador renasce ao desconectar.

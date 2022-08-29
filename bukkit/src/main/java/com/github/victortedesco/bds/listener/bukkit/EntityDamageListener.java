@@ -3,15 +3,11 @@ package com.github.victortedesco.bds.listener.bukkit;
 import com.cryptomorin.xseries.messages.ActionBar;
 import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.bds.BetterDeathScreen;
-import com.github.victortedesco.bds.listener.Events;
-import com.github.victortedesco.bds.utils.PlayerAPI;
-import com.github.victortedesco.bds.api.events.PlayerDropInventoryEvent;
-import com.github.victortedesco.bds.utils.Randomizer;
 import com.github.victortedesco.bds.animations.Animation;
-import com.github.victortedesco.bds.utils.Version;
+import com.github.victortedesco.bds.api.events.PlayerDropInventoryEvent;
 import com.github.victortedesco.bds.configs.Config;
-import com.github.victortedesco.bds.utils.DeathMessage;
-import com.github.victortedesco.bds.utils.Tasks;
+import com.github.victortedesco.bds.listener.Events;
+import com.github.victortedesco.bds.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Statistic;
@@ -20,8 +16,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
@@ -63,14 +61,10 @@ public class EntityDamageListener extends Events {
 
         if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
             if (p.hasPermission(Config.KEEP_XP)) {
-                EntityDeathEvent ent_death = new EntityDeathEvent(p, filtered_inventory, 0);
-                Bukkit.getPluginManager().callEvent(ent_death);
                 PlayerDeathEvent death = new PlayerDeathEvent(p, filtered_inventory, 0, (int) p.getExp(), p.getTotalExperience(), p.getLevel(), DeathMessage.sendMessage(p, e));
                 Bukkit.getPluginManager().callEvent(death);
             }
             if (!p.hasPermission(Config.KEEP_XP)) {
-                EntityDeathEvent ent_death = new EntityDeathEvent(p, filtered_inventory, Math.min(100, p.getLevel() * 7));
-                Bukkit.getPluginManager().callEvent(ent_death);
                 PlayerDeathEvent death = new PlayerDeathEvent(p, filtered_inventory, Math.min(100, p.getLevel() * 7), 0, p.getTotalExperience(), 0, DeathMessage.sendMessage(p, e));
                 Bukkit.getPluginManager().callEvent(death);
             }
@@ -78,8 +72,6 @@ public class EntityDamageListener extends Events {
             Bukkit.getPluginManager().callEvent(drop_items);
         }
         if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
-            EntityDeathEvent ent_death = new EntityDeathEvent(p, Collections.emptyList(), 0);
-            Bukkit.getPluginManager().callEvent(ent_death);
             PlayerDeathEvent death = new PlayerDeathEvent(p, Collections.emptyList(), 0, DeathMessage.sendMessage(p, e));
             Bukkit.getPluginManager().callEvent(death);
             PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, Collections.emptyList());
@@ -93,10 +85,9 @@ public class EntityDamageListener extends Events {
         Animation.sendAnimation(p);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity victim = event.getEntity();
-
         int time = Config.TIME;
         if (time <= 0) {
             time = 1;
@@ -107,35 +98,35 @@ public class EntityDamageListener extends Events {
             String random_kill_sound = Randomizer.randomSound(Config.SOUND_KILL);
 
             if (Config.DEAD_PLAYERS.contains(pv.getName())) {
-                event.setCancelled(true);
+                event.setDamage(0);
                 return;
             }
             if (pv.getHealth() > event.getFinalDamage()) {
-                if (!(event instanceof EntityDamageByEntityEvent) && !(event instanceof EntityDamageByBlockEvent)){
-                    ArrayList<Object> player_list = new ArrayList<>();
-                    player_list.add(event.getCause());
-                    player_list.add(event.getDamage());
-                    player_list.add(event.getFinalDamage());
+                if (!(event instanceof EntityDamageByEntityEvent) && !(event instanceof EntityDamageByBlockEvent)) {
+                    ArrayList<Object> list = new ArrayList<>();
+                    list.add(event.getCause());
+                    list.add(event.getDamage());
+                    list.add(event.getFinalDamage());
 
-                    PlayerDeathListener.LAST_DAMAGE_BEFORE_DEATH.put(pv.getName(), player_list);
+                    PlayerDeathListener.LAST_DAMAGE_BEFORE_DEATH.put(pv.getName(), list);
                 }
                 if (event instanceof EntityDamageByEntityEvent) {
-                    ArrayList<Object> player_list = new ArrayList<>();
-                    player_list.add(((EntityDamageByEntityEvent) event).getDamager());
-                    player_list.add(event.getCause());
-                    player_list.add(event.getDamage());
-                    player_list.add(event.getFinalDamage());
+                    ArrayList<Object> list = new ArrayList<>();
+                    list.add(((EntityDamageByEntityEvent) event).getDamager());
+                    list.add(event.getCause());
+                    list.add(event.getDamage());
+                    list.add(event.getFinalDamage());
 
-                    PlayerDeathListener.LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.put(pv.getName(), player_list);
+                    PlayerDeathListener.LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.put(pv.getName(), list);
                 }
                 if (event instanceof EntityDamageByBlockEvent) {
-                    ArrayList<Object> player_list = new ArrayList<>();
-                    player_list.add(((EntityDamageByBlockEvent) event).getDamager());
-                    player_list.add(event.getCause());
-                    player_list.add(event.getDamage());
-                    player_list.add(event.getFinalDamage());
+                    ArrayList<Object> list = new ArrayList<>();
+                    list.add(((EntityDamageByBlockEvent) event).getDamager());
+                    list.add(event.getCause());
+                    list.add(event.getDamage());
+                    list.add(event.getFinalDamage());
 
-                    PlayerDeathListener.LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.put(pv.getName(), player_list);
+                    PlayerDeathListener.LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.put(pv.getName(), list);
                 }
             }
             if (pv.getHealth() <= event.getFinalDamage() && handChecker(pv, event)) {
@@ -144,12 +135,14 @@ public class EntityDamageListener extends Events {
                 pv.setGameMode(GameMode.SPECTATOR);
                 Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitle(pv), Randomizer.randomSubTitle(pv));
                 PlayerAPI.incrementStatistic(pv, Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage());
-                try {
-                    EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), event.getDamage());
-                    Bukkit.getPluginManager().callEvent(fake_damage);
-                } catch (IllegalArgumentException e) {
-                    EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), pv.getHealth());
-                    Bukkit.getPluginManager().callEvent(fake_damage);
+                if (!(event instanceof EntityDamageByEntityEvent) && !(event instanceof EntityDamageByBlockEvent)) {
+                    try {
+                        EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), event.getDamage());
+                        Bukkit.getPluginManager().callEvent(fake_damage);
+                    } catch (IllegalArgumentException e) {
+                        EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), pv.getHealth());
+                        Bukkit.getPluginManager().callEvent(fake_damage);
+                    }
                 }
                 if (event instanceof EntityDamageByBlockEvent) {
                     Block damager = ((EntityDamageByBlockEvent) event).getDamager();

@@ -5,6 +5,7 @@ import com.github.victortedesco.bds.listener.Events;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
@@ -12,7 +13,7 @@ import java.util.Collections;
 public class PlayerDropInventoryListener extends Events {
 
     @SuppressWarnings("deprecation")
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDrop(PlayerDropInventoryEvent e) {
         Player p = e.getPlayer();
 

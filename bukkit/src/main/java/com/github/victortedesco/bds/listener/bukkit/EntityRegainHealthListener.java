@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 
 public class EntityRegainHealthListener extends Events {
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onRegen(EntityRegainHealthEvent e) {
         Entity ent = e.getEntity();
 

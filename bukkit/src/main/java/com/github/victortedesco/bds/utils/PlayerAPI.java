@@ -37,6 +37,19 @@ public class PlayerAPI {
         }
     }
 
+    public static void playSoundNoExceptions(Player p, String sound, float volume, float pitch) {
+        try {
+            if (!sound.contains(".")) {
+                p.playSound(p.getLocation(), Sound.valueOf(sound), volume, pitch);
+            }
+            if (sound.contains(".")) {
+                p.playSound(p.getLocation(), sound, volume, pitch);
+            }
+        } catch (IllegalArgumentException ignored) {
+
+        }
+    }
+
     public static void teleportSafeLocation(Player p, Location location) {
         double y = location.getWorld().getMaxHeight();
         for (double i = y; i > 0; i -= 1) {

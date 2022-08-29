@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 
 public class PlayerMoveListener extends Events {
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
         Location from = e.getFrom();

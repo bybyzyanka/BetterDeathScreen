@@ -11,7 +11,6 @@ public class Config {
 
     public static List<String> DEAD_PLAYERS = new ArrayList<>();
     public static String LANGUAGE;
-    public static boolean WORLD_BORDER_EFFECT;
     public static boolean USE_DEFAULT_WORLD_SPAWN;
     public static boolean USE_SAFE_TELEPORT;
     public static boolean USE_KILL_CAM;
@@ -47,7 +46,6 @@ public class Config {
         FileConfiguration locations = ConfigHandler.getConfig("locations");
 
         LANGUAGE = config.getString("misc.language");
-        WORLD_BORDER_EFFECT = config.getBoolean("misc.world-border-effect");
         USE_DEFAULT_WORLD_SPAWN = config.getBoolean("misc.use-default-world-spawn");
         USE_SAFE_TELEPORT = config.getBoolean("misc.use-safe-teleport");
         USE_KILL_CAM = config.getBoolean("misc.use-kill-camera");

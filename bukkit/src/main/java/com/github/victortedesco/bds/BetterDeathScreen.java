@@ -1,13 +1,13 @@
 package com.github.victortedesco.bds;
 
-import com.github.victortedesco.bds.listener.Events;
-import com.github.victortedesco.bds.utils.Version;
 import com.github.victortedesco.bds.commands.MainCommand;
 import com.github.victortedesco.bds.commands.MainTabComplete;
 import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.configs.ConfigHandler;
 import com.github.victortedesco.bds.configs.Messages;
+import com.github.victortedesco.bds.listener.Events;
 import com.github.victortedesco.bds.utils.Tasks;
+import com.github.victortedesco.bds.utils.Version;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,43 +24,6 @@ public class BetterDeathScreen extends JavaPlugin {
 
     public static void logger(String text) {
         Bukkit.getConsoleSender().sendMessage("[BetterDeathScreen] " + text);
-    }
-    public static boolean veryNewVersion() {
-        if (version == Version.v1_20)
-            return true;
-        if (version == Version.v1_19)
-            return true;
-        if (version == Version.v1_18)
-            return true;
-        if (version == Version.v1_17)
-            return true;
-        return false;
-    }
-
-    public static boolean newVersion() {
-        if (version == Version.v1_16)
-            return true;
-        if (version == Version.v1_15)
-            return true;
-        if (version == Version.v1_14)
-            return true;
-        if (version == Version.v1_13)
-            return true;
-        return false;
-    }
-
-    public static boolean oldVersion() {
-        if (version == Version.v1_12)
-            return true;
-        if (version == Version.v1_11)
-            return true;
-        if (version == Version.v1_10)
-            return true;
-        if (version == Version.v1_9)
-            return true;
-        if (version == Version.v1_8)
-            return true;
-        return false;
     }
 
     public static void createAndLoadConfigs() {

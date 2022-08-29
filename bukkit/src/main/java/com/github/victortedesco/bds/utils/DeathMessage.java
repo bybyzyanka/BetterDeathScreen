@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class DeathMessage {
 
-    @SuppressWarnings("all")
+    @SuppressWarnings("deprecation")
     public static String sendMessage(Player p, EntityDamageEvent e) {
         // https://minecraft.fandom.com/wiki/Death_messages#Java_Edition
         String message = "§f%p died".replace("%p", p.getName());
@@ -64,15 +64,17 @@ public class DeathMessage {
         if (e.getCause() == EntityDamageEvent.DamageCause.WITHER) {
             message = "§f%p withered away".replace("%p", p.getName());
         }
-        if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+        if (e.getCause() == EntityDamageEvent.DamageCause.VOID || e.getCause() == EntityDamageEvent.DamageCause.SUICIDE) {
             message = "§f%p fell out of the world".replace("%p", p.getName());
+        }
+        if (BetterDeathScreen.version.value >= Version.v1_17.value) {
+            if (e.getCause() == EntityDamageEvent.DamageCause.FREEZE) {
+                message = "§f%p froze to death".replace("%p", p.getName());
+            }
         }
         if (BetterDeathScreen.version.value >= Version.v1_19.value) {
             if (e.getCause() == EntityDamageEvent.DamageCause.SONIC_BOOM) {
                 message = "§f%p was obliterated by a sonically-charged shriek".replace("%p", p.getName());
-            }
-            if (e.getCause() == EntityDamageEvent.DamageCause.FREEZE) {
-                message = "§f%p froze to death".replace("%p", p.getName());
             }
         }
 
@@ -183,7 +185,7 @@ public class DeathMessage {
                     message = "§f%p was killed by [Intentional Game Design]".replace("%p", p.getName());
                 }
             }
-            if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+            if (e.getCause() == EntityDamageEvent.DamageCause.VOID || e.getCause() == EntityDamageEvent.DamageCause.SUICIDE) {
                 if (((EntityDamageByBlockEvent) e).getDamager() == null) {
                     message = "§f%p fell out of the world".replace("%p", p.getName());
                 }
