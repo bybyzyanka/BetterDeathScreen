@@ -8,8 +8,6 @@ import com.github.victortedesco.bds.configs.Messages;
 import com.github.victortedesco.bds.listener.bukkit.PlayerTeleportListener;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -19,88 +17,43 @@ public class Tasks {
 
     @SuppressWarnings("deprecation")
     public static void teleportToSpawnPoint(Player p) {
+        PlayerRespawnEvent respawn = new PlayerRespawnEvent(p, p.getWorld().getSpawnLocation(), false);
         if (!PlayerTeleportListener.TELEPORT_LOCATION.containsKey(p.getName())) {
             if (Config.USE_DEFAULT_WORLD_SPAWN) {
-                if (p.getBedSpawnLocation() == null) {
-                    PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
-                    Bukkit.getPluginManager().callEvent(non_bed_respawn);
-                    if (Config.USE_SAFE_TELEPORT) {
-                        PlayerAPI.teleportSafeLocation(p, Bukkit.getWorlds().get(0).getSpawnLocation());
-                    }
-                    if (!Config.USE_SAFE_TELEPORT) {
-                        p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                respawn.setRespawnLocation(Bukkit.getWorlds().get(0).getSpawnLocation());
+            }
+            if (!Config.USE_DEFAULT_WORLD_SPAWN) {
+                if (p.hasPermission(Config.VIP)) {
+                    try {
+                        respawn.setRespawnLocation(Config.VIP_SPAWN);
+                    } catch (Exception e) {
+                        respawn.setRespawnLocation(Bukkit.getWorlds().get(0).getSpawnLocation());
+                        BetterDeathScreen.logger(Messages.SPAWN_ERROR.replace("%player%", p.getName()).replace("%type%", "VIP"));
                     }
                 }
-                if (p.getBedSpawnLocation() != null) {
-                    PlayerRespawnEvent bed_respawn = new PlayerRespawnEvent(p, p.getBedSpawnLocation(), true);
-                    Bukkit.getPluginManager().callEvent(bed_respawn);
-                    if (Config.USE_SAFE_TELEPORT) {
-                        PlayerAPI.teleportSafeLocation(p, p.getBedSpawnLocation());
-                    }
-                    if (!Config.USE_SAFE_TELEPORT) {
-                        p.teleport(p.getBedSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                if (!p.hasPermission(Config.VIP)) {
+                    try {
+                        respawn.setRespawnLocation(Config.SPAWN);
+                    } catch (Exception e) {
+                        respawn.setRespawnLocation(Bukkit.getWorlds().get(0).getSpawnLocation());
+                        BetterDeathScreen.logger(Messages.SPAWN_ERROR.replace("%player%", p.getName()).replace("%type%", "VIP"));
                     }
                 }
             }
-            if (!Config.USE_DEFAULT_WORLD_SPAWN) {
-                if (p.getBedSpawnLocation() == null) {
-                    if (p.hasPermission(Config.VIP)) {
-                        try {
-                            PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Config.VIP_SPAWN, false);
-                            Bukkit.getPluginManager().callEvent(non_bed_respawn);
-                            p.teleport(Config.VIP_SPAWN, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                        } catch (Exception e) {
-                            PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
-                            Bukkit.getPluginManager().callEvent(non_bed_respawn);
-                            if (Config.USE_SAFE_TELEPORT) {
-                                PlayerAPI.teleportSafeLocation(p, Bukkit.getWorlds().get(0).getSpawnLocation());
-                            }
-                            if (!Config.USE_SAFE_TELEPORT) {
-                                p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                            }
-                            BetterDeathScreen.logger(Messages.SPAWN_ERROR.replace("%player%", p.getName()).replace("%type%", "VIP"));
-                        }
-                    }
-                    if (!p.hasPermission(Config.VIP)) {
-                        try {
-                            PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Config.SPAWN, false);
-                            Bukkit.getPluginManager().callEvent(non_bed_respawn);
-                            p.teleport(Config.SPAWN, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                        } catch (Exception e) {
-                            PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
-                            Bukkit.getPluginManager().callEvent(non_bed_respawn);
-                            if (Config.USE_SAFE_TELEPORT) {
-                                PlayerAPI.teleportSafeLocation(p, Bukkit.getWorlds().get(0).getSpawnLocation());
-                            }
-                            if (!Config.USE_SAFE_TELEPORT) {
-                                p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                            }
-                            BetterDeathScreen.logger(Messages.SPAWN_ERROR.replace("%player%", p.getName()).replace("%type%", "VIP"));
-                        }
-                    }
-                }
-                if (p.getBedSpawnLocation() != null) {
-                    PlayerRespawnEvent bed_respawn = new PlayerRespawnEvent(p, p.getBedSpawnLocation(), true);
-                    Bukkit.getPluginManager().callEvent(bed_respawn);
-                    if (Config.USE_SAFE_TELEPORT) {
-                        PlayerAPI.teleportSafeLocation(p, p.getBedSpawnLocation());
-                    }
-                    if (!Config.USE_SAFE_TELEPORT) {
-                        p.teleport(p.getBedSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                    }
-                }
+            if (p.getBedSpawnLocation() != null) {
+                respawn.setRespawnLocation(p.getBedSpawnLocation());
             }
         }
         if (PlayerTeleportListener.TELEPORT_LOCATION.containsKey(p.getName())) {
-            PlayerRespawnEvent queued_teleport = new PlayerRespawnEvent(p, PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()), false);
-            Bukkit.getPluginManager().callEvent(queued_teleport);
-            if (Config.USE_SAFE_TELEPORT) {
-                PlayerAPI.teleportSafeLocation(p, PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()));
-            }
-            if (!Config.USE_SAFE_TELEPORT) {
-                p.teleport(PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()), PlayerTeleportEvent.TeleportCause.PLUGIN);
-            }
+            respawn.setRespawnLocation(PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()));
             PlayerTeleportListener.TELEPORT_LOCATION.remove(p.getName());
+        }
+        Bukkit.getPluginManager().callEvent(respawn);
+        if (Config.USE_SAFE_TELEPORT) {
+            PlayerAPI.teleportSafeLocation(p, respawn.getRespawnLocation());
+        }
+        if (!Config.USE_SAFE_TELEPORT) {
+            p.teleport(respawn.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         }
     }
 
@@ -148,24 +101,18 @@ public class Tasks {
 
                     ActionBar.sendActionBar(p, Messages.ACTIONBAR_HC);
 
-                    // When chaning the gamemode of the player, he respawns.
+                    // When changing the gamemode of the player, he respawns.
                     if (!(p.getGameMode() == GameMode.SPECTATOR)) {
                         performRespawn(p);
                         cancel();
                     }
                 }
-            }.runTaskTimer(BetterDeathScreen.plugin, 1, 20);
+            }.runTaskTimer(BetterDeathScreen.plugin, 20, 20);
         }
 
         if (!Bukkit.getServer().isHardcore()) {
             String random_countdown_sound = Randomizer.randomSound(Config.SOUND_COUNTDOWN);
-            try {
-                if (!random_countdown_sound.contains(".")) {
-                    p.playSound(new Location(Bukkit.getWorlds().get(0), 0, 2048, 0), Sound.valueOf(random_countdown_sound), 1, 1);
-                }
-            } catch (Exception e) {
-                BetterDeathScreen.logger(Messages.SOUND_ERROR.replace("%sound%", random_countdown_sound));
-            }
+            PlayerAPI.playSound(p, random_countdown_sound, 0, 0);
 
             new BukkitRunnable() {
                 int time = Config.TIME;
@@ -176,22 +123,26 @@ public class Tasks {
 
                     if (!p.isOnline()) cancel();
 
-                    if (time == Config.TIME - 1 && p.hasPermission(Config.INSTANT_RESPAWN)) {
-                        ActionBar.sendActionBar(p, "");
-                        performRespawn(p);
-                        cancel();
+                    if (p.hasPermission(Config.INSTANT_RESPAWN)) {
+                        if (time == Config.TIME - 1) {
+                            ActionBar.sendActionBar(p, "");
+                            performRespawn(p);
+                            cancel();
+                        }
                     }
-                    if (time > 1 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
-                        ActionBar.sendActionBar(p, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
-                        PlayerAPI.playSoundNoExceptions(p, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
-                    }
-                    if (time == 1 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
-                        ActionBar.sendActionBar(p, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
-                        PlayerAPI.playSoundNoExceptions(p, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
-                    }
-                    if (time <= 0 && !p.hasPermission(Config.INSTANT_RESPAWN)) {
-                        performRespawn(p);
-                        cancel();
+                    if (!p.hasPermission(Config.INSTANT_RESPAWN)) {
+                        if (time > 1) {
+                            ActionBar.sendActionBar(p, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
+                            PlayerAPI.playSoundNoExceptions(p, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                        }
+                        if (time == 1) {
+                            ActionBar.sendActionBar(p, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
+                            PlayerAPI.playSoundNoExceptions(p, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                        }
+                        if (time <= 0) {
+                            performRespawn(p);
+                            cancel();
+                        }
                     }
                 }
             }.runTaskTimer(BetterDeathScreen.plugin, 20, 20);

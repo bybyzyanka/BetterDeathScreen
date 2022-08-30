@@ -50,7 +50,6 @@ public class EntityDamageListener extends Events {
                     .collect(Collectors.toList());
             filtered_inventory.addAll(armor);
         }
-
         for (PotionEffect pe : p.getActivePotionEffects()) {
             p.removePotionEffect(pe.getType());
         }
@@ -58,25 +57,33 @@ public class EntityDamageListener extends Events {
             p.setWalkSpeed(0F);
             p.setFlySpeed(0F);
         }
-
+        PlayerDeathEvent death = new PlayerDeathEvent(p, filtered_inventory, 0, DeathMessage.sendMessage(p, e));
+        PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, filtered_inventory);
         if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
             if (p.hasPermission(Config.KEEP_XP)) {
-                PlayerDeathEvent death = new PlayerDeathEvent(p, filtered_inventory, 0, (int) p.getExp(), p.getTotalExperience(), p.getLevel(), DeathMessage.sendMessage(p, e));
-                Bukkit.getPluginManager().callEvent(death);
+                death.setKeepLevel(true);
+                death.setNewExp((int) p.getExp());
+                death.setNewLevel(p.getLevel());
+                death.setNewTotalExp(p.getTotalExperience());
             }
             if (!p.hasPermission(Config.KEEP_XP)) {
-                PlayerDeathEvent death = new PlayerDeathEvent(p, filtered_inventory, Math.min(100, p.getLevel() * 7), 0, p.getTotalExperience(), 0, DeathMessage.sendMessage(p, e));
-                Bukkit.getPluginManager().callEvent(death);
+                death.setDroppedExp(Math.min(100, p.getLevel() * 7));
+                death.setKeepLevel(false);
+                death.setNewTotalExp(p.getTotalExperience());
+                death.setNewExp(0);
+                death.setNewLevel(0);
             }
-            PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, filtered_inventory);
-            Bukkit.getPluginManager().callEvent(drop_items);
         }
         if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
-            PlayerDeathEvent death = new PlayerDeathEvent(p, Collections.emptyList(), 0, DeathMessage.sendMessage(p, e));
-            Bukkit.getPluginManager().callEvent(death);
-            PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, Collections.emptyList());
-            Bukkit.getPluginManager().callEvent(drop_items);
+            death.setKeepInventory(true);
+            death.setKeepLevel(true);
+            death.setNewExp((int) p.getExp());
+            death.setNewLevel(p.getLevel());
+            drop_items.setDrops(Collections.emptyList());
+            drop_items.setCancelled(true);
         }
+        Bukkit.getPluginManager().callEvent(death);
+        Bukkit.getPluginManager().callEvent(drop_items);
         p.setHealth(0.1);
         p.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
         p.incrementStatistic(Statistic.DEATHS, 1);
@@ -156,13 +163,14 @@ public class EntityDamageListener extends Events {
                 }
                 if (event instanceof EntityDamageByEntityEvent) {
                     Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+                    EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(damager, victim, event.getCause(), event.getDamage());
+                    Bukkit.getPluginManager().callEvent(entity_damage);
+
                     if (Config.USE_KILL_CAM) {
                         pv.setSpectatorTarget(damager);
                     }
                     if (damager instanceof Player) {
                         Player pd = (Player) damager;
-                        EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(damager, victim, event.getCause(), event.getDamage());
-                        Bukkit.getPluginManager().callEvent(entity_damage);
 
                         Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                         ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
@@ -179,8 +187,6 @@ public class EntityDamageListener extends Events {
                         }
                         if (pj.getShooter() instanceof Player) {
                             Player pd = (Player) pj.getShooter();
-                            EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(pd, victim, event.getCause(), event.getDamage());
-                            Bukkit.getPluginManager().callEvent(entity_damage);
 
                             Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                             ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));

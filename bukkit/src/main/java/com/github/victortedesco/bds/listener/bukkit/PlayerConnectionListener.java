@@ -25,7 +25,7 @@ public class PlayerConnectionListener extends Events {
         }
         // Desbugando o respawn em outras dimensões.
         if (p.getBedSpawnLocation() != null) {
-            if (p.getBedSpawnLocation().getWorld().getEnvironment() != World.Environment.NORMAL) {
+            if (p.getBedSpawnLocation().getWorld().getEnvironment() == World.Environment.NETHER || p.getBedSpawnLocation().getWorld().getEnvironment() == World.Environment.THE_END) {
                 p.setBedSpawnLocation(null);
             }
         }
