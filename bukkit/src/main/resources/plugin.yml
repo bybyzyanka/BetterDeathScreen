@@ -4,8 +4,8 @@ description: Plugin that offers a wide variety of options to customize the death
 version: ${project.version}
 author: Tedesk
 load: POSTWORLD
-depend: [ProtocolLib]
-softdepend: [PlaceholderAPI]
+depend: [ ProtocolLib ]
+softdepend: [ PlaceholderAPI ]
 api-version: 1.13
 
 commands:

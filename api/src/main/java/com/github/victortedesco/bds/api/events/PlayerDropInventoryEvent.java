@@ -6,7 +6,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class PlayerDropInventoryEvent extends Event implements Cancellable {
      *
      * @return List of drops of the event
      */
-    @Nullable
+    @NotNull
     public List<ItemStack> getDrops() {
         return this.drops;
     }

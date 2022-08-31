@@ -7,8 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
-
 public class PlayerDropInventoryListener extends Events {
 
     @SuppressWarnings("deprecation")
@@ -25,9 +23,6 @@ public class PlayerDropInventoryListener extends Events {
             return;
         }
 
-        if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
-            e.setDrops(Collections.emptyList());
-        }
         if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
             for (ItemStack items : e.getDrops()) {
                 p.getWorld().dropItemNaturally(p.getLocation(), items);

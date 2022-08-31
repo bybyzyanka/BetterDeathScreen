@@ -42,13 +42,13 @@ public class EntityDamageListener extends Events {
     private static void sendEventsBukkit(Player p, EntityDamageEvent e) {
         String random_death_sound = Randomizer.randomSound(Config.SOUND_DEATH);
         p.closeInventory();
-        List<ItemStack> filtered_inventory = Arrays.stream(p.getInventory().getContents())
+        List<ItemStack> inventory = Arrays.stream(p.getInventory().getContents())
                 .filter(stack -> !PlayerAPI.isStackEmpty(stack)).collect(Collectors.toList());
         if (BetterDeathScreen.version == Version.v1_8) {
             List<ItemStack> armor = Arrays.stream(p.getInventory().getArmorContents())
                     .filter(stack -> !PlayerAPI.isStackEmpty(stack))
                     .collect(Collectors.toList());
-            filtered_inventory.addAll(armor);
+            inventory.addAll(armor);
         }
         for (PotionEffect pe : p.getActivePotionEffects()) {
             p.removePotionEffect(pe.getType());
@@ -57,9 +57,10 @@ public class EntityDamageListener extends Events {
             p.setWalkSpeed(0F);
             p.setFlySpeed(0F);
         }
-        PlayerDeathEvent death = new PlayerDeathEvent(p, filtered_inventory, 0, DeathMessage.sendMessage(p, e));
-        PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, filtered_inventory);
+        PlayerDeathEvent death = new PlayerDeathEvent(p, inventory, 0, DeathMessage.sendMessage(p, e));
+        PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, inventory);
         if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
+            death.setKeepInventory(false);
             if (p.hasPermission(Config.KEEP_XP)) {
                 death.setKeepLevel(true);
                 death.setNewExp((int) p.getExp());
@@ -69,9 +70,9 @@ public class EntityDamageListener extends Events {
             if (!p.hasPermission(Config.KEEP_XP)) {
                 death.setDroppedExp(Math.min(100, p.getLevel() * 7));
                 death.setKeepLevel(false);
-                death.setNewTotalExp(p.getTotalExperience());
                 death.setNewExp(0);
                 death.setNewLevel(0);
+                death.setNewTotalExp(p.getTotalExperience());
             }
         }
         if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
@@ -79,6 +80,7 @@ public class EntityDamageListener extends Events {
             death.setKeepLevel(true);
             death.setNewExp((int) p.getExp());
             death.setNewLevel(p.getLevel());
+            death.setNewTotalExp(p.getTotalExperience());
             drop_items.setDrops(Collections.emptyList());
             drop_items.setCancelled(true);
         }
