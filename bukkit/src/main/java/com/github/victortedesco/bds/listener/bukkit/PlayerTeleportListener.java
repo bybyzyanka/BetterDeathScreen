@@ -25,23 +25,25 @@ public class PlayerTeleportListener extends Events {
     public void onPlayerTeleport(PlayerTeleportEvent e) {
         Player p = e.getPlayer();
 
-        if (!Config.HOTBAR_TELEPORT_SPECTATOR && Config.DEAD_PLAYERS.contains(p.getName())) {
+        if (Config.DEAD_PLAYERS.contains(p.getName()) && !Config.HOTBAR_TELEPORT_SPECTATOR) {
             if (e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
                 e.setCancelled(true);
-                if (!TELEPORT_MESSAGE_CD.contains(p.getName())) {
-                    TELEPORT_MESSAGE_CD.add(p.getName());
-                    p.sendMessage(Messages.HOTBAR_TELEPORT_BLOCKED);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            TELEPORT_MESSAGE_CD.remove(p.getName());
-                        }
-                    }.runTaskLaterAsynchronously(BetterDeathScreen.plugin, 20 * 3);
+                if (!Config.USE_KILL_CAM) {
+                    if (!TELEPORT_MESSAGE_CD.contains(p.getName())) {
+                        TELEPORT_MESSAGE_CD.add(p.getName());
+                        p.sendMessage(Messages.HOTBAR_TELEPORT_BLOCKED);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                TELEPORT_MESSAGE_CD.remove(p.getName());
+                            }
+                        }.runTaskLaterAsynchronously(BetterDeathScreen.plugin, 20 * 3);
+                    }
                 }
                 return;
             }
         }
-        if (Config.QUEUE_TELEPORT && Config.DEAD_PLAYERS.contains(p.getName())) {
+        if (Config.DEAD_PLAYERS.contains(p.getName()) && Config.QUEUE_TELEPORT) {
             if (e.getCause() != PlayerTeleportEvent.TeleportCause.UNKNOWN && e.getCause() != PlayerTeleportEvent.TeleportCause.SPECTATE) {
                 TELEPORT_LOCATION.put(p.getName(), e.getTo());
                 e.setCancelled(true);

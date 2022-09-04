@@ -8,6 +8,7 @@ import com.github.victortedesco.bds.configs.Messages;
 import com.github.victortedesco.bds.listener.bukkit.PlayerTeleportListener;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -76,8 +77,14 @@ public class Tasks {
 
         if (!Bukkit.isHardcore()) {
             Config.DEAD_PLAYERS.remove(p.getName());
-            double health = p.getMaxHealth();
-            p.setHealth(health);
+            double max_health = 0;
+            if (BetterDeathScreen.version == Version.v1_8) {
+                max_health = p.getMaxHealth();
+            }
+            if (BetterDeathScreen.version != Version.v1_8) {
+                max_health = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+            }
+            p.setHealth(max_health);
             p.setFoodLevel(20);
             if (p.getGameMode() == GameMode.SPECTATOR) p.setSpectatorTarget(null);
             Titles.sendTitle(p, 1, 1, 1, "", "");
@@ -96,8 +103,14 @@ public class Tasks {
             if (!(p.getGameMode() == GameMode.SPECTATOR)) {
                 Config.DEAD_PLAYERS.remove(p.getName());
                 ActionBar.sendActionBar(p, "");
-                double health = p.getMaxHealth();
-                p.setHealth(health);
+                double max_health = 0;
+                if (BetterDeathScreen.version == Version.v1_8) {
+                    max_health = p.getMaxHealth();
+                }
+                if (BetterDeathScreen.version != Version.v1_8) {
+                    max_health = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                }
+                p.setHealth(max_health);
                 p.setFoodLevel(20);
                 teleportToSpawnPoint(p);
                 p.updateInventory();

@@ -1,9 +1,11 @@
 package com.github.victortedesco.bds.listener.bukkit;
 
+import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.api.events.PlayerDamageBeforeDeathEvent;
 import com.github.victortedesco.bds.api.events.PlayerDamageByBlockBeforeDeathEvent;
 import com.github.victortedesco.bds.api.events.PlayerDamageByEntityBeforeDeathEvent;
 import com.github.victortedesco.bds.listener.Events;
+import com.github.victortedesco.bds.utils.DeathMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -25,10 +27,6 @@ public class PlayerDeathListener extends Events {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
-        // For some reason, creating a new PlayerDeathEvent does not send the death message.
-        if (e.getDeathMessage() != null) {
-            Bukkit.broadcastMessage(e.getDeathMessage());
-        }
 
         // Damage without blocks and entities.
         try {
@@ -53,6 +51,13 @@ public class PlayerDeathListener extends Events {
         } catch (Exception ex) {
             PlayerDamageByBlockBeforeDeathEvent pdbbd = new PlayerDamageByBlockBeforeDeathEvent(p, null, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
             Bukkit.getPluginManager().callEvent(pdbbd);
+        }
+
+        // For some reason, creating a new PlayerDeathEvent does not send the death message.
+        if (e.getDeathMessage() != null) {
+            if (e.getDeathMessage().equals("BDS Handled Death")) {
+                Bukkit.getScheduler().runTaskLater(BetterDeathScreen.plugin, () -> DeathMessage.sendMessage(p), 1);
+            }
         }
     }
 }

@@ -14,22 +14,21 @@ public class PlayerDropInventoryListener extends Events {
     public void onDrop(PlayerDropInventoryEvent e) {
         Player p = e.getPlayer();
 
-        if (Bukkit.getServer().getPluginManager().getPlugin("AngelChest") != null) {
-            e.setCancelled(true);
-            return;
-        }
-        if (Bukkit.getServer().getPluginManager().getPlugin("Graves") != null) {
-            e.setCancelled(true);
-            return;
-        }
-
         if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
-            for (ItemStack items : e.getDrops()) {
-                p.getWorld().dropItemNaturally(p.getLocation(), items);
-            }
             p.getInventory().setArmorContents(null);
             p.getInventory().clear();
             p.updateInventory();
+            if (Bukkit.getServer().getPluginManager().getPlugin("AngelChest") != null) {
+                e.setCancelled(true);
+                return;
+            }
+            if (Bukkit.getServer().getPluginManager().getPlugin("Graves") != null) {
+                e.setCancelled(true);
+                return;
+            }
+            for (ItemStack items : e.getDrops()) {
+                p.getWorld().dropItemNaturally(p.getLocation(), items);
+            }
         }
     }
 }

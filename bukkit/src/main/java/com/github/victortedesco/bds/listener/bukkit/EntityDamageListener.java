@@ -7,11 +7,13 @@ import com.github.victortedesco.bds.animations.Animation;
 import com.github.victortedesco.bds.api.events.PlayerDropInventoryEvent;
 import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.listener.Events;
-import com.github.victortedesco.bds.utils.*;
+import com.github.victortedesco.bds.utils.PlayerAPI;
+import com.github.victortedesco.bds.utils.Randomizer;
+import com.github.victortedesco.bds.utils.Tasks;
+import com.github.victortedesco.bds.utils.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Statistic;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -33,13 +35,14 @@ public class EntityDamageListener extends Events {
 
     private static boolean handChecker(Player p, EntityDamageEvent event) {
         if (BetterDeathScreen.version != Version.v1_8) {
-            return ((!p.getInventory().getItemInMainHand().getType().toString().contains("TOTEM") && !p.getInventory().getItemInOffHand().getType().toString().contains("TOTEM")) || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID);
+            return ((!p.getInventory().getItemInMainHand().getType().toString().contains("TOTEM") && !p.getInventory().getItemInOffHand().getType().toString().contains("TOTEM"))
+                    || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID);
         }
         return true;
     }
 
     @SuppressWarnings("deprecation")
-    private static void sendEventsBukkit(Player p, EntityDamageEvent e) {
+    private static void sendEventsBukkit(Player p) {
         String random_death_sound = Randomizer.randomSound(Config.SOUND_DEATH);
         p.closeInventory();
         List<ItemStack> inventory = Arrays.stream(p.getInventory().getContents())
@@ -57,7 +60,7 @@ public class EntityDamageListener extends Events {
             p.setWalkSpeed(0F);
             p.setFlySpeed(0F);
         }
-        PlayerDeathEvent death = new PlayerDeathEvent(p, inventory, 0, DeathMessage.sendMessage(p, e));
+        PlayerDeathEvent death = new PlayerDeathEvent(p, inventory, 0, "BDS Handled Death");
         PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, inventory);
         if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
             death.setKeepInventory(false);
@@ -73,6 +76,8 @@ public class EntityDamageListener extends Events {
                 death.setNewExp(0);
                 death.setNewLevel(0);
                 death.setNewTotalExp(p.getTotalExperience());
+                p.setExp(0);
+                p.setLevel(0);
             }
         }
         if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
@@ -106,8 +111,8 @@ public class EntityDamageListener extends Events {
             Player pv = (Player) victim;
             String random_kill_sound = Randomizer.randomSound(Config.SOUND_KILL);
 
-            if (Config.DEAD_PLAYERS.contains(pv.getName())) {
-                event.setDamage(0);
+            if (Config.DEAD_PLAYERS.contains(pv.getName()) || pv.getGameMode() == GameMode.SPECTATOR) {
+                event.setCancelled(true);
                 return;
             }
             if (pv.getHealth() > event.getFinalDamage()) {
@@ -139,34 +144,13 @@ public class EntityDamageListener extends Events {
                 }
             }
             if (pv.getHealth() <= event.getFinalDamage() && handChecker(pv, event)) {
-                event.setCancelled(true);
+                event.setDamage(0);
                 Config.DEAD_PLAYERS.add(victim.getName());
                 pv.setGameMode(GameMode.SPECTATOR);
                 Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitle(pv), Randomizer.randomSubTitle(pv));
                 PlayerAPI.incrementStatistic(pv, Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage());
-                if (!(event instanceof EntityDamageByEntityEvent) && !(event instanceof EntityDamageByBlockEvent)) {
-                    try {
-                        EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), event.getDamage());
-                        Bukkit.getPluginManager().callEvent(fake_damage);
-                    } catch (IllegalArgumentException e) {
-                        EntityDamageEvent fake_damage = new EntityDamageEvent(victim, event.getCause(), pv.getHealth());
-                        Bukkit.getPluginManager().callEvent(fake_damage);
-                    }
-                }
-                if (event instanceof EntityDamageByBlockEvent) {
-                    Block damager = ((EntityDamageByBlockEvent) event).getDamager();
-                    try {
-                        EntityDamageByBlockEvent block_damage = new EntityDamageByBlockEvent(damager, victim, event.getCause(), event.getDamage());
-                        Bukkit.getPluginManager().callEvent(block_damage);
-                    } catch (IllegalArgumentException e) {
-                        EntityDamageByBlockEvent block_damage = new EntityDamageByBlockEvent(damager, victim, event.getCause(), pv.getHealth());
-                        Bukkit.getPluginManager().callEvent(block_damage);
-                    }
-                }
                 if (event instanceof EntityDamageByEntityEvent) {
                     Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
-                    EntityDamageByEntityEvent entity_damage = new EntityDamageByEntityEvent(damager, victim, event.getCause(), event.getDamage());
-                    Bukkit.getPluginManager().callEvent(entity_damage);
 
                     if (Config.USE_KILL_CAM) {
                         pv.setSpectatorTarget(damager);
@@ -199,7 +183,7 @@ public class EntityDamageListener extends Events {
                         pj.remove();
                     }
                 }
-                sendEventsBukkit(pv, event);
+                sendEventsBukkit(pv);
             }
         }
     }
