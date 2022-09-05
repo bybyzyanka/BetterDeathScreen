@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerConnectionListener extends Events {
@@ -47,12 +48,12 @@ public class PlayerConnectionListener extends Events {
                 }
                 if (p.getLastDamageCause() != null) {
                     if (BetterDeathScreen.version == Version.v1_8) {
-                        if (p.getMaxHealth() - p.getLastDamageCause().getDamage() < p.getHealth()) {
+                        if (p.getMaxHealth() - p.getLastDamageCause().getDamage() < p.getHealth() && !p.hasPotionEffect(PotionEffectType.REGENERATION)) {
                             combat_timer -= 1;
                         }
                     }
                     if (BetterDeathScreen.version != Version.v1_8) {
-                        if (p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - p.getLastDamageCause().getDamage() < p.getHealth()) {
+                        if (p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - p.getLastDamageCause().getDamage() < p.getHealth() && !p.hasPotionEffect(PotionEffectType.REGENERATION)) {
                             combat_timer -= 1;
                         }
                     }

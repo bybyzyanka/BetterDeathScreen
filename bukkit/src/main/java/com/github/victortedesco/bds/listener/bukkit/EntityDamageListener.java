@@ -4,7 +4,6 @@ import com.cryptomorin.xseries.messages.ActionBar;
 import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.animations.Animation;
-import com.github.victortedesco.bds.api.events.PlayerDropInventoryEvent;
 import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.listener.Events;
 import com.github.victortedesco.bds.utils.PlayerAPI;
@@ -18,6 +17,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -27,7 +27,6 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +60,6 @@ public class EntityDamageListener extends Events {
             p.setFlySpeed(0F);
         }
         PlayerDeathEvent death = new PlayerDeathEvent(p, inventory, 0, "BDS Handled Death");
-        PlayerDropInventoryEvent drop_items = new PlayerDropInventoryEvent(p, inventory);
         if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
             death.setKeepInventory(false);
             if (p.hasPermission(Config.KEEP_XP)) {
@@ -76,8 +74,6 @@ public class EntityDamageListener extends Events {
                 death.setNewExp(0);
                 death.setNewLevel(0);
                 death.setNewTotalExp(p.getTotalExperience());
-                p.setExp(0);
-                p.setLevel(0);
             }
         }
         if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
@@ -86,11 +82,8 @@ public class EntityDamageListener extends Events {
             death.setNewExp((int) p.getExp());
             death.setNewLevel(p.getLevel());
             death.setNewTotalExp(p.getTotalExperience());
-            drop_items.setDrops(Collections.emptyList());
-            drop_items.setCancelled(true);
         }
         Bukkit.getPluginManager().callEvent(death);
-        Bukkit.getPluginManager().callEvent(drop_items);
         p.setHealth(0.1);
         p.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
         p.incrementStatistic(Statistic.DEATHS, 1);
@@ -99,7 +92,7 @@ public class EntityDamageListener extends Events {
         Animation.sendAnimation(p);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity victim = event.getEntity();
         int time = Config.TIME;
@@ -144,7 +137,6 @@ public class EntityDamageListener extends Events {
                 }
             }
             if (pv.getHealth() <= event.getFinalDamage() && handChecker(pv, event)) {
-                event.setDamage(0);
                 Config.DEAD_PLAYERS.add(victim.getName());
                 pv.setGameMode(GameMode.SPECTATOR);
                 Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitle(pv), Randomizer.randomSubTitle(pv));
@@ -184,6 +176,7 @@ public class EntityDamageListener extends Events {
                     }
                 }
                 sendEventsBukkit(pv);
+                event.setDamage(0);
             }
         }
     }
