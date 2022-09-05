@@ -31,21 +31,6 @@ public class PlayerDeathListener extends Events {
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
 
-        PlayerDropInventoryEvent drop_inv = new PlayerDropInventoryEvent(p, e.getDrops());
-        if (e.getKeepInventory()) {
-            drop_inv.setCancelled(true);
-            drop_inv.setDrops(Collections.emptyList());
-        }
-        if (!e.getKeepInventory()) {
-            p.getInventory().setArmorContents(null);
-            p.getInventory().clear();
-            p.updateInventory();
-        }
-        Bukkit.getPluginManager().callEvent(drop_inv);
-        p.setExp(e.getNewExp());
-        p.setLevel(e.getNewLevel());
-        p.setTotalExperience(e.getNewTotalExp());
-
         // Damage without blocks and entities.
         try {
             PlayerDamageBeforeDeathEvent pdbd = new PlayerDamageBeforeDeathEvent(p, (EntityDamageEvent.DamageCause) LAST_DAMAGE_BEFORE_DEATH.get(p.getName()).get(0), (double) LAST_DAMAGE_BEFORE_DEATH.get(p.getName()).get(1), (double) LAST_DAMAGE_BEFORE_DEATH.get(p.getName()).get(2));
@@ -70,6 +55,21 @@ public class PlayerDeathListener extends Events {
             PlayerDamageByBlockBeforeDeathEvent pdbbd = new PlayerDamageByBlockBeforeDeathEvent(p, null, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
             Bukkit.getPluginManager().callEvent(pdbbd);
         }
+
+        PlayerDropInventoryEvent drop_inv = new PlayerDropInventoryEvent(p, e.getDrops());
+        if (e.getKeepInventory()) {
+            drop_inv.setCancelled(true);
+            drop_inv.setDrops(Collections.emptyList());
+        }
+        if (!e.getKeepInventory()) {
+            p.getInventory().setArmorContents(null);
+            p.getInventory().clear();
+            p.updateInventory();
+        }
+        Bukkit.getPluginManager().callEvent(drop_inv);
+        p.setExp(e.getNewExp());
+        p.setLevel(e.getNewLevel());
+        p.setTotalExperience(e.getNewTotalExp());
 
         // For some reason, creating a new PlayerDeathEvent does not send the death message.
         if (e.getDeathMessage() != null) {

@@ -104,7 +104,7 @@ public class EntityDamageListener extends Events {
             Player pv = (Player) victim;
             String random_kill_sound = Randomizer.randomSound(Config.SOUND_KILL);
 
-            if (Config.DEAD_PLAYERS.contains(pv.getName()) || pv.getGameMode() == GameMode.SPECTATOR) {
+            if (Config.DEAD_PLAYERS.contains(pv.getName())) {
                 event.setCancelled(true);
                 return;
             }
