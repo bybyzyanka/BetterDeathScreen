@@ -10,14 +10,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 public class MainCommand implements CommandExecutor {
 
     @Override
-    public boolean onCommand(CommandSender s, Command cnd, String lbl, String[] args) {
-
+    public boolean onCommand(@NotNull CommandSender s, @NotNull Command cnd, @NotNull String lbl, String[] args) {
         if (!(s instanceof Player)) {
             if (args.length != 0) {
                 if (args[0].equalsIgnoreCase("reload")) {

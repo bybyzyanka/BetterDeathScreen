@@ -11,7 +11,7 @@ import org.bukkit.plugin.PluginManager;
 public class Events implements Listener {
 
     public static void setup() {
-        BetterDeathScreen pl = BetterDeathScreen.plugin;
+        BetterDeathScreen pl = BetterDeathScreen.getInstance();
         PluginManager pm = Bukkit.getPluginManager();
 
         // Bukkit

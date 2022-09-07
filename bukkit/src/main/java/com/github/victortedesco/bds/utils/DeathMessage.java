@@ -2,8 +2,8 @@ package com.github.victortedesco.bds.utils;
 
 import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.listener.bukkit.PlayerDeathListener;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
@@ -12,8 +12,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class DeathMessage {
 
-    @SuppressWarnings("all")
-    public static void sendMessage(Player p) {
+    @SuppressWarnings({"deprecation", "ConstantConditions"})
+    public static BaseComponent getMessage(Player p) {
         // https://minecraft.fandom.com/wiki/Death_messages#Java_Edition
 
         TranslatableComponent message = new TranslatableComponent("death.attack.generic");
@@ -31,7 +31,7 @@ public class DeathMessage {
                     message = new TranslatableComponent("death.attack.starve");
                     message.addWith(p.getName());
                     if (ebd != null) {
-                        if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                        if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                             message = new TranslatableComponent("death.attack.starve.player");
                             message.addWith(p.getName());
                             message.addWith(ebd.getName());
@@ -47,14 +47,16 @@ public class DeathMessage {
                         message.addWith(ebd.getName());
                     }
                 }
-                if (BetterDeathScreen.version.value >= Version.v1_9.value) {
+                if (BetterDeathScreen.getVersion().value >= Version.v1_9.value) {
                     if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) {
                         message = new TranslatableComponent("death.attack.flyIntoWall");
                         message.addWith(p.getName());
                         if (ebd != null) {
-                            message = new TranslatableComponent("death.attack.flyIntoWall.player");
-                            message.addWith(p.getName());
-                            message.addWith(ebd.getName());
+                            if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
+                                message = new TranslatableComponent("death.attack.flyIntoWall.player");
+                                message.addWith(p.getName());
+                                message.addWith(ebd.getName());
+                            }
                         }
                     }
                 }
@@ -63,9 +65,11 @@ public class DeathMessage {
                         message = new TranslatableComponent("death.attack.fall");
                         message.addWith(p.getName());
                         if (ebd != null) {
-                            message = new TranslatableComponent("death.attack.fall.player");
-                            message.addWith(p.getName());
-                            message.addWith(ebd.getName());
+                            if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
+                                message = new TranslatableComponent("death.attack.fall.player");
+                                message.addWith(p.getName());
+                                message.addWith(ebd.getName());
+                            }
                         }
                     }
                     if (p.getLastDamageCause().getDamage() > 4) {
@@ -73,7 +77,7 @@ public class DeathMessage {
                         message.addWith(p.getName());
                     }
                 }
-                if (BetterDeathScreen.version.value >= Version.v1_10.value) {
+                if (BetterDeathScreen.getVersion().value >= Version.v1_10.value) {
                     if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.HOT_FLOOR) {
                         message = new TranslatableComponent("death.attack.hotFloor");
                         message.addWith(p.getName());
@@ -115,16 +119,18 @@ public class DeathMessage {
                     message = new TranslatableComponent("death.attack.magic");
                     message.addWith(p.getName());
                     if (ebd != null) {
-                        message = new TranslatableComponent("death.attack.magic.player");
-                        message.addWith(p.getName());
-                        message.addWith(ebd.getName());
+                        if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
+                            message = new TranslatableComponent("death.attack.magic.player");
+                            message.addWith(p.getName());
+                            message.addWith(ebd.getName());
+                        }
                     }
                 }
                 if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.LIGHTNING) {
                     message = new TranslatableComponent("death.attack.lightningBolt");
                     message.addWith(p.getName());
                     if (ebd != null) {
-                        if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                        if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                             message = new TranslatableComponent("death.attack.lightningBolt.player");
                             message.addWith(p.getName());
                             message.addWith(ebd.getName());
@@ -135,19 +141,19 @@ public class DeathMessage {
                     message = new TranslatableComponent("death.attack.inWall");
                     message.addWith(p.getName());
                     if (ebd != null) {
-                        if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                        if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                             message = new TranslatableComponent("death.attack.inWall.player");
                             message.addWith(p.getName());
                             message.addWith(ebd.getName());
                         }
                     }
                 }
-                if (BetterDeathScreen.version.value >= Version.v1_11.value) {
+                if (BetterDeathScreen.getVersion().value >= Version.v1_11.value) {
                     if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.CRAMMING) {
                         message = new TranslatableComponent("death.attack.cramming");
                         message.addWith(p.getName());
                         if (ebd != null) {
-                            if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                            if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                                 message = new TranslatableComponent("death.attack.cramming.player");
                                 message.addWith(p.getName());
                                 message.addWith(ebd.getName());
@@ -159,7 +165,7 @@ public class DeathMessage {
                     message = new TranslatableComponent("death.attack.wither");
                     message.addWith(p.getName());
                     if (ebd != null) {
-                        if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                        if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                             message = new TranslatableComponent("death.attack.wither.player");
                             message.addWith(p.getName());
                             message.addWith(ebd.getName());
@@ -170,14 +176,14 @@ public class DeathMessage {
                     message = new TranslatableComponent("death.attack.outOfWorld");
                     message.addWith(p.getName());
                     if (ebd != null) {
-                        if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                        if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                             message = new TranslatableComponent("death.attack.outOfWorld.player");
                             message.addWith(p.getName());
                             message.addWith(ebd.getName());
                         }
                     }
                 }
-                if (BetterDeathScreen.version.value >= Version.v1_17.value) {
+                if (BetterDeathScreen.getVersion().value >= Version.v1_17.value) {
                     if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.FREEZE) {
                         message = new TranslatableComponent("death.attack.freeze");
                         message.addWith(p.getName());
@@ -188,7 +194,7 @@ public class DeathMessage {
                         }
                     }
                 }
-                if (BetterDeathScreen.version.value >= Version.v1_19.value) {
+                if (BetterDeathScreen.getVersion().value >= Version.v1_19.value) {
                     if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.SONIC_BOOM) {
                         message = new TranslatableComponent("death.attack.sonic_boom");
                         message.addWith(p.getName());
@@ -202,20 +208,22 @@ public class DeathMessage {
 
                 if (p.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
                     Entity ent = ((EntityDamageByEntityEvent) p.getLastDamageCause()).getDamager();
-                    message = new TranslatableComponent("death.attack.player");
+                    message = new TranslatableComponent("death.attack.mob");
                     message.addWith(p.getName());
                     message.addWith(ent.getName());
                     if (ent instanceof LivingEntity) {
                         LivingEntity d = (LivingEntity) ent;
                         if (!PlayerAPI.isStackEmpty(d.getEquipment().getItemInHand())) {
                             if (d.getEquipment().getItemInHand().getItemMeta().hasDisplayName()) {
-                                message = new TranslatableComponent("death.attack.player.item");
-                                message.addWith(p.getName());
-                                message.addWith(ent.getName());
-                                message.addWith(d.getEquipment().getItemInHand().getItemMeta().getDisplayName());
+                                if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
+                                    message = new TranslatableComponent("death.attack.mob.item");
+                                    message.addWith(p.getName());
+                                    message.addWith(ent.getName());
+                                    message.addWith(d.getEquipment().getItemInHand().getItemMeta().getDisplayName());
+                                }
                             }
                         }
-                        if (BetterDeathScreen.version.value >= Version.v1_15.value) {
+                        if (BetterDeathScreen.getVersion().value >= Version.v1_15.value) {
                             if (d instanceof Bee) {
                                 message = new TranslatableComponent("death.attack.sting");
                                 message.addWith(p.getName());
@@ -224,6 +232,20 @@ public class DeathMessage {
                                     message.addWith(p.getName());
                                     message.addWith(ebd.getName());
                                 }
+                            }
+                        }
+                    }
+                    if (ent instanceof Player) {
+                        Player d = (Player) ent;
+                        message = new TranslatableComponent("death.attack.player");
+                        message.addWith(p.getName());
+                        message.addWith(ent.getName());
+                        if (!PlayerAPI.isStackEmpty(d.getEquipment().getItemInHand())) {
+                            if (d.getEquipment().getItemInMainHand().getItemMeta().hasDisplayName()) {
+                                message = new TranslatableComponent("death.attack.player.item");
+                                message.addWith(p.getName());
+                                message.addWith(ent.getName());
+                                message.addWith(d.getEquipment().getItemInMainHand().getItemMeta().getDisplayName());
                             }
                         }
                     }
@@ -257,7 +279,7 @@ public class DeathMessage {
                             message = new TranslatableComponent("death.attack.fireworks");
                             message.addWith(p.getName());
                             if (ebd != null) {
-                                if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                                if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                                     message = new TranslatableComponent("death.attack.fireworks.player");
                                     message.addWith(p.getName());
                                     message.addWith(ebd.getName());
@@ -288,7 +310,7 @@ public class DeathMessage {
                                         message.addWith(d.getEquipment().getItemInHand().getItemMeta().getDisplayName());
                                     }
                                 }
-                                if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                                if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                                     if (pj instanceof Trident) {
                                         Trident t = (Trident) pj;
                                         message = new TranslatableComponent("death.attack.trident");
@@ -309,14 +331,14 @@ public class DeathMessage {
                                     message.addWith(p.getName());
                                     message.addWith(d.getName());
                                 }
-                                if (BetterDeathScreen.version.value >= Version.v1_9.value) {
+                                if (BetterDeathScreen.getVersion().value >= Version.v1_9.value) {
                                     if (pj instanceof ShulkerBullet) {
                                         message = new TranslatableComponent("death.attack.generic.player");
                                         message.addWith(p.getName());
                                         message.addWith(d.getName());
                                     }
                                 }
-                                if (BetterDeathScreen.version.value >= Version.v1_11.value) {
+                                if (BetterDeathScreen.getVersion().value >= Version.v1_11.value) {
                                     if (pj instanceof LlamaSpit) {
                                         message = new TranslatableComponent("death.attack.generic.player");
                                         message.addWith(p.getName());
@@ -331,7 +353,7 @@ public class DeathMessage {
                             message = new TranslatableComponent("death.attack.fall");
                             message.addWith(p.getName());
                             if (ebd != null) {
-                                if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                                if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                                     message = new TranslatableComponent("death.attack.fall.player");
                                     message.addWith(p.getName());
                                     message.addWith(ebd.getName());
@@ -345,7 +367,7 @@ public class DeathMessage {
                             message = new TranslatableComponent("death.attack.fallingBlock");
                             message.addWith(p.getName());
                             if (ebd != null) {
-                                if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                                if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                                     message = new TranslatableComponent("death.attack.fallingBlock.player");
                                     message.addWith(p.getName());
                                     message.addWith(ebd.getName());
@@ -355,14 +377,14 @@ public class DeathMessage {
                                 message = new TranslatableComponent("death.attack.anvil");
                                 message.addWith(p.getName());
                                 if (ebd != null) {
-                                    if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                                    if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                                         message = new TranslatableComponent("death.attack.anvil.player");
                                         message.addWith(p.getName());
                                         message.addWith(ebd.getName());
                                     }
                                 }
                             }
-                            if (BetterDeathScreen.version.value >= Version.v1_17.value) {
+                            if (BetterDeathScreen.getVersion().value >= Version.v1_17.value) {
                                 if (f.getBlockData().getMaterial() == Material.POINTED_DRIPSTONE) {
                                     message = new TranslatableComponent("death.attack.fallingStalactite");
                                     message.addWith(p.getName());
@@ -380,7 +402,7 @@ public class DeathMessage {
                 if (p.getLastDamageCause() instanceof EntityDamageByBlockEvent) {
                     if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                         if (((EntityDamageByBlockEvent) p.getLastDamageCause()).getDamager() == null) {
-                            if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                            if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                                 message = new TranslatableComponent("death.attack.badRespawnPoint.message");
                                 message.addWith(p.getName());
                                 message.addWith(new TranslatableComponent("death.attack.badRespawnPoint.link"));
@@ -392,7 +414,7 @@ public class DeathMessage {
                             message = new TranslatableComponent("death.attack.outOfWorld");
                             message.addWith(p.getName());
                             if (ebd != null) {
-                                if (BetterDeathScreen.version.value >= Version.v1_13.value) {
+                                if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                                     message = new TranslatableComponent("death.attack.outOfWorld.player");
                                     message.addWith(p.getName());
                                     message.addWith(ebd.getName());
@@ -423,10 +445,7 @@ public class DeathMessage {
                 e.printStackTrace();
                 BetterDeathScreen.logger("§cPlease, contact the author §fTedesk §cabout this error!");
             }
-            Bukkit.getConsoleSender().spigot().sendMessage(message);
-            for (Player ps : Bukkit.getOnlinePlayers()) {
-                ps.spigot().sendMessage(message);
-            }
         }
+        return message;
     }
 }

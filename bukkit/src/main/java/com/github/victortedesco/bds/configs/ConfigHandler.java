@@ -9,13 +9,13 @@ import java.io.File;
 public class ConfigHandler {
 
     public static void createConfig(String file) {
-        if (!new File(BetterDeathScreen.plugin.getDataFolder(), file + ".yml").exists()) {
-            BetterDeathScreen.plugin.saveResource(file + ".yml", false);
+        if (!new File(BetterDeathScreen.getInstance().getDataFolder(), file + ".yml").exists()) {
+            BetterDeathScreen.getInstance().saveResource(file + ".yml", false);
         }
     }
 
     public static FileConfiguration getConfig(String file) {
-        File new_file = new File(BetterDeathScreen.plugin.getDataFolder() + File.separator + file + ".yml");
+        File new_file = new File(BetterDeathScreen.getInstance().getDataFolder() + File.separator + file + ".yml");
         return YamlConfiguration.loadConfiguration(new_file);
     }
 
@@ -24,7 +24,7 @@ public class ConfigHandler {
     }
 
     public static File getFile(String file) {
-        return new File(BetterDeathScreen.plugin.getDataFolder() + File.separator + file + ".yml");
+        return new File(BetterDeathScreen.getInstance().getDataFolder() + File.separator + file + ".yml");
     }
 }
 

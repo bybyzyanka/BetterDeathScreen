@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class EntityDamageListener extends Events {
 
     private static boolean handChecker(Player p, EntityDamageEvent event) {
-        if (BetterDeathScreen.version != Version.v1_8) {
+        if (BetterDeathScreen.getVersion() != Version.v1_8) {
             return ((!p.getInventory().getItemInMainHand().getType().toString().contains("TOTEM") && !p.getInventory().getItemInOffHand().getType().toString().contains("TOTEM"))
                     || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID);
         }
@@ -46,7 +46,7 @@ public class EntityDamageListener extends Events {
         p.closeInventory();
         List<ItemStack> inventory = Arrays.stream(p.getInventory().getContents())
                 .filter(stack -> !PlayerAPI.isStackEmpty(stack)).collect(Collectors.toList());
-        if (BetterDeathScreen.version == Version.v1_8) {
+        if (BetterDeathScreen.getVersion() == Version.v1_8) {
             List<ItemStack> armor = Arrays.stream(p.getInventory().getArmorContents())
                     .filter(stack -> !PlayerAPI.isStackEmpty(stack))
                     .collect(Collectors.toList());
@@ -60,29 +60,6 @@ public class EntityDamageListener extends Events {
             p.setFlySpeed(0F);
         }
         PlayerDeathEvent death = new PlayerDeathEvent(p, inventory, 0, "BDS Handled Death");
-        if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
-            death.setKeepInventory(false);
-            if (p.hasPermission(Config.KEEP_XP)) {
-                death.setKeepLevel(true);
-                death.setNewExp((int) p.getExp());
-                death.setNewLevel(p.getLevel());
-                death.setNewTotalExp(p.getTotalExperience());
-            }
-            if (!p.hasPermission(Config.KEEP_XP)) {
-                death.setDroppedExp(Math.min(100, p.getLevel() * 7));
-                death.setKeepLevel(false);
-                death.setNewExp(0);
-                death.setNewLevel(0);
-                death.setNewTotalExp(p.getTotalExperience());
-            }
-        }
-        if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
-            death.setKeepInventory(true);
-            death.setKeepLevel(true);
-            death.setNewExp((int) p.getExp());
-            death.setNewLevel(p.getLevel());
-            death.setNewTotalExp(p.getTotalExperience());
-        }
         Bukkit.getPluginManager().callEvent(death);
         p.setHealth(0.1);
         p.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
@@ -144,9 +121,7 @@ public class EntityDamageListener extends Events {
                 if (event instanceof EntityDamageByEntityEvent) {
                     Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 
-                    if (Config.USE_KILL_CAM) {
-                        pv.setSpectatorTarget(damager);
-                    }
+                    if (Config.USE_KILL_CAM) pv.setSpectatorTarget(damager);
                     if (damager instanceof Player) {
                         Player pd = (Player) damager;
 
@@ -159,9 +134,7 @@ public class EntityDamageListener extends Events {
                     if (damager instanceof Projectile) {
                         Projectile pj = (Projectile) damager;
                         if (pj.getShooter() instanceof Entity) {
-                            if (Config.USE_KILL_CAM) {
-                                pv.setSpectatorTarget((Entity) pj.getShooter());
-                            }
+                            if (Config.USE_KILL_CAM) pv.setSpectatorTarget((Entity) pj.getShooter());
                         }
                         if (pj.getShooter() instanceof Player) {
                             Player pd = (Player) pj.getShooter();
@@ -172,7 +145,6 @@ public class EntityDamageListener extends Events {
                             PlayerAPI.incrementStatistic(pd, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
                             pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
                         }
-                        pj.remove();
                     }
                 }
                 sendEventsBukkit(pv);

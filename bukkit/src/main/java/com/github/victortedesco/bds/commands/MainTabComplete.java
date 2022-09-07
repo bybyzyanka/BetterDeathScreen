@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ public class MainTabComplete implements TabCompleter {
     private static final String[] SECOND_COMPLETIONS = {"normal", "vip"};
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String lbl, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, @NotNull Command cmd, @NotNull String lbl, String[] args) {
         if (sender.hasPermission(Config.ADMIN)) {
             if (args.length == 1) {
                 final List<String> completions = new ArrayList<>();

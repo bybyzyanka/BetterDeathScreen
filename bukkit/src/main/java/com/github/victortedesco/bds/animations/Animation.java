@@ -38,10 +38,10 @@ public class Animation {
         } catch (InvocationTargetException ignored) {
 
         }
-        if (BetterDeathScreen.version != Version.v1_8) {
+        if (BetterDeathScreen.getVersion() != Version.v1_8) {
             p.getWorld().playSound(p.getLocation(), Sound.valueOf("ENTITY_GENERIC_EXPLODE"), 1, 1);
         }
-        if (BetterDeathScreen.version == Version.v1_8) {
+        if (BetterDeathScreen.getVersion() == Version.v1_8) {
             p.getWorld().playSound(p.getLocation(), Sound.valueOf("EXPLODE"), 1, 1);
         }
     }

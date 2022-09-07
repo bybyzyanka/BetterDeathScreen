@@ -17,10 +17,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class BetterDeathScreen extends JavaPlugin {
 
-    public static BetterDeathScreen plugin;
-    public static Version version;
-    public static boolean PLACEHOLDERAPI = false;
     PluginDescriptionFile pdf = this.getDescription();
+
+    public static BetterDeathScreen getInstance() {
+        return getPlugin(BetterDeathScreen.class);
+    }
+
+    public static Version getVersion() {
+        return Version.getServerVersion();
+    }
+
+    public static boolean isPAPIActive() {
+        return (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null);
+    }
 
     public static void logger(String text) {
         Bukkit.getConsoleSender().sendMessage("[BetterDeathScreen] " + text);
@@ -35,24 +44,20 @@ public class BetterDeathScreen extends JavaPlugin {
         } catch (RuntimeException e) {
             logger("The plugin will shutdown, because " + Config.LANGUAGE + " does not exist on the configurations.");
             logger("O plugin será desligado, porque " + Config.LANGUAGE + " não existe nas configurações.");
-            plugin.getPluginLoader().disablePlugin(plugin);
+            getInstance().getPluginLoader().disablePlugin(BetterDeathScreen.getInstance());
             return;
         }
         Messages.loadMessages();
     }
 
+    @SuppressWarnings({"ConstantConditions", "unused"})
     @Override
     public void onEnable() {
-        plugin = this;
-        version = Version.getServerVersion();
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            PLACEHOLDERAPI = true;
-        }
-        if (version == Version.UNKNOWN) {
+        if (getVersion() == Version.UNKNOWN) {
             for (String incompatible : Messages.INCOMPATIBLE) {
                 logger(ChatColor.translateAlternateColorCodes('&', incompatible.replace("%server_version%", "(" + Version.getServerVersion() + ")")));
             }
-            getPluginLoader().disablePlugin(plugin);
+            getPluginLoader().disablePlugin(this);
             return;
         }
         createAndLoadConfigs();
@@ -63,7 +68,7 @@ public class BetterDeathScreen extends JavaPlugin {
         for (String enabled : Messages.ENABLED) {
             logger(ChatColor.translateAlternateColorCodes('&', enabled.replace("%plugin_version%", "(v" + pdf.getVersion() + ")")));
         }
-        logger("§fMinecraft " + version.toString().replace("_", ".").replace("v", ""));
+        logger("§fMinecraft " + getVersion().toString().replace("_", ".").replace("v", ""));
     }
 
     @Override

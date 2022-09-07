@@ -5,6 +5,7 @@ import com.github.victortedesco.bds.api.events.PlayerDamageBeforeDeathEvent;
 import com.github.victortedesco.bds.api.events.PlayerDamageByBlockBeforeDeathEvent;
 import com.github.victortedesco.bds.api.events.PlayerDamageByEntityBeforeDeathEvent;
 import com.github.victortedesco.bds.api.events.PlayerDropInventoryEvent;
+import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.listener.Events;
 import com.github.victortedesco.bds.utils.DeathMessage;
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +30,7 @@ public class PlayerDeathListener extends Events {
 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerDeath(PlayerDeathEvent e) {
+    public void onDeathMonitor(PlayerDeathEvent e) {
         Player p = e.getEntity();
 
         // Damage without blocks and entities.
@@ -67,15 +69,52 @@ public class PlayerDeathListener extends Events {
             p.updateInventory();
         }
         Bukkit.getPluginManager().callEvent(drop_inv);
-        p.setExp(e.getNewExp());
-        p.setLevel(e.getNewLevel());
-        p.setTotalExperience(e.getNewTotalExp());
+        if (!e.getKeepLevel()) {
+            p.setLevel(0);
+            p.setExp(0);
+        }
 
         // For some reason, creating a new PlayerDeathEvent does not send the death message.
         if (e.getDeathMessage() != null) {
             if (e.getDeathMessage().equals("BDS Handled Death") && p.getWorld().getGameRuleValue("showDeathMessages").equals("true")) {
-                Bukkit.getScheduler().runTaskLater(BetterDeathScreen.plugin, () -> DeathMessage.sendMessage(p), 1);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.getConsoleSender().spigot().sendMessage(DeathMessage.getMessage(p));
+                        for (Player ps : Bukkit.getOnlinePlayers()) {
+                            ps.spigot().sendMessage(DeathMessage.getMessage(p));
+                        }
+                    }
+                }.runTaskLater(BetterDeathScreen.getInstance(), 1);
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onDeathLowest(PlayerDeathEvent e) {
+        Player p = e.getEntity();
+
+        if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
+            e.setKeepInventory(false);
+            if (p.hasPermission(Config.KEEP_XP)) {
+                e.setKeepLevel(true);
+                e.setNewExp((int) p.getExp());
+                e.setNewLevel(p.getLevel());
+            }
+            if (!p.hasPermission(Config.KEEP_XP)) {
+                e.setDroppedExp(Math.min(100, p.getLevel() * 7));
+                e.setKeepLevel(false);
+                e.setNewExp(0);
+                e.setNewLevel(0);
+            }
+        }
+        if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
+            e.setKeepInventory(true);
+            e.setKeepLevel(true);
+            e.setNewExp((int) p.getExp());
+            e.setNewLevel(p.getLevel());
+        }
+        e.setNewTotalExp(p.getTotalExperience());
     }
 }

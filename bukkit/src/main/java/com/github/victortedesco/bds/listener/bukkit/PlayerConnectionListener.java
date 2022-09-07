@@ -20,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerConnectionListener extends Events {
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "ConstantConditions"})
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
@@ -47,12 +47,12 @@ public class PlayerConnectionListener extends Events {
                     cancel();
                 }
                 if (p.getLastDamageCause() != null) {
-                    if (BetterDeathScreen.version == Version.v1_8) {
+                    if (BetterDeathScreen.getVersion() == Version.v1_8) {
                         if (p.getMaxHealth() - p.getLastDamageCause().getDamage() < p.getHealth() && !p.hasPotionEffect(PotionEffectType.REGENERATION)) {
                             combat_timer -= 1;
                         }
                     }
-                    if (BetterDeathScreen.version != Version.v1_8) {
+                    if (BetterDeathScreen.getVersion() != Version.v1_8) {
                         if (p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - p.getLastDamageCause().getDamage() < p.getHealth() && !p.hasPotionEffect(PotionEffectType.REGENERATION)) {
                             combat_timer -= 1;
                         }
@@ -63,7 +63,7 @@ public class PlayerConnectionListener extends Events {
                     combat_timer = 100;
                 }
             }
-        }.runTaskTimer(BetterDeathScreen.plugin, 1, 20);
+        }.runTaskTimer(BetterDeathScreen.getInstance(), 1, 20);
     }
 
     @EventHandler(priority = EventPriority.LOW)

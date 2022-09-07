@@ -7,8 +7,8 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.configs.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class SpectatorPacketLimiter {
     public static List<String> SPECTATOR_MESSAGE_CD = new ArrayList<>();
 
     public static void cancelSpectate() {
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(BetterDeathScreen.plugin, PacketType.Play.Client.USE_ENTITY) {
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(BetterDeathScreen.getInstance(), PacketType.Play.Client.USE_ENTITY) {
             @Override
             public void onPacketReceiving(PacketEvent e) {
                 Player p = e.getPlayer();
@@ -27,12 +27,8 @@ public class SpectatorPacketLimiter {
                     if (!SPECTATOR_MESSAGE_CD.contains(p.getName())) {
                         SPECTATOR_MESSAGE_CD.add(p.getName());
                         p.sendMessage(Messages.SPECTATE_BLOCKED);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                SPECTATOR_MESSAGE_CD.remove(p.getName());
-                            }
-                        }.runTaskLaterAsynchronously(BetterDeathScreen.plugin, 20 * 3);
+                        Bukkit.getScheduler().runTaskLaterAsynchronously(BetterDeathScreen.getInstance(),
+                                () -> SPECTATOR_MESSAGE_CD.remove(p.getName()), 20 * 3);
                     }
                 }
             }

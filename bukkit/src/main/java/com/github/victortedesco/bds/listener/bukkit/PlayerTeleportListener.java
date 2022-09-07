@@ -4,12 +4,12 @@ import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.configs.Messages;
 import com.github.victortedesco.bds.listener.Events;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,12 +32,8 @@ public class PlayerTeleportListener extends Events {
                     if (!TELEPORT_MESSAGE_CD.contains(p.getName())) {
                         TELEPORT_MESSAGE_CD.add(p.getName());
                         p.sendMessage(Messages.HOTBAR_TELEPORT_BLOCKED);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                TELEPORT_MESSAGE_CD.remove(p.getName());
-                            }
-                        }.runTaskLaterAsynchronously(BetterDeathScreen.plugin, 20 * 3);
+                        Bukkit.getScheduler().runTaskLaterAsynchronously(BetterDeathScreen.getInstance(),
+                                () -> TELEPORT_MESSAGE_CD.remove(p.getName()), 20 * 3);
                     }
                 }
                 return;

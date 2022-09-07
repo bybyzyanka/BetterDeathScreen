@@ -71,19 +71,16 @@ public class Tasks {
         }
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "ConstantConditions"})
     public static void performRespawn(Player p) {
         String random_respawn_sound = Randomizer.randomSound(Config.SOUND_RESPAWN);
 
         if (!Bukkit.isHardcore()) {
             Config.DEAD_PLAYERS.remove(p.getName());
             double max_health = 0;
-            if (BetterDeathScreen.version == Version.v1_8) {
-                max_health = p.getMaxHealth();
-            }
-            if (BetterDeathScreen.version != Version.v1_8) {
+            if (BetterDeathScreen.getVersion() == Version.v1_8) max_health = p.getMaxHealth();
+            if (BetterDeathScreen.getVersion() != Version.v1_8)
                 max_health = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-            }
             p.setHealth(max_health);
             p.setFoodLevel(20);
             if (p.getGameMode() == GameMode.SPECTATOR) p.setSpectatorTarget(null);
@@ -95,21 +92,23 @@ public class Tasks {
             }
             teleportToSpawnPoint(p);
             PlayerAPI.playSound(p, random_respawn_sound, Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
-            p.setGameMode(GameMode.SURVIVAL);
+            p.setGameMode(Bukkit.getServer().getDefaultGameMode());
             p.updateInventory();
         }
 
         if (Bukkit.isHardcore()) {
-            if (!(p.getGameMode() == GameMode.SPECTATOR)) {
+            if (p.getGameMode() != GameMode.SPECTATOR) {
                 Config.DEAD_PLAYERS.remove(p.getName());
+                Titles.sendTitle(p, 1, 1, 1, "", "");
                 ActionBar.sendActionBar(p, "");
+                if (!Config.MOVE_SPECTATOR) {
+                    p.setWalkSpeed(0.2F);
+                    p.setFlySpeed(0.1F);
+                }
                 double max_health = 0;
-                if (BetterDeathScreen.version == Version.v1_8) {
-                    max_health = p.getMaxHealth();
-                }
-                if (BetterDeathScreen.version != Version.v1_8) {
+                if (BetterDeathScreen.getVersion() == Version.v1_8) max_health = p.getMaxHealth();
+                if (BetterDeathScreen.getVersion() != Version.v1_8)
                     max_health = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                }
                 p.setHealth(max_health);
                 p.setFoodLevel(20);
                 teleportToSpawnPoint(p);
@@ -119,23 +118,6 @@ public class Tasks {
     }
 
     public static void startTimer(Player p) {
-        if (Bukkit.getServer().isHardcore()) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (!p.isOnline()) cancel();
-
-                    ActionBar.sendActionBar(p, Messages.ACTIONBAR_HC);
-
-                    // When changing the gamemode of the player, he respawns.
-                    if (!(p.getGameMode() == GameMode.SPECTATOR)) {
-                        performRespawn(p);
-                        cancel();
-                    }
-                }
-            }.runTaskTimer(BetterDeathScreen.plugin, 20, 20);
-        }
-
         if (!Bukkit.getServer().isHardcore()) {
             String random_countdown_sound = Randomizer.randomSound(Config.SOUND_COUNTDOWN);
             PlayerAPI.playSound(p, random_countdown_sound, 0, 0);
@@ -171,7 +153,24 @@ public class Tasks {
                         }
                     }
                 }
-            }.runTaskTimer(BetterDeathScreen.plugin, 20, 20);
+            }.runTaskTimer(BetterDeathScreen.getInstance(), 20, 20);
+        }
+
+        if (Bukkit.getServer().isHardcore()) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (!p.isOnline()) cancel();
+
+                    ActionBar.sendActionBar(p, Messages.ACTIONBAR_HC);
+
+                    // When changing the gamemode of the player, he respawns.
+                    if (p.getGameMode() != GameMode.SPECTATOR) {
+                        performRespawn(p);
+                        cancel();
+                    }
+                }
+            }.runTaskTimer(BetterDeathScreen.getInstance(), 20, 20);
         }
     }
 }

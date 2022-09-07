@@ -30,6 +30,7 @@ public class Messages {
     public static String SOUND_ERROR;
     public static String SPAWN_ERROR;
 
+    @SuppressWarnings("ConstantConditions")
     public static void loadMessages() {
         FileConfiguration messages = ConfigHandler.getConfig("messages_" + Config.LANGUAGE);
 

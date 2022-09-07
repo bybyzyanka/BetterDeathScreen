@@ -41,6 +41,7 @@ public class Config {
     public static boolean MOVE_SPECTATOR;
     public static boolean ALLOW_COMMANDS_WHILE_DEAD;
 
+    @SuppressWarnings("ConstantConditions")
     public static void loadConfigs() {
         FileConfiguration config = ConfigHandler.getConfig("config");
         FileConfiguration locations = ConfigHandler.getConfig("locations");

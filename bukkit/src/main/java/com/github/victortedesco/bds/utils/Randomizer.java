@@ -21,7 +21,7 @@ public class Randomizer {
         Random r = new Random();
         int random_item = r.nextInt(Messages.KILLED_BY_PLAYER_TITLES.size());
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_BY_PLAYER_TITLES.get(random_item));
-        if (BetterDeathScreen.PLACEHOLDERAPI) {
+        if (BetterDeathScreen.isPAPIActive()) {
             message = PlaceholderAPI.setPlaceholders(p, message);
         }
         return message;
@@ -31,7 +31,7 @@ public class Randomizer {
         Random r = new Random();
         int random_item = r.nextInt(Messages.KILLED_BY_PLAYER_SUBTITLES.size());
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_BY_PLAYER_SUBTITLES.get(random_item));
-        if (BetterDeathScreen.PLACEHOLDERAPI) {
+        if (BetterDeathScreen.isPAPIActive()) {
             message = PlaceholderAPI.setPlaceholders(p, message);
         }
         return message;
@@ -41,7 +41,7 @@ public class Randomizer {
         Random r = new Random();
         int random_item = r.nextInt(Messages.ACTIONBAR_KILL.size());
         String message = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_KILL.get(random_item));
-        if (BetterDeathScreen.PLACEHOLDERAPI) {
+        if (BetterDeathScreen.isPAPIActive()) {
             message = PlaceholderAPI.setPlaceholders(p, message);
         }
         return message;
@@ -51,7 +51,7 @@ public class Randomizer {
         Random r = new Random();
         int random_item = r.nextInt(Messages.KILLED_TITLES.size());
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_TITLES.get(random_item));
-        if (BetterDeathScreen.PLACEHOLDERAPI) {
+        if (BetterDeathScreen.isPAPIActive()) {
             message = PlaceholderAPI.setPlaceholders(p, message);
         }
         return message;
@@ -61,7 +61,7 @@ public class Randomizer {
         Random r = new Random();
         int random_item = r.nextInt(Messages.KILLED_SUBTITLES.size());
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_SUBTITLES.get(random_item));
-        if (BetterDeathScreen.PLACEHOLDERAPI) {
+        if (BetterDeathScreen.isPAPIActive()) {
             message = PlaceholderAPI.setPlaceholders(p, message);
         }
         return message;
