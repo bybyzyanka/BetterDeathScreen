@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 public class EntityDamageListener extends Events {
 
-    private static boolean handChecker(Player p, EntityDamageEvent event) {
+    private boolean handChecker(Player p, EntityDamageEvent event) {
         if (BetterDeathScreen.getVersion() != Version.v1_8) {
             return ((!p.getInventory().getItemInMainHand().getType().toString().contains("TOTEM") && !p.getInventory().getItemInOffHand().getType().toString().contains("TOTEM"))
                     || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID);
@@ -40,8 +40,7 @@ public class EntityDamageListener extends Events {
         return true;
     }
 
-    @SuppressWarnings("deprecation")
-    private static void sendEventsBukkit(Player p) {
+    private void sendEventsBukkit(Player p) {
         String random_death_sound = Randomizer.randomSound(Config.SOUND_DEATH);
         p.closeInventory();
         List<ItemStack> inventory = Arrays.stream(p.getInventory().getContents())
@@ -73,9 +72,7 @@ public class EntityDamageListener extends Events {
     public void onEntityDamage(EntityDamageEvent event) {
         Entity victim = event.getEntity();
         int time = Config.TIME;
-        if (time <= 0) {
-            time = 1;
-        }
+        if (time <= 0) time = 1;
 
         if (victim instanceof Player) {
             Player pv = (Player) victim;

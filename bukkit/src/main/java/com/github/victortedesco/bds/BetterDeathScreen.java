@@ -31,7 +31,7 @@ public class BetterDeathScreen extends JavaPlugin {
         return (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null);
     }
 
-    public static void logger(String text) {
+    public static void sendConsoleMessage(String text) {
         Bukkit.getConsoleSender().sendMessage("[BetterDeathScreen] " + text);
     }
 
@@ -42,8 +42,8 @@ public class BetterDeathScreen extends JavaPlugin {
         try {
             ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
         } catch (RuntimeException e) {
-            logger("The plugin will shutdown, because " + Config.LANGUAGE + " does not exist on the configurations.");
-            logger("O plugin será desligado, porque " + Config.LANGUAGE + " não existe nas configurações.");
+            sendConsoleMessage("The plugin will shutdown, because " + Config.LANGUAGE + " does not exist on the configurations.");
+            sendConsoleMessage("O plugin será desligado, porque " + Config.LANGUAGE + " não existe nas configurações.");
             getInstance().getPluginLoader().disablePlugin(BetterDeathScreen.getInstance());
             return;
         }
@@ -55,7 +55,7 @@ public class BetterDeathScreen extends JavaPlugin {
     public void onEnable() {
         if (getVersion() == Version.UNKNOWN) {
             for (String incompatible : Messages.INCOMPATIBLE) {
-                logger(ChatColor.translateAlternateColorCodes('&', incompatible.replace("%server_version%", "(" + Version.getServerVersion() + ")")));
+                sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', incompatible.replace("%server_version%", "(" + Version.getServerVersion() + ")")));
             }
             getPluginLoader().disablePlugin(this);
             return;
@@ -66,20 +66,20 @@ public class BetterDeathScreen extends JavaPlugin {
         getCommand("bds").setTabCompleter(new MainTabComplete());
         Metrics metrics = new Metrics(this, 14729);
         for (String enabled : Messages.ENABLED) {
-            logger(ChatColor.translateAlternateColorCodes('&', enabled.replace("%plugin_version%", "(v" + pdf.getVersion() + ")")));
+            sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', enabled.replace("%plugin_version%", "(v" + pdf.getVersion() + ")")));
         }
-        logger("§fMinecraft " + getVersion().toString().replace("_", ".").replace("v", ""));
+        sendConsoleMessage("§fMinecraft " + getVersion().toString().replace("_", ".").replace("v", ""));
     }
 
     @Override
     public void onDisable() {
-        for (String disabled : Messages.DISABLED) {
-            logger(ChatColor.translateAlternateColorCodes('&', disabled.replace("%plugin_version%", "(v" + pdf.getVersion() + ")")));
-        }
         for (Player ps : Bukkit.getOnlinePlayers()) {
             if (Config.DEAD_PLAYERS.contains(ps.getName())) {
                 Tasks.performRespawn(ps);
             }
+        }
+        for (String disabled : Messages.DISABLED) {
+            sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', disabled.replace("%plugin_version%", "(v" + pdf.getVersion() + ")")));
         }
     }
 }

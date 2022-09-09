@@ -1,5 +1,6 @@
 package com.github.victortedesco.bds.configs;
 
+import com.github.victortedesco.bds.BetterDeathScreen;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,14 +21,14 @@ public class Config {
     public static List<String> SOUND_COUNTDOWN;
     public static List<String> SOUND_RESPAWN;
     public static List<String> SOUND_KILL;
-    public static Float SOUND_DEATH_VOLUME;
-    public static Float SOUND_COUNTDOWN_VOLUME;
-    public static Float SOUND_RESPAWN_VOLUME;
-    public static Float SOUND_KILL_VOLUME;
-    public static Float SOUND_DEATH_PITCH;
-    public static Float SOUND_COUNTDOWN_PITCH;
-    public static Float SOUND_RESPAWN_PITCH;
-    public static Float SOUND_KILL_PITCH;
+    public static float SOUND_DEATH_VOLUME;
+    public static float SOUND_COUNTDOWN_VOLUME;
+    public static float SOUND_RESPAWN_VOLUME;
+    public static float SOUND_KILL_VOLUME;
+    public static float SOUND_DEATH_PITCH;
+    public static float SOUND_COUNTDOWN_PITCH;
+    public static float SOUND_RESPAWN_PITCH;
+    public static float SOUND_KILL_PITCH;
     public static int TIME;
     public static String INSTANT_RESPAWN;
     public static String VIP;
@@ -41,7 +42,7 @@ public class Config {
     public static boolean MOVE_SPECTATOR;
     public static boolean ALLOW_COMMANDS_WHILE_DEAD;
 
-    @SuppressWarnings("ConstantConditions")
+
     public static void loadConfigs() {
         FileConfiguration config = ConfigHandler.getConfig("config");
         FileConfiguration locations = ConfigHandler.getConfig("locations");
@@ -51,8 +52,16 @@ public class Config {
         USE_SAFE_TELEPORT = config.getBoolean("misc.use-safe-teleport");
         USE_KILL_CAM = config.getBoolean("misc.use-kill-camera");
 
-        SPAWN = new Location(Bukkit.getWorld(locations.getString("normal.world")), locations.getDouble("normal.X"), locations.getDouble("normal.Y"), locations.getDouble("normal.Z"), (float) locations.getDouble("normal.yaw"), (float) locations.getDouble("normal.pitch"));
-        VIP_SPAWN = new Location(Bukkit.getWorld(locations.getString("vip.world")), locations.getDouble("vip.X"), locations.getDouble("vip.Y"), locations.getDouble("vip.Z"), (float) locations.getDouble("vip.yaw"), (float) locations.getDouble("vip.pitch"));
+        try {
+            SPAWN = new Location(Bukkit.getWorld(locations.getString("normal.world")), locations.getDouble("normal.X"), locations.getDouble("normal.Y"), locations.getDouble("normal.Z"), (float) locations.getDouble("normal.yaw"), (float) locations.getDouble("normal.pitch"));
+        } catch (Exception e) {
+            BetterDeathScreen.sendConsoleMessage(Messages.SPAWN_SET.replace("%type%", "Normal"));
+        }
+        try {
+            VIP_SPAWN = new Location(Bukkit.getWorld(locations.getString("vip.world")), locations.getDouble("vip.X"), locations.getDouble("vip.Y"), locations.getDouble("vip.Z"), (float) locations.getDouble("vip.yaw"), (float) locations.getDouble("vip.pitch"));
+        } catch (Exception e) {
+            BetterDeathScreen.sendConsoleMessage(Messages.SPAWN_SET.replace("%type%", "Normal"));
+        }
 
         SOUND_DEATH = config.getStringList("sound.type.death");
         SOUND_COUNTDOWN = config.getStringList("sound.type.countdown");

@@ -59,7 +59,7 @@ public class PlayerAPI {
                 p.playSound(p.getLocation(), sound, volume, pitch);
             }
         } catch (IllegalArgumentException e) {
-            BetterDeathScreen.logger(Messages.SOUND_ERROR.replace("%sound%", sound));
+            BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", sound));
         }
     }
 

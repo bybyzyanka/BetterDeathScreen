@@ -443,7 +443,7 @@ public class DeathMessage {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                BetterDeathScreen.logger("§cPlease, contact the author §fTedesk §cabout this error!");
+                BetterDeathScreen.sendConsoleMessage("§cPlease, contact the author §fTedesk §cabout this error!");
             }
         }
         return message;
