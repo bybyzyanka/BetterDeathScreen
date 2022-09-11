@@ -31,12 +31,11 @@ public class Animation {
         particle.getFloat().write(2, (float) p.getLocation().getZ());
         particle.getIntegers().write(0, 1);
 
-        try {
-            for (Player ps : Bukkit.getOnlinePlayers()) {
+        for (Player ps : Bukkit.getOnlinePlayers()) {
+            try {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(ps, particle);
+            } catch (InvocationTargetException ignored) {
             }
-        } catch (InvocationTargetException ignored) {
-
         }
         if (BetterDeathScreen.getVersion() != Version.v1_8) {
             p.getWorld().playSound(p.getLocation(), Sound.valueOf("ENTITY_GENERIC_EXPLODE"), 1, 1);
@@ -51,13 +50,13 @@ public class Animation {
     }
 
     public static void sendAnimation(Player p) {
-        if (Config.ANIMATION.equalsIgnoreCase("BLOOD")) {
+        if (Config.ANIMATION.toUpperCase().contains("BLOOD")) {
             bloodAnimation(p);
         }
-        if (Config.ANIMATION.equalsIgnoreCase("EXPLOSION")) {
+        if (Config.ANIMATION.toUpperCase().contains("EXPLOSION")) {
             explosionAnimation(p);
         }
-        if (Config.ANIMATION.equalsIgnoreCase("LIGHTNING")) {
+        if (Config.ANIMATION.toUpperCase().contains("LIGHTNING")) {
             lightningAnimation(p);
         }
     }

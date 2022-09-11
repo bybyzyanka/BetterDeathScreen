@@ -14,9 +14,9 @@ import java.util.List;
 
 public class MainTabComplete implements TabCompleter {
 
-    private static final String[] FIRST_COMPLETIONS = {"reload", "setspawn"};
+    private final String[] FIRST_COMPLETIONS = {"reload", "setspawn"};
 
-    private static final String[] SECOND_COMPLETIONS = {"normal", "vip"};
+    private final String[] SECOND_COMPLETIONS = {"normal", "vip"};
 
     @Override
     public List<String> onTabComplete(CommandSender sender, @NotNull Command cmd, @NotNull String lbl, String[] args) {
