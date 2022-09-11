@@ -5,7 +5,6 @@ import com.github.victortedesco.bds.api.events.PlayerDamageBeforeDeathEvent;
 import com.github.victortedesco.bds.api.events.PlayerDamageByBlockBeforeDeathEvent;
 import com.github.victortedesco.bds.api.events.PlayerDamageByEntityBeforeDeathEvent;
 import com.github.victortedesco.bds.api.events.PlayerDropInventoryEvent;
-import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.listener.Events;
 import com.github.victortedesco.bds.utils.DeathMessage;
 import org.bukkit.Bukkit;
@@ -27,37 +26,38 @@ public class PlayerDeathListener extends Events {
     public static HashMap<String, ArrayList<Object>> LAST_DAMAGE_BEFORE_DEATH = new HashMap<>();
     public static HashMap<String, ArrayList<Object>> LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH = new HashMap<>();
     public static HashMap<String, ArrayList<Object>> LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH = new HashMap<>();
+    public static HashMap<String, Entity> KILL_ASSIST;
 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeathMonitor(PlayerDeathEvent e) {
         Player p = e.getEntity();
 
+        PlayerDamageBeforeDeathEvent pdbd;
+        PlayerDamageByEntityBeforeDeathEvent pdebd;
+        PlayerDamageByBlockBeforeDeathEvent pdbbd;
+
         // Damage without blocks and entities.
         try {
-            PlayerDamageBeforeDeathEvent pdbd = new PlayerDamageBeforeDeathEvent(p, (EntityDamageEvent.DamageCause) LAST_DAMAGE_BEFORE_DEATH.get(p.getName()).get(0), (double) LAST_DAMAGE_BEFORE_DEATH.get(p.getName()).get(1), (double) LAST_DAMAGE_BEFORE_DEATH.get(p.getName()).get(2));
-            Bukkit.getPluginManager().callEvent(pdbd);
+            pdbd = new PlayerDamageBeforeDeathEvent(p, (EntityDamageEvent.DamageCause) LAST_DAMAGE_BEFORE_DEATH.get(p.getName()).get(0), (double) LAST_DAMAGE_BEFORE_DEATH.get(p.getName()).get(1), (double) LAST_DAMAGE_BEFORE_DEATH.get(p.getName()).get(2));
         } catch (Exception ex) {
-            PlayerDamageBeforeDeathEvent pdbd = new PlayerDamageBeforeDeathEvent(p, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
-            Bukkit.getPluginManager().callEvent(pdbd);
+            pdbd = new PlayerDamageBeforeDeathEvent(p, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
         }
         // Damage by entity
         try {
-            PlayerDamageByEntityBeforeDeathEvent pdebd = new PlayerDamageByEntityBeforeDeathEvent(p, (Entity) LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.get(p.getName()).get(0), (EntityDamageEvent.DamageCause) LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.get(p.getName()).get(1), (double) LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.get(p.getName()).get(2), (double) LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.get(p.getName()).get(3));
-            Bukkit.getPluginManager().callEvent(pdebd);
+            pdebd = new PlayerDamageByEntityBeforeDeathEvent(p, (Entity) LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.get(p.getName()).get(0), (EntityDamageEvent.DamageCause) LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.get(p.getName()).get(1), (double) LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.get(p.getName()).get(2), (double) LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.get(p.getName()).get(3));
         } catch (Exception ex) {
-            PlayerDamageByEntityBeforeDeathEvent pdebd = new PlayerDamageByEntityBeforeDeathEvent(p, null, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
-            Bukkit.getPluginManager().callEvent(pdebd);
+            pdebd = new PlayerDamageByEntityBeforeDeathEvent(p, null, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
         }
         // Damage by block
         try {
-            PlayerDamageByBlockBeforeDeathEvent pdbbd = new PlayerDamageByBlockBeforeDeathEvent(p, (Block) LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.get(p.getName()).get(0), (EntityDamageEvent.DamageCause) LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.get(p.getName()).get(1), (double) LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.get(p.getName()).get(2), (double) LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.get(p.getName()).get(3));
-            Bukkit.getPluginManager().callEvent(pdbbd);
+            pdbbd = new PlayerDamageByBlockBeforeDeathEvent(p, (Block) LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.get(p.getName()).get(0), (EntityDamageEvent.DamageCause) LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.get(p.getName()).get(1), (double) LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.get(p.getName()).get(2), (double) LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.get(p.getName()).get(3));
         } catch (Exception ex) {
-            PlayerDamageByBlockBeforeDeathEvent pdbbd = new PlayerDamageByBlockBeforeDeathEvent(p, null, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
-            Bukkit.getPluginManager().callEvent(pdbbd);
+            pdbbd = new PlayerDamageByBlockBeforeDeathEvent(p, null, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
         }
-
+        Bukkit.getPluginManager().callEvent(pdbd);
+        Bukkit.getPluginManager().callEvent(pdebd);
+        Bukkit.getPluginManager().callEvent(pdbbd);
         PlayerDropInventoryEvent drop_inv = new PlayerDropInventoryEvent(p, e.getDrops());
         if (e.getKeepInventory()) {
             drop_inv.setCancelled(true);
@@ -80,41 +80,14 @@ public class PlayerDeathListener extends Events {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        Bukkit.getConsoleSender().spigot().sendMessage(DeathMessage.getMessage(p));
+                        Bukkit.getConsoleSender().spigot().sendMessage(DeathMessage.getMessage(p, KILL_ASSIST.get(p.getName())));
                         for (Player ps : Bukkit.getOnlinePlayers()) {
-                            ps.spigot().sendMessage(DeathMessage.getMessage(p));
+                            ps.spigot().sendMessage(DeathMessage.getMessage(p, KILL_ASSIST.get(p.getName())));
                         }
+                        KILL_ASSIST.remove(p.getName());
                     }
                 }.runTaskLater(BetterDeathScreen.getInstance(), 1);
             }
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onDeathLowest(PlayerDeathEvent e) {
-        Player p = e.getEntity();
-
-        if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
-            e.setKeepInventory(false);
-            if (p.hasPermission(Config.KEEP_XP)) {
-                e.setKeepLevel(true);
-                e.setNewExp((int) p.getExp());
-                e.setNewLevel(p.getLevel());
-            }
-            if (!p.hasPermission(Config.KEEP_XP)) {
-                e.setDroppedExp(Math.min(100, p.getLevel() * 7));
-                e.setKeepLevel(false);
-                e.setNewExp(0);
-                e.setNewLevel(0);
-            }
-        }
-        if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
-            e.setKeepInventory(true);
-            e.setKeepLevel(true);
-            e.setNewExp((int) p.getExp());
-            e.setNewLevel(p.getLevel());
-        }
-        e.setNewTotalExp(p.getTotalExperience());
     }
 }

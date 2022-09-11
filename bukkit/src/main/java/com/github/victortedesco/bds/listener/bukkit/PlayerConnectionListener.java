@@ -49,12 +49,12 @@ public class PlayerConnectionListener extends Events {
                 if (p.getLastDamageCause() != null) {
                     if (BetterDeathScreen.getVersion() == Version.v1_8) {
                         if (p.getMaxHealth() - p.getLastDamageCause().getDamage() < p.getHealth() && !p.hasPotionEffect(PotionEffectType.REGENERATION)) {
-                            combat_timer -= 1;
+                            combat_timer--;
                         }
                     }
                     if (BetterDeathScreen.getVersion() != Version.v1_8) {
                         if (p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - p.getLastDamageCause().getDamage() < p.getHealth() && !p.hasPotionEffect(PotionEffectType.REGENERATION)) {
-                            combat_timer -= 1;
+                            combat_timer--;
                         }
                     }
                 }

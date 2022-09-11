@@ -1,6 +1,5 @@
 package com.github.victortedesco.bds.configs;
 
-import com.github.victortedesco.bds.BetterDeathScreen;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -42,7 +41,7 @@ public class Config {
     public static boolean MOVE_SPECTATOR;
     public static boolean ALLOW_COMMANDS_WHILE_DEAD;
 
-
+    @SuppressWarnings("ConstantConditions")
     public static void loadConfigs() {
         FileConfiguration config = ConfigHandler.getConfig("config");
         FileConfiguration locations = ConfigHandler.getConfig("locations");
@@ -55,12 +54,12 @@ public class Config {
         try {
             SPAWN = new Location(Bukkit.getWorld(locations.getString("normal.world")), locations.getDouble("normal.X"), locations.getDouble("normal.Y"), locations.getDouble("normal.Z"), (float) locations.getDouble("normal.yaw"), (float) locations.getDouble("normal.pitch"));
         } catch (Exception e) {
-            BetterDeathScreen.sendConsoleMessage(Messages.SPAWN_SET.replace("%type%", "Normal"));
+            SPAWN = null;
         }
         try {
             VIP_SPAWN = new Location(Bukkit.getWorld(locations.getString("vip.world")), locations.getDouble("vip.X"), locations.getDouble("vip.Y"), locations.getDouble("vip.Z"), (float) locations.getDouble("vip.yaw"), (float) locations.getDouble("vip.pitch"));
         } catch (Exception e) {
-            BetterDeathScreen.sendConsoleMessage(Messages.SPAWN_SET.replace("%type%", "Normal"));
+            VIP_SPAWN = null;
         }
 
         SOUND_DEATH = config.getStringList("sound.type.death");

@@ -14,7 +14,6 @@ misc: #Available languages: en-US, pt-BR, zh-TW
   use-safe-teleport: true
   use-default-world-spawn: true #If this option is enabled, the spawn section on locations.yml will be ignored.
   use-kill-camera: true #If this option is enabled, the player will spectate the killer.
-  world-border-effect: true # Enable red border on screen after death.
 sound:
   type:
     death:
@@ -42,7 +41,7 @@ sound:
     countdown: 1.0
     respawn: 1.0
     kill: 1.0
-animation: #Available types: NONE, BLOOD, EXPLOSION, LIGHTNING
+animation: #Available types: NONE, BLOOD, EXPLOSION, LIGHTNING (You can mix. Example: LIGHTNING-EXPLOSION)
   type: "BLOOD"
 time:
   duration: 10

@@ -38,7 +38,7 @@ public class Tasks {
                             non_bed_respawn.setRespawnLocation(Config.SPAWN);
                         } catch (Exception e) {
                             non_bed_respawn.setRespawnLocation(Bukkit.getWorlds().get(0).getSpawnLocation());
-                            BetterDeathScreen.sendConsoleMessage(Messages.SPAWN_ERROR.replace("%player%", p.getName()).replace("%type%", "VIP"));
+                            BetterDeathScreen.sendConsoleMessage(Messages.SPAWN_ERROR.replace("%player%", p.getName()).replace("%type%", "Normal"));
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 package com.github.victortedesco.bds.listener;
 
 import com.github.victortedesco.bds.BetterDeathScreen;
+import com.github.victortedesco.bds.listener.bds.PlayerDamageBeforeEntityListener;
 import com.github.victortedesco.bds.listener.bds.PlayerDropInventoryListener;
 import com.github.victortedesco.bds.listener.bukkit.*;
 import com.github.victortedesco.bds.listener.packets.SpectatorPacketLimiter;
@@ -15,6 +16,7 @@ public class Events implements Listener {
         PluginManager pm = Bukkit.getPluginManager();
 
         // Bukkit
+        pm.registerEvents(new PlayerDamageBeforeEntityListener(), pl);
         pm.registerEvents(new PlayerDropInventoryListener(), pl);
         pm.registerEvents(new EntityDamageListener(), pl);
         pm.registerEvents(new EntityRegainHealthListener(), pl);

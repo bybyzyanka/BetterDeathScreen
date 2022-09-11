@@ -12,6 +12,7 @@ import com.github.victortedesco.bds.utils.Tasks;
 import com.github.victortedesco.bds.utils.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -34,12 +35,16 @@ public class EntityDamageListener extends Events {
 
     private boolean handChecker(Player p, EntityDamageEvent event) {
         if (BetterDeathScreen.getVersion() != Version.v1_8) {
-            return ((!p.getInventory().getItemInMainHand().getType().toString().contains("TOTEM") && !p.getInventory().getItemInOffHand().getType().toString().contains("TOTEM"))
-                    || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID);
+            Material hand = p.getInventory().getItemInMainHand().getType();
+            Material off_hand = p.getInventory().getItemInOffHand().getType();
+
+            if (!hand.toString().contains("TOTEM") && !off_hand.toString().contains("TOTEM")) return true;
+            return event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID;
         }
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     private void sendEventsBukkit(Player p) {
         String random_death_sound = Randomizer.randomSound(Config.SOUND_DEATH);
         p.closeInventory();
@@ -59,6 +64,27 @@ public class EntityDamageListener extends Events {
             p.setFlySpeed(0F);
         }
         PlayerDeathEvent death = new PlayerDeathEvent(p, inventory, 0, "BDS Handled Death");
+        if (p.getWorld().getGameRuleValue("keepInventory").equals("false")) {
+            death.setKeepInventory(false);
+            if (p.hasPermission(Config.KEEP_XP)) {
+                death.setKeepLevel(true);
+                death.setNewExp((int) p.getExp());
+                death.setNewLevel(p.getLevel());
+            }
+            if (!p.hasPermission(Config.KEEP_XP)) {
+                death.setDroppedExp(Math.min(100, p.getLevel() * 7));
+                death.setKeepLevel(false);
+                death.setNewExp(0);
+                death.setNewLevel(0);
+            }
+        }
+        if (p.getWorld().getGameRuleValue("keepInventory").equals("true")) {
+            death.setKeepInventory(true);
+            death.setKeepLevel(true);
+            death.setNewExp((int) p.getExp());
+            death.setNewLevel(p.getLevel());
+        }
+        death.setNewTotalExp(p.getTotalExperience());
         Bukkit.getPluginManager().callEvent(death);
         p.setHealth(0.1);
         p.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
