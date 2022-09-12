@@ -51,7 +51,7 @@ public class MainCommand implements CommandExecutor {
                     }
                     performed = true;
                 }
-                if (args[0].equalsIgnoreCase("setspawn")) {
+                if (args[0].equalsIgnoreCase("setspawn") && args.length > 1) {
                     if (args[1].equalsIgnoreCase("normal")) {
                         File spawn_loc = ConfigHandler.getFile("locations");
                         FileConfiguration spawn_cfg = ConfigHandler.getSavedConfiguration(spawn_loc);
