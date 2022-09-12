@@ -11,58 +11,58 @@ import java.util.Random;
 
 public class Randomizer {
 
-    public static String randomSound(List<String> sound) {
+    public static String randomSound(List<String> sound_list) {
         Random r = new Random();
-        int random_item = r.nextInt(sound.size());
-        return sound.get(random_item);
+        int random_item = r.nextInt(sound_list.size());
+        return sound_list.get(random_item);
     }
 
-    public static String randomTitleOnDeathByPlayer(Player p) {
+    public static String randomTitleOnDeathByPlayer(Player player) {
         Random r = new Random();
         int random_item = r.nextInt(Messages.KILLED_BY_PLAYER_TITLES.size());
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_BY_PLAYER_TITLES.get(random_item));
         if (BetterDeathScreen.isPAPIActive()) {
-            message = PlaceholderAPI.setPlaceholders(p, message);
+            message = PlaceholderAPI.setPlaceholders(player, message);
         }
         return message;
     }
 
-    public static String randomSubTitleOnDeathByPlayer(Player p) {
+    public static String randomSubTitleOnDeathByPlayer(Player player) {
         Random r = new Random();
         int random_item = r.nextInt(Messages.KILLED_BY_PLAYER_SUBTITLES.size());
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_BY_PLAYER_SUBTITLES.get(random_item));
         if (BetterDeathScreen.isPAPIActive()) {
-            message = PlaceholderAPI.setPlaceholders(p, message);
+            message = PlaceholderAPI.setPlaceholders(player, message);
         }
         return message;
     }
 
-    public static String randomKillActionBar(Player p) {
+    public static String randomKillActionBar(Player player) {
         Random r = new Random();
         int random_item = r.nextInt(Messages.ACTIONBAR_KILL.size());
         String message = ChatColor.translateAlternateColorCodes('&', Messages.ACTIONBAR_KILL.get(random_item));
         if (BetterDeathScreen.isPAPIActive()) {
-            message = PlaceholderAPI.setPlaceholders(p, message);
+            message = PlaceholderAPI.setPlaceholders(player, message);
         }
         return message;
     }
 
-    public static String randomTitle(Player p) {
+    public static String randomTitle(Player player) {
         Random r = new Random();
         int random_item = r.nextInt(Messages.KILLED_TITLES.size());
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_TITLES.get(random_item));
         if (BetterDeathScreen.isPAPIActive()) {
-            message = PlaceholderAPI.setPlaceholders(p, message);
+            message = PlaceholderAPI.setPlaceholders(player, message);
         }
         return message;
     }
 
-    public static String randomSubTitle(Player p) {
+    public static String randomSubTitle(Player player) {
         Random r = new Random();
         int random_item = r.nextInt(Messages.KILLED_SUBTITLES.size());
         String message = ChatColor.translateAlternateColorCodes('&', Messages.KILLED_SUBTITLES.get(random_item));
         if (BetterDeathScreen.isPAPIActive()) {
-            message = PlaceholderAPI.setPlaceholders(p, message);
+            message = PlaceholderAPI.setPlaceholders(player, message);
         }
         return message;
     }

@@ -17,7 +17,7 @@ import java.io.File;
 public class MainCommand implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender s, @NotNull Command cnd, @NotNull String lbl, String[] args) {
+    public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String lbl, String[] args) {
         boolean performed = false;
         if (!(s instanceof Player)) {
             if (args.length != 0) {

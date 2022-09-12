@@ -17,110 +17,94 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Tasks {
 
     @SuppressWarnings("deprecation")
-    public static void teleportToSpawnPoint(Player p) {
-        if (p.getBedSpawnLocation() == null) {
-            PlayerRespawnEvent non_bed_respawn = new PlayerRespawnEvent(p, p.getWorld().getSpawnLocation(), false);
-            if (!PlayerTeleportListener.TELEPORT_LOCATION.containsKey(p.getName())) {
-                if (Config.USE_DEFAULT_WORLD_SPAWN) {
-                    non_bed_respawn.setRespawnLocation(Bukkit.getWorlds().get(0).getSpawnLocation());
-                }
-                if (!Config.USE_DEFAULT_WORLD_SPAWN) {
-                    if (p.hasPermission(Config.VIP)) {
-                        try {
-                            non_bed_respawn.setRespawnLocation(Config.VIP_SPAWN);
-                        } catch (Exception e) {
-                            non_bed_respawn.setRespawnLocation(Bukkit.getWorlds().get(0).getSpawnLocation());
-                            BetterDeathScreen.sendConsoleMessage(Messages.SPAWN_ERROR.replace("%player%", p.getName()).replace("%type%", "VIP"));
-                        }
-                    }
-                    if (!p.hasPermission(Config.VIP)) {
-                        try {
-                            non_bed_respawn.setRespawnLocation(Config.SPAWN);
-                        } catch (Exception e) {
-                            non_bed_respawn.setRespawnLocation(Bukkit.getWorlds().get(0).getSpawnLocation());
-                            BetterDeathScreen.sendConsoleMessage(Messages.SPAWN_ERROR.replace("%player%", p.getName()).replace("%type%", "Normal"));
-                        }
+    public static void teleportToSpawnPoint(Player player) {
+        PlayerRespawnEvent respawn = null;
+        if (player.getBedSpawnLocation() == null) {
+            respawn = new PlayerRespawnEvent(player, Bukkit.getWorlds().get(0).getSpawnLocation(), false);
+            if (!Config.USE_DEFAULT_WORLD_SPAWN) {
+                if (player.hasPermission(Config.VIP)) {
+                    try {
+                        respawn.setRespawnLocation(Config.VIP_SPAWN);
+                    } catch (Exception e) {
+                        BetterDeathScreen.sendConsoleMessage(Messages.SPAWN_ERROR.replace("%player%", player.getName()).replace("%type%", "VIP"));
                     }
                 }
-            }
-            if (PlayerTeleportListener.TELEPORT_LOCATION.containsKey(p.getName())) {
-                non_bed_respawn.setRespawnLocation(PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()));
-                PlayerTeleportListener.TELEPORT_LOCATION.remove(p.getName());
-            }
-            Bukkit.getPluginManager().callEvent(non_bed_respawn);
-            if (Config.USE_SAFE_TELEPORT) {
-                PlayerAPI.teleportSafeLocation(p, non_bed_respawn.getRespawnLocation());
-            }
-            if (!Config.USE_SAFE_TELEPORT) {
-                p.teleport(non_bed_respawn.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                if (!player.hasPermission(Config.VIP)) {
+                    try {
+                        respawn.setRespawnLocation(Config.SPAWN);
+                    } catch (Exception e) {
+                        BetterDeathScreen.sendConsoleMessage(Messages.SPAWN_ERROR.replace("%player%", player.getName()).replace("%type%", "Normal"));
+                    }
+                }
             }
         }
-        if (p.getBedSpawnLocation() != null) {
-            PlayerRespawnEvent bed_respawn = new PlayerRespawnEvent(p, p.getBedSpawnLocation(), true);
-            if (PlayerTeleportListener.TELEPORT_LOCATION.containsKey(p.getName())) {
-                bed_respawn.setRespawnLocation(PlayerTeleportListener.TELEPORT_LOCATION.get(p.getName()));
-                PlayerTeleportListener.TELEPORT_LOCATION.remove(p.getName());
-            }
-            Bukkit.getPluginManager().callEvent(bed_respawn);
-            if (Config.USE_SAFE_TELEPORT) {
-                PlayerAPI.teleportSafeLocation(p, bed_respawn.getRespawnLocation());
-            }
-            if (!Config.USE_SAFE_TELEPORT) {
-                p.teleport(bed_respawn.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-            }
+        if (player.getBedSpawnLocation() != null) {
+            respawn = new PlayerRespawnEvent(player, player.getBedSpawnLocation(), true);
+        }
+        if (PlayerTeleportListener.TELEPORT_LOCATION.containsKey(player.getName())) {
+            respawn = new PlayerRespawnEvent(player, PlayerTeleportListener.TELEPORT_LOCATION.get(player.getName()), false);
+            PlayerTeleportListener.TELEPORT_LOCATION.remove(player.getName());
+        }
+        assert respawn != null;
+        Bukkit.getPluginManager().callEvent(respawn);
+        if (Config.USE_SAFE_TELEPORT) {
+            PlayerAPI.teleportSafeLocation(player, respawn.getRespawnLocation());
+        }
+        if (!Config.USE_SAFE_TELEPORT) {
+            player.teleport(respawn.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         }
     }
 
     @SuppressWarnings({"deprecation", "ConstantConditions"})
-    public static void performRespawn(Player p) {
+    public static void performRespawn(Player player) {
         String random_respawn_sound = Randomizer.randomSound(Config.SOUND_RESPAWN);
 
         if (!Bukkit.isHardcore()) {
-            Config.DEAD_PLAYERS.remove(p.getName());
+            Config.DEAD_PLAYERS.remove(player.getName());
             double max_health = 0;
-            if (BetterDeathScreen.getVersion() == Version.v1_8) max_health = p.getMaxHealth();
+            if (BetterDeathScreen.getVersion() == Version.v1_8) max_health = player.getMaxHealth();
             if (BetterDeathScreen.getVersion() != Version.v1_8)
-                max_health = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-            p.setHealth(max_health);
-            p.setFoodLevel(20);
-            if (p.getGameMode() == GameMode.SPECTATOR) p.setSpectatorTarget(null);
-            Titles.sendTitle(p, 1, 1, 1, "", "");
-            ActionBar.sendActionBar(p, "");
+                max_health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+            player.setHealth(max_health);
+            player.setFoodLevel(20);
+            if (player.getGameMode() == GameMode.SPECTATOR) player.setSpectatorTarget(null);
+            Titles.sendTitle(player, 1, 1, 1, "", "");
+            ActionBar.sendActionBar(player, "");
             if (!Config.MOVE_SPECTATOR) {
-                p.setWalkSpeed(0.2F);
-                p.setFlySpeed(0.1F);
+                player.setWalkSpeed(0.2F);
+                player.setFlySpeed(0.1F);
             }
-            teleportToSpawnPoint(p);
-            PlayerAPI.playSound(p, random_respawn_sound, Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
-            p.setGameMode(Bukkit.getServer().getDefaultGameMode());
-            p.updateInventory();
+            teleportToSpawnPoint(player);
+            PlayerAPI.playSound(player, random_respawn_sound, Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
+            player.setGameMode(Bukkit.getServer().getDefaultGameMode());
+            player.updateInventory();
         }
 
         if (Bukkit.isHardcore()) {
-            if (p.getGameMode() != GameMode.SPECTATOR) {
-                Config.DEAD_PLAYERS.remove(p.getName());
-                Titles.sendTitle(p, 1, 1, 1, "", "");
-                ActionBar.sendActionBar(p, "");
+            if (player.getGameMode() != GameMode.SPECTATOR) {
+                Config.DEAD_PLAYERS.remove(player.getName());
+                Titles.sendTitle(player, 1, 1, 1, "", "");
+                ActionBar.sendActionBar(player, "");
                 if (!Config.MOVE_SPECTATOR) {
-                    p.setWalkSpeed(0.2F);
-                    p.setFlySpeed(0.1F);
+                    player.setWalkSpeed(0.2F);
+                    player.setFlySpeed(0.1F);
                 }
                 double max_health = 0;
-                if (BetterDeathScreen.getVersion() == Version.v1_8) max_health = p.getMaxHealth();
+                if (BetterDeathScreen.getVersion() == Version.v1_8) max_health = player.getMaxHealth();
                 if (BetterDeathScreen.getVersion() != Version.v1_8)
-                    max_health = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                p.setHealth(max_health);
-                p.setFoodLevel(20);
-                teleportToSpawnPoint(p);
-                p.updateInventory();
+                    max_health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                player.setHealth(max_health);
+                player.setFoodLevel(20);
+                teleportToSpawnPoint(player);
+                player.updateInventory();
             }
         }
     }
 
-    public static void startTimer(Player p) {
+    public static void startTimer(Player player) {
         if (!Bukkit.getServer().isHardcore()) {
             String random_countdown_sound = Randomizer.randomSound(Config.SOUND_COUNTDOWN);
-            PlayerAPI.playSound(p, random_countdown_sound, 0, 0);
+            PlayerAPI.playSound(player, random_countdown_sound, 0, 0);
 
             new BukkitRunnable() {
                 int time = Config.TIME;
@@ -129,26 +113,26 @@ public class Tasks {
                 public void run() {
                     time--;
 
-                    if (!p.isOnline()) cancel();
+                    if (!player.isOnline()) cancel();
 
-                    if (p.hasPermission(Config.INSTANT_RESPAWN)) {
+                    if (player.hasPermission(Config.INSTANT_RESPAWN)) {
                         if (time <= Config.TIME) {
-                            ActionBar.sendActionBar(p, "");
-                            performRespawn(p);
+                            ActionBar.sendActionBar(player, "");
+                            performRespawn(player);
                             cancel();
                         }
                     }
-                    if (!p.hasPermission(Config.INSTANT_RESPAWN)) {
+                    if (!player.hasPermission(Config.INSTANT_RESPAWN)) {
                         if (time > 1) {
-                            ActionBar.sendActionBar(p, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
-                            PlayerAPI.playSoundNoExceptions(p, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                            ActionBar.sendActionBar(player, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
+                            PlayerAPI.playSoundNoExceptions(player, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
                         }
                         if (time == 1) {
-                            ActionBar.sendActionBar(p, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
-                            PlayerAPI.playSoundNoExceptions(p, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                            ActionBar.sendActionBar(player, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
+                            PlayerAPI.playSoundNoExceptions(player, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
                         }
                         if (time <= 0) {
-                            performRespawn(p);
+                            performRespawn(player);
                             cancel();
                         }
                     }
@@ -160,13 +144,13 @@ public class Tasks {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (!p.isOnline()) cancel();
+                    if (!player.isOnline()) cancel();
 
-                    ActionBar.sendActionBar(p, Messages.ACTIONBAR_HC);
+                    ActionBar.sendActionBar(player, Messages.ACTIONBAR_HC);
 
                     // When changing the gamemode of the player, he respawns.
-                    if (p.getGameMode() != GameMode.SPECTATOR) {
-                        performRespawn(p);
+                    if (player.getGameMode() != GameMode.SPECTATOR) {
+                        performRespawn(player);
                         cancel();
                     }
                 }

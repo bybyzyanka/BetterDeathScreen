@@ -17,18 +17,18 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Animation {
 
-    private static void bloodAnimation(Player p) {
-        p.getWorld().playEffect(p.getEyeLocation(), Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
-        p.getWorld().playEffect(p.getLocation(), Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
+    private static void bloodAnimation(Player player) {
+        player.getWorld().playEffect(player.getEyeLocation(), Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
+        player.getWorld().playEffect(player.getLocation(), Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
     }
 
-    private static void explosionAnimation(Player p) {
+    private static void explosionAnimation(Player player) {
         PacketContainer particle = new PacketContainer(PacketType.Play.Server.WORLD_PARTICLES);
 
         particle.getParticles().write(0, EnumWrappers.Particle.EXPLOSION_LARGE);
-        particle.getFloat().write(0, (float) p.getLocation().getX());
-        particle.getFloat().write(1, (float) p.getLocation().getY());
-        particle.getFloat().write(2, (float) p.getLocation().getZ());
+        particle.getFloat().write(0, (float) player.getLocation().getX());
+        particle.getFloat().write(1, (float) player.getLocation().getY());
+        particle.getFloat().write(2, (float) player.getLocation().getZ());
         particle.getIntegers().write(0, 1);
 
         for (Player ps : Bukkit.getOnlinePlayers()) {
@@ -38,26 +38,26 @@ public class Animation {
             }
         }
         if (BetterDeathScreen.getVersion() != Version.v1_8) {
-            p.getWorld().playSound(p.getLocation(), Sound.valueOf("ENTITY_GENERIC_EXPLODE"), 1, 1);
+            player.getWorld().playSound(player.getLocation(), Sound.valueOf("ENTITY_GENERIC_EXPLODE"), 1, 1);
         }
         if (BetterDeathScreen.getVersion() == Version.v1_8) {
-            p.getWorld().playSound(p.getLocation(), Sound.valueOf("EXPLODE"), 1, 1);
+            player.getWorld().playSound(player.getLocation(), Sound.valueOf("EXPLODE"), 1, 1);
         }
     }
 
-    private static void lightningAnimation(Player p) {
-        p.getWorld().strikeLightningEffect(p.getLocation());
+    private static void lightningAnimation(Player player) {
+        player.getWorld().strikeLightningEffect(player.getLocation());
     }
 
-    public static void sendAnimation(Player p) {
+    public static void sendAnimation(Player player) {
         if (Config.ANIMATION.toUpperCase().contains("BLOOD")) {
-            bloodAnimation(p);
+            bloodAnimation(player);
         }
         if (Config.ANIMATION.toUpperCase().contains("EXPLOSION")) {
-            explosionAnimation(p);
+            explosionAnimation(player);
         }
         if (Config.ANIMATION.toUpperCase().contains("LIGHTNING")) {
-            lightningAnimation(p);
+            lightningAnimation(player);
         }
     }
 }
