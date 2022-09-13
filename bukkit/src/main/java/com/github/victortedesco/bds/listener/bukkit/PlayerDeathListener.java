@@ -26,7 +26,7 @@ public class PlayerDeathListener extends Events {
     public static HashMap<String, ArrayList<Object>> LAST_DAMAGE_BEFORE_DEATH = new HashMap<>();
     public static HashMap<String, ArrayList<Object>> LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH = new HashMap<>();
     public static HashMap<String, ArrayList<Object>> LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH = new HashMap<>();
-    public static HashMap<String, Entity> KILL_ASSIST;
+    public static HashMap<String, Entity> KILL_ASSIST = new HashMap<>();
 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.MONITOR)

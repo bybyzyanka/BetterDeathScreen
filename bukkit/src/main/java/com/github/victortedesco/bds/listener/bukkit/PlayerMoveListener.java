@@ -26,13 +26,13 @@ public class PlayerMoveListener extends Events {
         }
 
         if (Config.DEAD_PLAYERS.contains(p.getName()) && !Config.IGNORE_WALLS) {
+            if (p.getEyeLocation().getBlock().getType().isSolid()) {
+                p.setVelocity(new Vector());
+                PlayerAPI.teleportSafeLocation(p, p.getLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
+            }
             if (to.getBlock().getType().isSolid()) {
                 p.setVelocity(new Vector());
                 p.teleport(e.getFrom(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
-            }
-            if (p.getEyeLocation().getBlock().getType().isSolid()) {
-                p.setVelocity(new Vector());
-                PlayerAPI.teleportSafeLocation(p, p.getLocation());
             }
         }
         if (Config.MOVE_SPECTATOR && p.getWalkSpeed() == 0 && p.getFlySpeed() == 0) {

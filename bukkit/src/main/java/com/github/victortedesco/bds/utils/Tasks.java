@@ -48,7 +48,7 @@ public class Tasks {
         assert respawn != null;
         Bukkit.getPluginManager().callEvent(respawn);
         if (Config.USE_SAFE_TELEPORT) {
-            PlayerAPI.teleportSafeLocation(player, respawn.getRespawnLocation());
+            PlayerAPI.teleportSafeLocation(player, respawn.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         }
         if (!Config.USE_SAFE_TELEPORT) {
             player.teleport(respawn.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
@@ -75,7 +75,7 @@ public class Tasks {
                 player.setFlySpeed(0.1F);
             }
             teleportToSpawnPoint(player);
-            PlayerAPI.playSound(player, random_respawn_sound, Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH);
+            PlayerAPI.playSound(player, random_respawn_sound, Config.SOUND_RESPAWN_VOLUME, Config.SOUND_RESPAWN_PITCH, true);
             player.setGameMode(Bukkit.getServer().getDefaultGameMode());
             player.updateInventory();
         }
@@ -104,7 +104,7 @@ public class Tasks {
     public static void startTimer(Player player) {
         if (!Bukkit.getServer().isHardcore()) {
             String random_countdown_sound = Randomizer.randomSound(Config.SOUND_COUNTDOWN);
-            PlayerAPI.playSound(player, random_countdown_sound, 0, 0);
+            PlayerAPI.playSound(player, random_countdown_sound, 0, 0, true);
 
             new BukkitRunnable() {
                 int time = Config.TIME;
@@ -125,11 +125,11 @@ public class Tasks {
                     if (!player.hasPermission(Config.INSTANT_RESPAWN)) {
                         if (time > 1) {
                             ActionBar.sendActionBar(player, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
-                            PlayerAPI.playSoundNoExceptions(player, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                            PlayerAPI.playSound(player, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH, false);
                         }
                         if (time == 1) {
                             ActionBar.sendActionBar(player, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
-                            PlayerAPI.playSoundNoExceptions(player, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH);
+                            PlayerAPI.playSound(player, random_countdown_sound, Config.SOUND_COUNTDOWN_VOLUME, Config.SOUND_COUNTDOWN_PITCH, false);
                         }
                         if (time <= 0) {
                             performRespawn(player);

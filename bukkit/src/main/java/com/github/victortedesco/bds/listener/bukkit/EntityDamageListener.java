@@ -89,7 +89,7 @@ public class EntityDamageListener extends Events {
         player.setHealth(0.1);
         player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
         player.incrementStatistic(Statistic.DEATHS, 1);
-        PlayerAPI.playSound(player, random_death_sound, Config.SOUND_DEATH_VOLUME, Config.SOUND_DEATH_PITCH);
+        PlayerAPI.playSound(player, random_death_sound, Config.SOUND_DEATH_VOLUME, Config.SOUND_DEATH_PITCH, true);
         Tasks.startTimer(player);
         Animation.sendAnimation(player);
     }
@@ -150,7 +150,7 @@ public class EntityDamageListener extends Events {
 
                         Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                         ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
-                        PlayerAPI.playSound(pd, random_kill_sound, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                        PlayerAPI.playSound(pd, random_kill_sound, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH, true);
                         PlayerAPI.incrementStatistic(pd, Statistic.DAMAGE_DEALT, (int) e.getFinalDamage());
                         pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
                     }
@@ -164,7 +164,7 @@ public class EntityDamageListener extends Events {
 
                             Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitleOnDeathByPlayer(pd), Randomizer.randomSubTitleOnDeathByPlayer(pd));
                             ActionBar.sendActionBar(pd, Randomizer.randomKillActionBar(pv));
-                            PlayerAPI.playSound(pd, random_kill_sound, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH);
+                            PlayerAPI.playSound(pd, random_kill_sound, Config.SOUND_KILL_VOLUME, Config.SOUND_KILL_PITCH, true);
                             PlayerAPI.incrementStatistic(pd, Statistic.DAMAGE_DEALT, (int) e.getFinalDamage());
                             pd.incrementStatistic(Statistic.PLAYER_KILLS, 1);
                         }

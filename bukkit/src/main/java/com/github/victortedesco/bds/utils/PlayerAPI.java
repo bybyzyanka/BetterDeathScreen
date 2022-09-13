@@ -35,22 +35,17 @@ public class PlayerAPI {
         default_damage.add(0);
         PlayerDeathListener.LAST_DAMAGE_BEFORE_DEATH.put(player.getName(), default_damage);
 
-        ArrayList<Object> ent_damage = new ArrayList<>();
-        ent_damage.add(null);
-        ent_damage.add(EntityDamageEvent.DamageCause.CUSTOM);
-        ent_damage.add(0);
-        ent_damage.add(0);
-        PlayerDeathListener.LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.put(player.getName(), ent_damage);
+        ArrayList<Object> caused_by_damage = new ArrayList<>();
+        caused_by_damage.add(null);
+        caused_by_damage.add(EntityDamageEvent.DamageCause.CUSTOM);
+        caused_by_damage.add(0);
+        caused_by_damage.add(0);
 
-        ArrayList<Object> block_damage = new ArrayList<>();
-        block_damage.add(null);
-        block_damage.add(EntityDamageEvent.DamageCause.CUSTOM);
-        block_damage.add(0);
-        block_damage.add(0);
-        PlayerDeathListener.LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.put(player.getName(), block_damage);
+        PlayerDeathListener.LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.put(player.getName(), caused_by_damage);
+        PlayerDeathListener.LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.put(player.getName(), caused_by_damage);
     }
 
-    public static void playSound(Player player, String sound, float volume, float pitch) {
+    public static void playSound(Player player, String sound, float volume, float pitch, boolean throwable) {
         try {
             if (!sound.contains(".")) {
                 player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
@@ -59,30 +54,17 @@ public class PlayerAPI {
                 player.playSound(player.getLocation(), sound, volume, pitch);
             }
         } catch (IllegalArgumentException e) {
-            BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", sound));
+            if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", sound));
         }
     }
 
-    public static void playSoundNoExceptions(Player player, String sound, float volume, float pitch) {
-        try {
-            if (!sound.contains(".")) {
-                player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
-            }
-            if (sound.contains(".")) {
-                player.playSound(player.getLocation(), sound, volume, pitch);
-            }
-        } catch (IllegalArgumentException ignored) {
-
-        }
-    }
-
-    public static void teleportSafeLocation(Player player, Location location) {
+    public static void teleportSafeLocation(Player player, Location location, PlayerTeleportEvent.TeleportCause teleportCause) {
         double y = location.getWorld().getMaxHeight();
         for (double i = y; i > 0; i -= 1) {
             Location loc = new Location(location.getWorld(), location.getX(), i, location.getZ());
             Material type = loc.getBlock().getType();
             if (!type.toString().contains("AIR") && !type.toString().contains("WATER") && !type.toString().contains("LAVA")) {
-                player.teleport(loc.add(0, 1.2, 0), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                player.teleport(loc.add(0, 1.2, 0), teleportCause);
                 break;
             }
         }
