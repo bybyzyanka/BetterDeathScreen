@@ -5,8 +5,7 @@ https://www.spigotmc.org/resources/102005/
 
 ## Observações
 
-Você obrigatoriamente precisa do plugin `ProtocolLib`, faça o download no [**
-repositório**](https://github.com/dmulloy2/ProtocolLib/releases) deles. Uma dependência opcional é o
+Você obrigatoriamente precisa do plugin `ProtocolLib`, faça o download no [**repositório**](https://github.com/dmulloy2/ProtocolLib/releases) deles. Uma dependência opcional é o
 plugin `PlaceholderAPI`, faça o download [**aqui**](https://github.com/PlaceholderAPI/PlaceholderAPI/releases).
 
 ## Download
