@@ -59,7 +59,7 @@ public class Tasks {
     public static void performRespawn(Player player) {
         String random_respawn_sound = Randomizer.randomSound(Config.SOUND_RESPAWN);
 
-        if (!Bukkit.isHardcore()) {
+        if (!player.getWorld().isHardcore()) {
             Config.DEAD_PLAYERS.remove(player.getName());
             double max_health = 0;
             if (BetterDeathScreen.getVersion() == Version.v1_8) max_health = player.getMaxHealth();
@@ -80,7 +80,7 @@ public class Tasks {
             player.updateInventory();
         }
 
-        if (Bukkit.isHardcore()) {
+        if (player.getWorld().isHardcore()) {
             if (player.getGameMode() != GameMode.SPECTATOR) {
                 Config.DEAD_PLAYERS.remove(player.getName());
                 Titles.sendTitle(player, 1, 1, 1, "", "");
@@ -102,7 +102,7 @@ public class Tasks {
     }
 
     public static void startTimer(Player player) {
-        if (!Bukkit.getServer().isHardcore()) {
+        if (!player.getWorld().isHardcore()) {
             String random_countdown_sound = Randomizer.randomSound(Config.SOUND_COUNTDOWN);
             PlayerAPI.playSound(player, random_countdown_sound, 0, 0, true);
 
@@ -140,7 +140,7 @@ public class Tasks {
             }.runTaskTimer(BetterDeathScreen.getInstance(), 20, 20);
         }
 
-        if (Bukkit.getServer().isHardcore()) {
+        if (player.getWorld().isHardcore()) {
             new BukkitRunnable() {
                 @Override
                 public void run() {

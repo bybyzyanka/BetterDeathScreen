@@ -6,7 +6,6 @@ import com.github.victortedesco.bds.listener.Events;
 import com.github.victortedesco.bds.utils.PlayerAPI;
 import com.github.victortedesco.bds.utils.Tasks;
 import com.github.victortedesco.bds.utils.Version;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -25,7 +24,7 @@ public class PlayerConnectionListener extends Events {
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if ((p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) || Config.DEAD_PLAYERS.contains(p.getName())) {
-            if (Bukkit.getServer().isHardcore()) {
+            if (p.getWorld().isHardcore()) {
                 Config.DEAD_PLAYERS.add(p.getName());
                 Tasks.startTimer(p);
             }
@@ -38,7 +37,7 @@ public class PlayerConnectionListener extends Events {
         }
         // A primitive combat log.
         new BukkitRunnable() {
-            int combat_timer = 100;
+            int combat_timer = 30;
 
             @Override
             public void run() {
@@ -60,7 +59,7 @@ public class PlayerConnectionListener extends Events {
                 }
                 if (combat_timer <= 0) {
                     PlayerAPI.resetDamageBeforeDeath(p);
-                    combat_timer = 100;
+                    combat_timer = 30;
                 }
             }
         }.runTaskTimer(BetterDeathScreen.getInstance(), 1, 20);
@@ -71,9 +70,10 @@ public class PlayerConnectionListener extends Events {
         Player p = e.getPlayer();
         // To avoid bugs, the player will respawn after disconnecting.
         if ((p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission(Config.ADMIN)) || Config.DEAD_PLAYERS.contains(p.getName())) {
-            if (!Bukkit.getServer().isHardcore()) {
+            if (!p.getWorld().isHardcore()) {
                 Tasks.performRespawn(p);
             }
         }
+        PlayerDeathListener.BED_MESSAGE_SENT.remove(p.getName());
     }
 }

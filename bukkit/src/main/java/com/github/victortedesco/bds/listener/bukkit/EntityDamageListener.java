@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 public class EntityDamageListener extends Events {
 
-    private boolean handChecker(Player player, EntityDamageEvent event) {
+    private boolean noTotem(Player player, EntityDamageEvent event) {
         if (BetterDeathScreen.getVersion() != Version.v1_8) {
             Material hand = player.getInventory().getItemInMainHand().getType();
             Material off_hand = player.getInventory().getItemInOffHand().getType();
@@ -108,7 +108,7 @@ public class EntityDamageListener extends Events {
                 e.setCancelled(true);
                 return;
             }
-            if (pv.getHealth() > e.getFinalDamage()) {
+            if (pv.getHealth() > e.getFinalDamage() || !noTotem(pv, e)) {
                 if (!(e instanceof EntityDamageByEntityEvent) && !(e instanceof EntityDamageByBlockEvent)) {
                     ArrayList<Object> list = new ArrayList<>();
                     list.add(e.getCause());
@@ -136,7 +136,7 @@ public class EntityDamageListener extends Events {
                     PlayerDeathListener.LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.put(pv.getName(), list);
                 }
             }
-            if (pv.getHealth() <= e.getFinalDamage() && handChecker(pv, e)) {
+            if (pv.getHealth() <= e.getFinalDamage() && noTotem(pv, e)) {
                 Config.DEAD_PLAYERS.add(v.getName());
                 pv.setGameMode(GameMode.SPECTATOR);
                 Titles.sendTitle(pv, 2, 20 * time, 2, Randomizer.randomTitle(pv), Randomizer.randomSubTitle(pv));
