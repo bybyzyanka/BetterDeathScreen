@@ -4,7 +4,7 @@ misc:
   hotbar-tp-blocked: "&cYou can´t teleport to other players using the spectator menu."
 actionbar:
   death: '&7You will respawn in &6%time%.'
-  hardcore: '&7You will never respawn again...'
+  hardcore: '&cYou will never respawn again...'
   kill: #This section uses the victim for the placeholders.
     - "&cYou killed &f%player_name%!"
     - "&6Congratulations for killing &f%player_name%"
@@ -36,7 +36,7 @@ time:
 errors:
   actionbar: "&cCould not send the actionbar to the player %player%"
   title: "&cCould not send the title message to the player %player%"
-  sound: "&cThe sound %sound% does not exist in your server version. Check your config.yml"
+  sound: "&cSomething is wrong with the syntax %sound%. Check your config.yml"
   spawn: "&cSending a %player% to the %type% spawn failed, he teleported to the default world spawn instead. Check your locations.yml or set the spawn."
 commands:
   help:

@@ -4,7 +4,7 @@ misc:
   hotbar-tp-blocked: "&cVocê não pode se teleportar para outros jogadores usando o menu do modo espectador."
 actionbar:
   death: '&7Você ressurgirá em &6%time%.'
-  hardcore: '&7Você não irá renascer...'
+  hardcore: '&cVocê não irá renascer...'
   kill: #A vítima será usada como base para as placeholders.
     - "&cVocê matou &f%player_name%!"
     - "&6Parabéns por matar &f%player_name%"
@@ -36,7 +36,7 @@ time:
 errors:
   actionbar: "&cNão foi possível enviar a actionbar para o jogador %player%"
   title: "&cNão foi possível enviar o title para o jogador %player%"
-  sound: "&cO som %sound% não existe na versão de seu servidor. Verifique sua config.yml"
+  sound: "&cAlgo está errado com a sintaxe %sound%. Verifique sua config.yml"
   spawn: "&cO teleporte de %player% para o spawn %type% falhou, ele foi teleportado para o spawn do mundo principal. Verifique sua locations.yml ou defina o spawn."
 commands:
   help:

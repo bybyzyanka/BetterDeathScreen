@@ -13,7 +13,7 @@ public class Messages {
     public static String SPECTATE_BLOCKED;
     public static String HOTBAR_TELEPORT_BLOCKED;
     public static String ACTIONBAR_DEATH;
-    public static String ACTIONBAR_HC;
+    public static String ACTIONBAR_HARDCORE;
     public static List<String> ACTIONBAR_KILL;
     public static List<String> KILLED_TITLES;
     public static List<String> KILLED_BY_PLAYER_TITLES;
@@ -25,7 +25,7 @@ public class Messages {
     public static String RELOAD;
     public static String NO_PERM;
     public static String SPAWN_SET;
-    public static String AB_ERROR;
+    public static String ACTIONBAR_ERROR;
     public static String TITLE_ERROR;
     public static String SOUND_ERROR;
     public static String SPAWN_ERROR;
@@ -43,7 +43,7 @@ public class Messages {
         HOTBAR_TELEPORT_BLOCKED = ChatColor.translateAlternateColorCodes('&', messages.getString("misc.hotbar-tp-blocked"));
 
         ACTIONBAR_DEATH = ChatColor.translateAlternateColorCodes('&', messages.getString("actionbar.death"));
-        ACTIONBAR_HC = ChatColor.translateAlternateColorCodes('&', messages.getString("actionbar.hardcore"));
+        ACTIONBAR_HARDCORE = ChatColor.translateAlternateColorCodes('&', messages.getString("actionbar.hardcore"));
         ACTIONBAR_KILL = messages.getStringList("actionbar.kill");
 
         KILLED_TITLES = messages.getStringList("titles.killed");
@@ -59,7 +59,7 @@ public class Messages {
         NO_PERM = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.no-perm"));
         SPAWN_SET = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.spawn-set"));
 
-        AB_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.actionbar"));
+        ACTIONBAR_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.actionbar"));
         TITLE_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.title"));
         SOUND_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.sound"));
         SPAWN_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.spawn"));

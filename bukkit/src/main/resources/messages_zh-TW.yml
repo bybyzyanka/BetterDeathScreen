@@ -4,7 +4,7 @@ misc:
   hotbar-tp-blocked: "&c你不能使用旁觀者選單傳送到其他玩家。"
 actionbar:
   death: '&7你將在&6%time%&7後復活。'
-  hardcore: '&7你永遠不會再復活...'
+  hardcore: '&c你永遠不會再復活...'
   kill: #這部分的變數符號是對於被害者的。
     - "&c你殺死了 &f%player_name%！"
     - "&6恭喜你殺死了 &f%player_name%"
