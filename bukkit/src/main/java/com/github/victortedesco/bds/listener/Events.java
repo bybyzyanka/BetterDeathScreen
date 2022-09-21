@@ -28,6 +28,7 @@ public class Events {
         pluginManager.registerEvents(new PlayerRespawnListener(), plugin);
         pluginManager.registerEvents(new PlayerTeleportListener(), plugin);
 
+        // Packets
         JoinPacketListener.changeHeartIcon();
         SpectatorPacketLimiter.cancelSpectate();
     }

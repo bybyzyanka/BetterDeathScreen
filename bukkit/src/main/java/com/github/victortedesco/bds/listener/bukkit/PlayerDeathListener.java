@@ -59,21 +59,21 @@ public class PlayerDeathListener implements Listener {
         PlayerDamageBeforeDeathEvent playerDamageBeforeDeathEvent;
         try {
             playerDamageBeforeDeathEvent = new PlayerDamageBeforeDeathEvent(player, (EntityDamageEvent.DamageCause) DAMAGE_BEFORE_DEATH.get(player.getName()).get(0), (double) DAMAGE_BEFORE_DEATH.get(player.getName()).get(1), (double) DAMAGE_BEFORE_DEATH.get(player.getName()).get(2));
-        } catch (Exception ex) {
+        } catch (Exception exception) {
             playerDamageBeforeDeathEvent = new PlayerDamageBeforeDeathEvent(player, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
         }
         // Damage by entity
         PlayerDamageByEntityBeforeDeathEvent playerDamageByEntityBeforeDeathEvent;
         try {
             playerDamageByEntityBeforeDeathEvent = new PlayerDamageByEntityBeforeDeathEvent(player, (Entity) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName()).get(0), (EntityDamageEvent.DamageCause) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName()).get(1), (double) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName()).get(2), (double) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName()).get(3));
-        } catch (Exception ex) {
+        } catch (Exception exception) {
             playerDamageByEntityBeforeDeathEvent = new PlayerDamageByEntityBeforeDeathEvent(player, null, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
         }
         // Damage by block
         PlayerDamageByBlockBeforeDeathEvent playerDamageByBlockBeforeDeathEvent;
         try {
             playerDamageByBlockBeforeDeathEvent = new PlayerDamageByBlockBeforeDeathEvent(player, (Block) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName()).get(0), (EntityDamageEvent.DamageCause) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName()).get(1), (double) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName()).get(2), (double) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName()).get(3));
-        } catch (Exception ex) {
+        } catch (Exception exception) {
             playerDamageByBlockBeforeDeathEvent = new PlayerDamageByBlockBeforeDeathEvent(player, null, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
         }
         Bukkit.getPluginManager().callEvent(playerDamageBeforeDeathEvent);

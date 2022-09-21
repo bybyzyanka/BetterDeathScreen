@@ -20,7 +20,7 @@ public class Randomizer {
         Random r = new Random();
         int random_item = r.nextInt(list.size());
         String message = ChatColor.translateAlternateColorCodes('&', list.get(random_item));
-        if (BetterDeathScreen.isPlaceHolderAPIActive()) {
+        if (BetterDeathScreen.isPlaceholderAPIActive()) {
             if (killer == null) message = PlaceholderAPI.setPlaceholders(player, message);
             if (killer != null) message = PlaceholderAPI.setPlaceholders(killer, message);
         }

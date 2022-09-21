@@ -23,7 +23,7 @@ public class Messages {
     public static String PLURAL;
     public static List<String> HELP;
     public static String RELOAD;
-    public static String NO_PERM;
+    public static String NO_PERMISSION;
     public static String SPAWN_SET;
     public static String ACTIONBAR_ERROR;
     public static String TITLE_ERROR;
@@ -56,7 +56,7 @@ public class Messages {
 
         HELP = messages.getStringList("commands.help");
         RELOAD = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.reload"));
-        NO_PERM = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.no-perm"));
+        NO_PERMISSION = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.no-perm"));
         SPAWN_SET = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.spawn-set"));
 
         ACTIONBAR_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.actionbar"));

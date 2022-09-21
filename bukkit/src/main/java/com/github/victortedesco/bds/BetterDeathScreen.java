@@ -31,7 +31,7 @@ public class BetterDeathScreen extends JavaPlugin {
         return Version.getServerVersion();
     }
 
-    public static boolean isPlaceHolderAPIActive() {
+    public static boolean isPlaceholderAPIActive() {
         return (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null);
     }
 
@@ -50,7 +50,7 @@ public class BetterDeathScreen extends JavaPlugin {
         try {
             ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
         } catch (Exception exception) {
-            sendConsoleMessage("&cThe plugin will shutdown, because " + Config.LANGUAGE + " &cdoes not exist on the configurations.");
+            sendConsoleMessage("&cThe plugin will shutdown, because &f" + Config.LANGUAGE + " &cdoes not exist on the configurations.");
             sendConsoleMessage("&cO plugin será desligado, porque &f" + Config.LANGUAGE + " &cnão existe nas configurações.");
             Bukkit.getScheduler().runTaskLater(getInstance(), () -> getInstance().getPluginLoader().disablePlugin(getInstance()), 1);
             return;

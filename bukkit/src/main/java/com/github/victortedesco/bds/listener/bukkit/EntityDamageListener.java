@@ -55,6 +55,8 @@ public class EntityDamageListener implements Listener {
             if (playerVictim.getHealth() <= event.getFinalDamage() && noTotem(playerVictim, event)) {
                 Config.DEAD_PLAYERS.add(playerVictim.getName());
                 PlayerTeleportListener.TELEPORT_MESSAGE_IMUNE.add(playerVictim.getName());
+                Bukkit.getScheduler().runTaskLaterAsynchronously(BetterDeathScreen.getInstance(),
+                        () -> PlayerTeleportListener.TELEPORT_MESSAGE_IMUNE.remove(playerVictim.getName()), 5);
                 playerVictim.setGameMode(GameMode.SPECTATOR);
                 Titles.sendTitle(playerVictim, 2, 20 * time, 2, Randomizer.getRandomMessage(playerVictim, null, Messages.KILLED_TITLES), Randomizer.getRandomMessage(playerVictim, null, Messages.KILLED_SUBTITLES));
                 PlayerAPI.incrementStatistic(playerVictim, Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage(), true);

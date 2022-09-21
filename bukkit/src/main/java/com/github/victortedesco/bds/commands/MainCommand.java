@@ -36,7 +36,7 @@ public class MainCommand implements CommandExecutor {
         }
         if (sender instanceof Player) {
             if (!sender.hasPermission(Config.ADMIN)) {
-                sender.sendMessage(Messages.NO_PERM);
+                sender.sendMessage(Messages.NO_PERMISSION);
                 return true;
             }
             if (args.length != 0) {
@@ -44,8 +44,8 @@ public class MainCommand implements CommandExecutor {
                     try {
                         BetterDeathScreen.createAndLoadConfigs();
                         sender.sendMessage(Messages.RELOAD);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
                     }
                     performed = true;
                 }

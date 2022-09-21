@@ -18,7 +18,6 @@ import java.util.Set;
 public class PlayerTeleportListener implements Listener {
 
     public static HashMap<String, Location> TELEPORT_LOCATION = new HashMap<>();
-
     public static Set<String> TELEPORT_MESSAGE_IMUNE = new HashSet<>();
     Set<String> TELEPORT_MESSAGE_CD = new HashSet<>();
 
@@ -26,10 +25,6 @@ public class PlayerTeleportListener implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
 
-        if (TELEPORT_MESSAGE_IMUNE.contains(player.getName())) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(BetterDeathScreen.getInstance(),
-                    () -> TELEPORT_MESSAGE_IMUNE.remove(player.getName()), 5);
-        }
         if (Config.DEAD_PLAYERS.contains(player.getName()) && !Config.HOTBAR_TELEPORT_SPECTATOR) {
             if (event.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
                 event.setCancelled(true);
