@@ -14,33 +14,22 @@ misc: #Available languages: en-US, pt-BR, zh-TW
   use-safe-teleport: true
   use-default-world-spawn: true #If this option is enabled, the spawn section on locations.yml will be ignored.
   use-kill-camera: true #If this option is enabled, the player will spectate the killer.
-sound:
-  type:
-    death:
-      - BLAZE_DEATH
-      - ANVIL_LAND
-      - ITEM_PICKUP
-      - ENDERMAN_DEATH
-    countdown:
-      - NOTE_BASS_DRUM
-      - CLICK
-    respawn:
-      - NOTE_PLING
-      - ORB_PICKUP
-      - LEVEL_UP
-    kill:
-      - SKELETON_DEATH
-      - GLASS
-  volume:
-    death: 1.0
-    countdown: 1.0
-    respawn: 1.0
-    kill: 1.0
-  pitch:
-    death: 1.0
-    countdown: 1.0
-    respawn: 1.0
-    kill: 1.0
+sound: #sound;volume;pitch
+  death:
+    - BLAZE_DEATH;1.0;1.0
+    - ANVIL_LAND;1.0;1.0
+    - ITEM_PICKUP;1.0;1.0
+    - ENDERMAN_DEATH;1.0;1.0
+  countdown:
+    - NOTE_BASS_DRUM;1.01;1.0
+    - CLICK;1.0;1.0
+  respawn:
+    - NOTE_PLING;1.0;1.0
+    - ORB_PICKUP;1.0;1.0
+    - LEVEL_UP;1.0;1.0
+  kill:
+    - SKELETON_DEATH;1.0;1.0
+    - GLASS;1.0;1.0
 animation: #Available types: NONE, BLOOD, EXPLOSION, LIGHTNING (You can mix. Example: LIGHTNING-EXPLOSION)
   type: "BLOOD"
 time:

@@ -3,16 +3,15 @@ package com.github.victortedesco.bds.utils;
 import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.configs.Messages;
 import com.github.victortedesco.bds.listener.bukkit.PlayerDeathListener;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.Statistic;
+import org.apache.commons.lang3.StringUtils;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerAPI {
 
@@ -20,11 +19,15 @@ public class PlayerAPI {
         return stack == null || stack.getType() == Material.AIR || stack.getAmount() == 0;
     }
 
-    public static void incrementStatistic(Player player, Statistic stat, int value) {
+    public static void incrementStatistic(Player player, Statistic statistic, int value, boolean safe) {
         try {
-            player.incrementStatistic(stat, (int) Math.min(player.getHealth(), value));
-        } catch (IllegalArgumentException e) {
-            player.incrementStatistic(stat, 1);
+            if (safe) {
+                player.incrementStatistic(statistic, (int) Math.min(player.getHealth(), value));
+                return;
+            }
+            player.incrementStatistic(statistic, value);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            player.incrementStatistic(statistic, 1);
         }
     }
 
@@ -33,7 +36,7 @@ public class PlayerAPI {
         default_damage.add(EntityDamageEvent.DamageCause.CUSTOM);
         default_damage.add(0);
         default_damage.add(0);
-        PlayerDeathListener.LAST_DAMAGE_BEFORE_DEATH.put(player.getName(), default_damage);
+        PlayerDeathListener.DAMAGE_BEFORE_DEATH.put(player.getName(), default_damage);
 
         ArrayList<Object> caused_by_damage = new ArrayList<>();
         caused_by_damage.add(null);
@@ -41,20 +44,24 @@ public class PlayerAPI {
         caused_by_damage.add(0);
         caused_by_damage.add(0);
 
-        PlayerDeathListener.LAST_DAMAGE_BY_ENTITY_BEFORE_DEATH.put(player.getName(), caused_by_damage);
-        PlayerDeathListener.LAST_DAMAGE_BY_BLOCK_BEFORE_DEATH.put(player.getName(), caused_by_damage);
+        PlayerDeathListener.DAMAGE_BY_ENTITY_BEFORE_DEATH.put(player.getName(), caused_by_damage);
+        PlayerDeathListener.DAMAGE_BY_BLOCK_BEFORE_DEATH.put(player.getName(), caused_by_damage);
     }
 
-    public static void playSound(Player player, String sound, float volume, float pitch, boolean throwable) {
+    public static void playSoundFromConfig(Player player, List<String> type, boolean throwable, boolean silent) {
+        String randomSound = Randomizer.getRandomSound(type);
         try {
-            if (!sound.contains(".")) {
-                player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
-            }
+            String sound = StringUtils.substringBefore(randomSound, ";");
+            float volume = Float.parseFloat(StringUtils.substringBetween(randomSound, ";", ";"));
+            float pitch = Float.parseFloat(StringUtils.substringAfterLast(randomSound, ";"));
+            if (silent) volume = 0;
             if (sound.contains(".")) {
                 player.playSound(player.getLocation(), sound, volume, pitch);
+                return;
             }
-        } catch (IllegalArgumentException e) {
-            if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", sound));
+            player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", randomSound));
         }
     }
 
@@ -68,5 +75,15 @@ public class PlayerAPI {
                 break;
             }
         }
+    }
+
+    public static boolean isHardcore(Player player) {
+        if (BetterDeathScreen.getVersion().value < Version.v1_16.value) {
+            return Bukkit.isHardcore();
+        }
+        if (BetterDeathScreen.getVersion().value >= Version.v1_16.value) {
+            return player.getWorld().isHardcore();
+        }
+        return false;
     }
 }

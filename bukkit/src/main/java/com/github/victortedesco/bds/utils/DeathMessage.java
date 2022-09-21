@@ -1,7 +1,6 @@
 package com.github.victortedesco.bds.utils;
 
 import com.github.victortedesco.bds.BetterDeathScreen;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -12,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 public class DeathMessage {
 
     @SuppressWarnings({"deprecation", "ConstantConditions"})
-    public static BaseComponent getMessage(Player player, Entity entity) {
+    public static TranslatableComponent getMessage(Player player, Entity entity) {
         // https://minecraft.fandom.com/wiki/Death_messages#Java_Edition
 
         TranslatableComponent message = new TranslatableComponent("death.attack.generic");
@@ -200,24 +199,24 @@ public class DeathMessage {
                 }
 
                 if (player.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-                    Entity ent = ((EntityDamageByEntityEvent) player.getLastDamageCause()).getDamager();
+                    Entity damager = ((EntityDamageByEntityEvent) player.getLastDamageCause()).getDamager();
                     message = new TranslatableComponent("death.attack.mob");
                     message.addWith(player.getName());
-                    message.addWith(ent.getName());
-                    if (ent instanceof LivingEntity) {
-                        LivingEntity d = (LivingEntity) ent;
-                        if (!PlayerAPI.isStackEmpty(d.getEquipment().getItemInHand())) {
-                            if (d.getEquipment().getItemInHand().getItemMeta().hasDisplayName()) {
+                    message.addWith(damager.getName());
+                    if (damager instanceof LivingEntity) {
+                        LivingEntity livingEntity = (LivingEntity) damager;
+                        if (!PlayerAPI.isStackEmpty(livingEntity.getEquipment().getItemInHand())) {
+                            if (livingEntity.getEquipment().getItemInHand().getItemMeta().hasDisplayName()) {
                                 if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                                     message = new TranslatableComponent("death.attack.mob.item");
                                     message.addWith(player.getName());
-                                    message.addWith(ent.getName());
-                                    message.addWith(d.getEquipment().getItemInHand().getItemMeta().getDisplayName());
+                                    message.addWith(damager.getName());
+                                    message.addWith(livingEntity.getEquipment().getItemInHand().getItemMeta().getDisplayName());
                                 }
                             }
                         }
                         if (BetterDeathScreen.getVersion().value >= Version.v1_15.value) {
-                            if (d instanceof Bee) {
+                            if (livingEntity instanceof Bee) {
                                 message = new TranslatableComponent("death.attack.sting");
                                 message.addWith(player.getName());
                                 if (entity != null) {
@@ -228,36 +227,36 @@ public class DeathMessage {
                             }
                         }
                     }
-                    if (ent instanceof Player) {
-                        Player d = (Player) ent;
+                    if (damager instanceof Player) {
+                        Player playerDamager = (Player) damager;
                         message = new TranslatableComponent("death.attack.player");
                         message.addWith(player.getName());
-                        message.addWith(ent.getName());
-                        if (!PlayerAPI.isStackEmpty(d.getEquipment().getItemInHand())) {
-                            if (d.getEquipment().getItemInMainHand().getItemMeta().hasDisplayName()) {
+                        message.addWith(damager.getName());
+                        if (!PlayerAPI.isStackEmpty(playerDamager.getEquipment().getItemInHand())) {
+                            if (playerDamager.getEquipment().getItemInMainHand().getItemMeta().hasDisplayName()) {
                                 message = new TranslatableComponent("death.attack.player.item");
                                 message.addWith(player.getName());
-                                message.addWith(ent.getName());
-                                message.addWith(d.getEquipment().getItemInMainHand().getItemMeta().getDisplayName());
+                                message.addWith(damager.getName());
+                                message.addWith(playerDamager.getEquipment().getItemInMainHand().getItemMeta().getDisplayName());
                             }
                         }
                     }
                     if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.MAGIC) {
                         message = new TranslatableComponent("death.attack.indirectMagic");
                         message.addWith(player.getName());
-                        message.addWith(ent.getName());
+                        message.addWith(damager.getName());
                     }
                     if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.THORNS) {
                         message = new TranslatableComponent("death.attack.thorns");
                         message.addWith(player.getName());
-                        message.addWith(ent.getName());
+                        message.addWith(damager.getName());
                     }
                     if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                         message = new TranslatableComponent("death.attack.explosion.player");
                         message.addWith(player.getName());
-                        message.addWith(ent.getName());
-                        if (ent instanceof TNTPrimed) {
-                            TNTPrimed tnt = (TNTPrimed) ent;
+                        message.addWith(damager.getName());
+                        if (damager instanceof TNTPrimed) {
+                            TNTPrimed tnt = (TNTPrimed) damager;
                             if (tnt.getSource() == null) {
                                 message = new TranslatableComponent("death.attack.explosion");
                                 message.addWith(player.getName());
@@ -268,7 +267,7 @@ public class DeathMessage {
                                 message.addWith(tnt.getSource().getName());
                             }
                         }
-                        if (ent instanceof Firework) {
+                        if (damager instanceof Firework) {
                             message = new TranslatableComponent("death.attack.fireworks");
                             message.addWith(player.getName());
                             if (entity != null) {
@@ -279,8 +278,8 @@ public class DeathMessage {
                                 }
                             }
                         }
-                        if (ent instanceof WitherSkull) {
-                            WitherSkull ws = (WitherSkull) ent;
+                        if (damager instanceof WitherSkull) {
+                            WitherSkull ws = (WitherSkull) damager;
                             Entity shooter = (Entity) ws.getShooter();
                             message = new TranslatableComponent("death.attack.witherSkull");
                             message.addWith(player.getName());
@@ -288,61 +287,61 @@ public class DeathMessage {
                         }
                     }
                     if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
-                        if (ent instanceof Projectile) {
-                            Projectile pj = (Projectile) ent;
-                            if (pj.getShooter() instanceof LivingEntity) {
-                                LivingEntity d = (LivingEntity) pj.getShooter();
+                        if (damager instanceof Projectile) {
+                            Projectile projectile = (Projectile) damager;
+                            if (projectile.getShooter() instanceof LivingEntity) {
+                                LivingEntity shooter = (LivingEntity) projectile.getShooter();
                                 message = new TranslatableComponent("death.attack.arrow");
                                 message.addWith(player.getName());
-                                message.addWith(d.getName());
-                                if (!PlayerAPI.isStackEmpty(d.getEquipment().getItemInHand())) {
-                                    if (d.getEquipment().getItemInHand().getItemMeta().hasDisplayName()) {
+                                message.addWith(shooter.getName());
+                                if (!PlayerAPI.isStackEmpty(shooter.getEquipment().getItemInHand())) {
+                                    if (shooter.getEquipment().getItemInHand().getItemMeta().hasDisplayName()) {
                                         message = new TranslatableComponent("death.attack.arrow.item");
                                         message.addWith(player.getName());
-                                        message.addWith(d.getName());
-                                        message.addWith(d.getEquipment().getItemInHand().getItemMeta().getDisplayName());
+                                        message.addWith(shooter.getName());
+                                        message.addWith(shooter.getEquipment().getItemInHand().getItemMeta().getDisplayName());
                                     }
                                 }
                                 if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
-                                    if (pj instanceof Trident) {
-                                        Trident t = (Trident) pj;
+                                    if (projectile instanceof Trident) {
+                                        Trident trident = (Trident) projectile;
                                         message = new TranslatableComponent("death.attack.trident");
                                         message.addWith(player.getName());
-                                        message.addWith(d.getName());
-                                        if (!PlayerAPI.isStackEmpty(d.getEquipment().getItemInHand())) {
-                                            if (t.getItem().getItemMeta().hasDisplayName()) {
+                                        message.addWith(shooter.getName());
+                                        if (!PlayerAPI.isStackEmpty(shooter.getEquipment().getItemInHand())) {
+                                            if (trident.getItem().getItemMeta().hasDisplayName()) {
                                                 message = new TranslatableComponent("death.attack.trident.item");
                                                 message.addWith(player.getName());
-                                                message.addWith(d.getName());
-                                                message.addWith(t.getItem().getItemMeta().getDisplayName());
+                                                message.addWith(shooter.getName());
+                                                message.addWith(trident.getItem().getItemMeta().getDisplayName());
                                             }
                                         }
                                     }
                                 }
-                                if (pj instanceof Fireball) {
+                                if (projectile instanceof Fireball) {
                                     message = new TranslatableComponent("death.attack.fireball");
                                     message.addWith(player.getName());
-                                    message.addWith(d.getName());
+                                    message.addWith(shooter.getName());
                                 }
                                 if (BetterDeathScreen.getVersion().value >= Version.v1_9.value) {
-                                    if (pj instanceof ShulkerBullet) {
+                                    if (projectile instanceof ShulkerBullet) {
                                         message = new TranslatableComponent("death.attack.generic.player");
                                         message.addWith(player.getName());
-                                        message.addWith(d.getName());
+                                        message.addWith(shooter.getName());
                                     }
                                 }
                                 if (BetterDeathScreen.getVersion().value >= Version.v1_11.value) {
-                                    if (pj instanceof LlamaSpit) {
+                                    if (projectile instanceof LlamaSpit) {
                                         message = new TranslatableComponent("death.attack.generic.player");
                                         message.addWith(player.getName());
-                                        message.addWith(d.getName());
+                                        message.addWith(shooter.getName());
                                     }
                                 }
                             }
                         }
                     }
                     if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.FALL) {
-                        if (ent instanceof EnderPearl) {
+                        if (damager instanceof EnderPearl) {
                             message = new TranslatableComponent("death.attack.fall");
                             message.addWith(player.getName());
                             if (entity != null) {
@@ -355,8 +354,8 @@ public class DeathMessage {
                         }
                     }
                     if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.FALLING_BLOCK) {
-                        if (ent instanceof FallingBlock) {
-                            FallingBlock f = (FallingBlock) ent;
+                        if (damager instanceof FallingBlock) {
+                            FallingBlock fallingBlock = (FallingBlock) damager;
                             message = new TranslatableComponent("death.attack.fallingBlock");
                             message.addWith(player.getName());
                             if (entity != null) {
@@ -366,7 +365,7 @@ public class DeathMessage {
                                     message.addWith(entity.getName());
                                 }
                             }
-                            if (f.getBlockData().getMaterial() == Material.ANVIL) {
+                            if (fallingBlock.getBlockData().getMaterial() == Material.ANVIL) {
                                 message = new TranslatableComponent("death.attack.anvil");
                                 message.addWith(player.getName());
                                 if (entity != null) {
@@ -378,7 +377,7 @@ public class DeathMessage {
                                 }
                             }
                             if (BetterDeathScreen.getVersion().value >= Version.v1_17.value) {
-                                if (f.getBlockData().getMaterial() == Material.POINTED_DRIPSTONE) {
+                                if (fallingBlock.getBlockData().getMaterial() == Material.POINTED_DRIPSTONE) {
                                     message = new TranslatableComponent("death.attack.fallingStalactite");
                                     message.addWith(player.getName());
                                     if (entity != null) {

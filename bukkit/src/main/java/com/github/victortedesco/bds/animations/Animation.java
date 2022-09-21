@@ -17,12 +17,12 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Animation {
 
-    private static void bloodAnimation(Player player) {
+    private static void sendBloodAnimation(Player player) {
         player.getWorld().playEffect(player.getEyeLocation(), Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
         player.getWorld().playEffect(player.getLocation(), Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
     }
 
-    private static void explosionAnimation(Player player) {
+    private static void sendExplosionAnimation(Player player) {
         PacketContainer particle = new PacketContainer(PacketType.Play.Server.WORLD_PARTICLES);
 
         particle.getParticles().write(0, EnumWrappers.Particle.EXPLOSION_LARGE);
@@ -31,9 +31,9 @@ public class Animation {
         particle.getFloat().write(2, (float) player.getLocation().getZ());
         particle.getIntegers().write(0, 1);
 
-        for (Player ps : Bukkit.getOnlinePlayers()) {
+        for (Player players : Bukkit.getOnlinePlayers()) {
             try {
-                ProtocolLibrary.getProtocolManager().sendServerPacket(ps, particle);
+                ProtocolLibrary.getProtocolManager().sendServerPacket(players, particle);
             } catch (InvocationTargetException ignored) {
             }
         }
@@ -45,19 +45,19 @@ public class Animation {
         }
     }
 
-    private static void lightningAnimation(Player player) {
+    private static void sendLightningAnimation(Player player) {
         player.getWorld().strikeLightningEffect(player.getLocation());
     }
 
     public static void sendAnimation(Player player) {
         if (Config.ANIMATION.toUpperCase().contains("BLOOD")) {
-            bloodAnimation(player);
+            sendBloodAnimation(player);
         }
         if (Config.ANIMATION.toUpperCase().contains("EXPLOSION")) {
-            explosionAnimation(player);
+            sendExplosionAnimation(player);
         }
         if (Config.ANIMATION.toUpperCase().contains("LIGHTNING")) {
-            lightningAnimation(player);
+            sendLightningAnimation(player);
         }
     }
 }

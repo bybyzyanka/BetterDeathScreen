@@ -4,12 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Config {
 
-    public static List<String> DEAD_PLAYERS = new ArrayList<>();
+    public static Set<String> DEAD_PLAYERS = new HashSet<>();
     public static String LANGUAGE;
     public static boolean USE_DEFAULT_WORLD_SPAWN;
     public static boolean USE_SAFE_TELEPORT;
@@ -20,14 +21,6 @@ public class Config {
     public static List<String> SOUND_COUNTDOWN;
     public static List<String> SOUND_RESPAWN;
     public static List<String> SOUND_KILL;
-    public static float SOUND_DEATH_VOLUME;
-    public static float SOUND_COUNTDOWN_VOLUME;
-    public static float SOUND_RESPAWN_VOLUME;
-    public static float SOUND_KILL_VOLUME;
-    public static float SOUND_DEATH_PITCH;
-    public static float SOUND_COUNTDOWN_PITCH;
-    public static float SOUND_RESPAWN_PITCH;
-    public static float SOUND_KILL_PITCH;
     public static int TIME;
     public static String INSTANT_RESPAWN;
     public static String VIP;
@@ -62,20 +55,10 @@ public class Config {
             VIP_SPAWN = null;
         }
 
-        SOUND_DEATH = config.getStringList("sound.type.death");
-        SOUND_COUNTDOWN = config.getStringList("sound.type.countdown");
-        SOUND_RESPAWN = config.getStringList("sound.type.respawn");
-        SOUND_KILL = config.getStringList("sound.type.kill");
-
-        SOUND_DEATH_VOLUME = (float) config.getDouble("sound.volume.death");
-        SOUND_COUNTDOWN_VOLUME = (float) config.getDouble("sound.volume.countdown");
-        SOUND_RESPAWN_VOLUME = (float) config.getDouble("sound.volume.respawn");
-        SOUND_KILL_VOLUME = (float) config.getDouble("sound.volume.kill");
-
-        SOUND_DEATH_PITCH = (float) config.getDouble("sound.pitch.death");
-        SOUND_COUNTDOWN_PITCH = (float) config.getDouble("sound.pitch.countdown");
-        SOUND_RESPAWN_PITCH = (float) config.getDouble("sound.pitch.respawn");
-        SOUND_KILL_PITCH = (float) config.getDouble("sound.pitch.kill");
+        SOUND_DEATH = config.getStringList("sound.death");
+        SOUND_COUNTDOWN = config.getStringList("sound.countdown");
+        SOUND_RESPAWN = config.getStringList("sound.respawn");
+        SOUND_KILL = config.getStringList("sound.kill");
 
         TIME = config.getInt("time.duration");
 

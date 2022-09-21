@@ -19,7 +19,7 @@ public class MainTabComplete implements TabCompleter {
     private final String[] SECOND_COMPLETIONS = {"normal", "vip"};
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, @NotNull Command cmd, @NotNull String lbl, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender.hasPermission(Config.ADMIN)) {
             if (args.length == 1) {
                 final List<String> completions = new ArrayList<>();

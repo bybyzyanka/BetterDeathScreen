@@ -1,30 +1,30 @@
 package com.github.victortedesco.bds.listener.bds;
 
 import com.github.victortedesco.bds.api.events.PlayerDropInventoryEvent;
-import com.github.victortedesco.bds.listener.Events;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerDropInventoryListener extends Events {
+public class PlayerDropInventoryListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onDrop(PlayerDropInventoryEvent e) {
-        Player p = e.getPlayer();
+    public void onDrop(PlayerDropInventoryEvent event) {
+        Player player = event.getPlayer();
 
         if (Bukkit.getServer().getPluginManager().getPlugin("AngelChest") != null) {
-            e.setCancelled(true);
+            event.setCancelled(true);
             return;
         }
         if (Bukkit.getServer().getPluginManager().getPlugin("Graves") != null) {
-            e.setCancelled(true);
+            event.setCancelled(true);
             return;
         }
 
-        for (ItemStack items : e.getDrops()) {
-            p.getWorld().dropItemNaturally(p.getLocation(), items);
+        for (ItemStack items : event.getDrops()) {
+            player.getWorld().dropItemNaturally(player.getLocation(), items);
         }
     }
 }
