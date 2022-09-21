@@ -62,29 +62,14 @@ public class EntityDamageListener implements Listener {
                     Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 
                     if (Config.USE_KILL_CAM) playerVictim.setSpectatorTarget(damager);
-                    if (damager instanceof Player) {
-                        Player playerDamager = (Player) damager;
-
-                        Titles.sendTitle(playerVictim, 2, 20 * time, 2, Randomizer.getRandomMessage(playerVictim, playerDamager, Messages.KILLED_BY_PLAYER_TITLES), Randomizer.getRandomMessage(playerVictim, playerDamager, Messages.KILLED_BY_PLAYER_SUBTITLES));
-                        ActionBar.sendActionBar(playerDamager, Randomizer.getRandomMessage(playerVictim, null, Messages.ACTIONBAR_KILL));
-                        PlayerAPI.playSoundFromConfig(playerDamager, Config.SOUND_KILL, true, false);
-                        PlayerAPI.incrementStatistic(playerDamager, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), true);
-                        playerDamager.incrementStatistic(Statistic.PLAYER_KILLS, 1);
-                    }
+                    if (damager instanceof Player) killedByPlayer(playerVictim, (Player) damager, 20 * time, event);
                     if (damager instanceof Projectile) {
                         Projectile projectile = (Projectile) damager;
                         if (projectile.getShooter() instanceof Entity) {
                             if (Config.USE_KILL_CAM) playerVictim.setSpectatorTarget((Entity) projectile.getShooter());
                         }
-                        if (projectile.getShooter() instanceof Player) {
-                            Player playerDamager = (Player) projectile.getShooter();
-
-                            Titles.sendTitle(playerVictim, 2, 20 * time, 2, Randomizer.getRandomMessage(playerVictim, playerDamager, Messages.KILLED_BY_PLAYER_TITLES), Randomizer.getRandomMessage(playerVictim, playerDamager, Messages.KILLED_BY_PLAYER_SUBTITLES));
-                            ActionBar.sendActionBar(playerDamager, Randomizer.getRandomMessage(playerVictim, null, Messages.ACTIONBAR_KILL));
-                            PlayerAPI.playSoundFromConfig(playerDamager, Config.SOUND_KILL, true, false);
-                            PlayerAPI.incrementStatistic(playerDamager, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), true);
-                            playerDamager.incrementStatistic(Statistic.PLAYER_KILLS, 1);
-                        }
+                        if (projectile.getShooter() instanceof Player)
+                            killedByPlayer(playerVictim, (Player) projectile.getShooter(), 20 * time, event);
                     }
                 }
                 sendDeath(playerVictim);
@@ -186,5 +171,13 @@ public class EntityDamageListener implements Listener {
         player.incrementStatistic(Statistic.DEATHS, 1);
         Tasks.startTimer(player);
         Animation.sendAnimation(player);
+    }
+
+    private void killedByPlayer(Player victim, Player damager, int time, EntityDamageEvent event) {
+        Titles.sendTitle(victim, 2, 20 * time, 2, Randomizer.getRandomMessage(victim, damager, Messages.KILLED_BY_PLAYER_TITLES), Randomizer.getRandomMessage(victim, damager, Messages.KILLED_BY_PLAYER_SUBTITLES));
+        ActionBar.sendActionBar(damager, Randomizer.getRandomMessage(victim, null, Messages.ACTIONBAR_KILL));
+        PlayerAPI.playSoundFromConfig(damager, Config.SOUND_KILL, true, false);
+        PlayerAPI.incrementStatistic(damager, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), true);
+        damager.incrementStatistic(Statistic.PLAYER_KILLS, 1);
     }
 }

@@ -89,8 +89,8 @@ public class PlayerDeathListener implements Listener {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        // 1.11 and before does not have this method.
                         if (BetterDeathScreen.getVersion().value >= Version.v1_12.value) {
+                            // 1.11 and before does not have this method.
                             Bukkit.getConsoleSender().spigot().sendMessage(DeathMessage.getMessage(player, KILL_ASSIST.get(player.getName())));
                         } else {
                             Bukkit.getConsoleSender().sendMessage(player.getName() + " died");
@@ -106,7 +106,6 @@ public class PlayerDeathListener implements Listener {
                     players.sendMessage(event.getDeathMessage());
                 }
             }
-            KILL_ASSIST.remove(player.getName());
         }
     }
 }

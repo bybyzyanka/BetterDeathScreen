@@ -40,7 +40,7 @@ public class BetterDeathScreen extends JavaPlugin {
     }
 
     public static void sendConsoleMessage(String text) {
-        Bukkit.getConsoleSender().sendMessage("[BetterDeathScreen] " + text);
+        Bukkit.getConsoleSender().sendMessage("[BetterDeathScreen] " + ChatColor.translateAlternateColorCodes('&', text));
     }
 
     public static void createAndLoadConfigs() {
@@ -49,10 +49,10 @@ public class BetterDeathScreen extends JavaPlugin {
         Config.loadConfigs();
         try {
             ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
-        } catch (Exception e) {
-            sendConsoleMessage("The plugin will shutdown, because " + Config.LANGUAGE + " does not exist on the configurations.");
-            sendConsoleMessage("O plugin será desligado, porque " + Config.LANGUAGE + " não existe nas configurações.");
-            getInstance().getPluginLoader().disablePlugin(BetterDeathScreen.getInstance());
+        } catch (Exception exception) {
+            sendConsoleMessage("&cThe plugin will shutdown, because " + Config.LANGUAGE + " &cdoes not exist on the configurations.");
+            sendConsoleMessage("&cO plugin será desligado, porque &f" + Config.LANGUAGE + " &cnão existe nas configurações.");
+            Bukkit.getScheduler().runTaskLater(getInstance(), () -> getInstance().getPluginLoader().disablePlugin(getInstance()), 1);
             return;
         }
         Messages.loadMessages();
@@ -64,12 +64,13 @@ public class BetterDeathScreen extends JavaPlugin {
         createAndLoadConfigs();
         if (getVersion() == Version.UNKNOWN) {
             for (String incompatible : Messages.INCOMPATIBLE) {
-                sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', incompatible.replace("%server_version%", "(" + Version.getMinecraftVersion() + ")")));
+                sendConsoleMessage(incompatible.replace("%server_version%", "(" + Version.getMinecraftVersion() + ")"));
             }
             Bukkit.getScheduler().runTaskLater(this, () -> getPluginLoader().disablePlugin(this), 1);
             return;
         }
         Events.setup();
+        Bukkit.getScheduler().runTaskLater(this, this::fixViaVersionConfig, 1);
         getCommand("bds").setExecutor(new MainCommand());
         getCommand("bds").setTabCompleter(new MainTabComplete());
         Metrics metrics = new Metrics(this, 14729);
@@ -80,10 +81,9 @@ public class BetterDeathScreen extends JavaPlugin {
             }
         }
         for (String enabled : Messages.ENABLED) {
-            sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', enabled.replace("%plugin_version%", "(v" + description.getVersion() + ")")));
+            sendConsoleMessage(enabled.replace("%plugin_version%", "(v" + description.getVersion() + ")"));
         }
-        sendConsoleMessage("§fMinecraft " + Version.getMinecraftVersion());
-        Bukkit.getScheduler().runTaskLater(this, this::fixViaVersionConfig, 1);
+        sendConsoleMessage("&fMinecraft " + Version.getMinecraftVersion());
     }
 
     @Override
@@ -94,7 +94,7 @@ public class BetterDeathScreen extends JavaPlugin {
             }
         }
         for (String disabled : Messages.DISABLED) {
-            sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', disabled.replace("%plugin_version%", "(v" + description.getVersion() + ")")));
+            sendConsoleMessage(disabled.replace("%plugin_version%", "(v" + description.getVersion() + ")"));
         }
     }
 

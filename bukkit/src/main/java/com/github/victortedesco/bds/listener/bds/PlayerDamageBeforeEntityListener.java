@@ -1,7 +1,9 @@
 package com.github.victortedesco.bds.listener.bds;
 
+import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.api.events.PlayerDamageByEntityBeforeDeathEvent;
 import com.github.victortedesco.bds.listener.bukkit.PlayerDeathListener;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,5 +17,8 @@ public class PlayerDamageBeforeEntityListener implements Listener {
 
         if (event.isCancelled()) PlayerDeathListener.KILL_ASSIST.put(player.getName(), null);
         if (!event.isCancelled()) PlayerDeathListener.KILL_ASSIST.put(player.getName(), event.getDamager());
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(BetterDeathScreen.getInstance(),
+                () -> PlayerDeathListener.KILL_ASSIST.remove(player.getName()), 5);
     }
 }
