@@ -2,7 +2,7 @@ package com.github.victortedesco.bds.listener.bukkit;
 
 import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.configs.Config;
-import com.github.victortedesco.bds.utils.PlayerAPI;
+import com.github.victortedesco.bds.utils.PlayerUtils;
 import com.github.victortedesco.bds.utils.Tasks;
 import com.github.victortedesco.bds.utils.Version;
 import org.bukkit.GameMode;
@@ -25,7 +25,7 @@ public class PlayerConnectionListener implements Listener {
         Player player = event.getPlayer();
 
         if ((player.getGameMode() == GameMode.SPECTATOR && (player.getHealth() == 0.1 || !player.hasPermission(Config.ADMIN))) || Config.DEAD_PLAYERS.contains(player.getName())) {
-            if (PlayerAPI.isHardcore(player)) {
+            if (PlayerUtils.isHardcore(player)) {
                 Config.DEAD_PLAYERS.add(player.getName());
                 Tasks.startTimer(player);
             }
@@ -45,7 +45,7 @@ public class PlayerConnectionListener implements Listener {
         Player player = event.getPlayer();
         // To avoid bugs, the player will respawn after disconnecting.
         if ((player.getGameMode() == GameMode.SPECTATOR && (player.getHealth() == 0.1 || !player.hasPermission(Config.ADMIN))) || Config.DEAD_PLAYERS.contains(player.getName())) {
-            if (!PlayerAPI.isHardcore(player)) {
+            if (!PlayerUtils.isHardcore(player)) {
                 Tasks.performRespawn(player);
             }
         }
@@ -61,7 +61,7 @@ public class PlayerConnectionListener implements Listener {
             @Override
             public void run() {
                 if (!player.isOnline()) {
-                    PlayerAPI.resetDamageBeforeDeath(player);
+                    PlayerUtils.resetDamageBeforeDeath(player);
                     cancel();
                 }
                 if (player.getLastDamageCause() != null) {
@@ -77,7 +77,7 @@ public class PlayerConnectionListener implements Listener {
                     }
                 }
                 if (combat_timer <= 0) {
-                    PlayerAPI.resetDamageBeforeDeath(player);
+                    PlayerUtils.resetDamageBeforeDeath(player);
                     combat_timer = 30;
                 }
             }

@@ -34,23 +34,7 @@ public class PlayerDeathListener implements Listener {
         Player player = event.getEntity();
 
         sendDamageEvents(player);
-
-        PlayerDropInventoryEvent playerDropInventoryEvent = new PlayerDropInventoryEvent(player, event.getDrops());
-        if (event.getKeepInventory()) {
-            playerDropInventoryEvent.setCancelled(true);
-            playerDropInventoryEvent.setDrops(Collections.emptyList());
-        }
-        if (!event.getKeepInventory()) {
-            player.getInventory().setArmorContents(null);
-            player.getInventory().clear();
-            player.updateInventory();
-        }
-        Bukkit.getPluginManager().callEvent(playerDropInventoryEvent);
-        if (!event.getKeepLevel()) {
-            player.setLevel(0);
-            player.setExp(0);
-        }
-
+        sendDropInventoryEvent(player, event);
         sendDeathMessage(player, event);
     }
 
@@ -79,6 +63,24 @@ public class PlayerDeathListener implements Listener {
         Bukkit.getPluginManager().callEvent(playerDamageBeforeDeathEvent);
         Bukkit.getPluginManager().callEvent(playerDamageByEntityBeforeDeathEvent);
         Bukkit.getPluginManager().callEvent(playerDamageByBlockBeforeDeathEvent);
+    }
+
+    private void sendDropInventoryEvent(Player player, PlayerDeathEvent event) {
+        PlayerDropInventoryEvent playerDropInventoryEvent = new PlayerDropInventoryEvent(player, event.getDrops());
+        if (event.getKeepInventory()) {
+            playerDropInventoryEvent.setCancelled(true);
+            playerDropInventoryEvent.setDrops(Collections.emptyList());
+        }
+        if (!event.getKeepInventory()) {
+            player.getInventory().setArmorContents(null);
+            player.getInventory().clear();
+            player.updateInventory();
+        }
+        if (!event.getKeepLevel()) {
+            player.setLevel(0);
+            player.setExp(0);
+        }
+        Bukkit.getPluginManager().callEvent(playerDropInventoryEvent);
     }
 
     @SuppressWarnings("deprecation")

@@ -7,7 +7,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.github.victortedesco.bds.BetterDeathScreen;
-import com.github.victortedesco.bds.utils.PlayerAPI;
+import com.github.victortedesco.bds.utils.PlayerUtils;
 import org.bukkit.entity.Player;
 
 public class JoinPacketListener {
@@ -19,7 +19,7 @@ public class JoinPacketListener {
                 Player player = event.getPlayer();
                 PacketContainer packet = event.getPacket();
 
-                packet.getBooleans().write(0, PlayerAPI.isHardcore(player));
+                packet.getBooleans().write(0, PlayerUtils.isHardcore(player));
             }
         });
     }

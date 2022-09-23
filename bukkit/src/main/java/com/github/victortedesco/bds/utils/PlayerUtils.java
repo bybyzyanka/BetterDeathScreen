@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerAPI {
+public class PlayerUtils {
 
     public static boolean isStackEmpty(ItemStack stack) {
         return stack == null || stack.getType() == Material.AIR || stack.getAmount() == 0;

@@ -6,7 +6,7 @@ import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.animations.Animation;
 import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.configs.Messages;
-import com.github.victortedesco.bds.utils.PlayerAPI;
+import com.github.victortedesco.bds.utils.PlayerUtils;
 import com.github.victortedesco.bds.utils.Randomizer;
 import com.github.victortedesco.bds.utils.Tasks;
 import com.github.victortedesco.bds.utils.Version;
@@ -44,7 +44,7 @@ public class EntityDamageListener implements Listener {
         if (entity instanceof Player) {
             Player playerVictim = (Player) entity;
 
-            if (PlayerAPI.isHardcore(playerVictim)) time = 5;
+            if (PlayerUtils.isHardcore(playerVictim)) time = 5;
             if (Config.DEAD_PLAYERS.contains(playerVictim.getName())) {
                 event.setCancelled(true);
                 return;
@@ -59,7 +59,7 @@ public class EntityDamageListener implements Listener {
                         () -> PlayerTeleportListener.TELEPORT_MESSAGE_IMUNE.remove(playerVictim.getName()), 5);
                 playerVictim.setGameMode(GameMode.SPECTATOR);
                 Titles.sendTitle(playerVictim, 2, 20 * time, 2, Randomizer.getRandomMessage(playerVictim, null, Messages.KILLED_TITLES), Randomizer.getRandomMessage(playerVictim, null, Messages.KILLED_SUBTITLES));
-                PlayerAPI.incrementStatistic(playerVictim, Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage(), true);
+                PlayerUtils.incrementStatistic(playerVictim, Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage(), true);
                 if (event instanceof EntityDamageByEntityEvent) {
                     Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 
@@ -130,10 +130,10 @@ public class EntityDamageListener implements Listener {
     private void sendDeath(Player player) {
         player.closeInventory();
         List<ItemStack> inventory = Arrays.stream(player.getInventory().getContents())
-                .filter(stack -> !PlayerAPI.isStackEmpty(stack)).collect(Collectors.toList());
+                .filter(stack -> !PlayerUtils.isStackEmpty(stack)).collect(Collectors.toList());
         if (BetterDeathScreen.getVersion() == Version.v1_8) {
             List<ItemStack> armor = Arrays.stream(player.getInventory().getArmorContents())
-                    .filter(stack -> !PlayerAPI.isStackEmpty(stack))
+                    .filter(stack -> !PlayerUtils.isStackEmpty(stack))
                     .collect(Collectors.toList());
             inventory.addAll(armor);
         }
@@ -167,7 +167,7 @@ public class EntityDamageListener implements Listener {
         }
         playerDeathEvent.setNewTotalExp(player.getTotalExperience());
         Bukkit.getPluginManager().callEvent(playerDeathEvent);
-        PlayerAPI.playSoundFromConfig(player, Config.SOUND_DEATH, true, false);
+        PlayerUtils.playSoundFromConfig(player, Config.SOUND_DEATH, true, false);
         player.setHealth(0.1);
         player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
         player.incrementStatistic(Statistic.DEATHS, 1);
@@ -178,8 +178,8 @@ public class EntityDamageListener implements Listener {
     private void killedByPlayer(Player victim, Player damager, int time, EntityDamageEvent event) {
         Titles.sendTitle(victim, 2, 20 * time, 2, Randomizer.getRandomMessage(victim, damager, Messages.KILLED_BY_PLAYER_TITLES), Randomizer.getRandomMessage(victim, damager, Messages.KILLED_BY_PLAYER_SUBTITLES));
         ActionBar.sendActionBar(damager, Randomizer.getRandomMessage(victim, null, Messages.ACTIONBAR_KILL));
-        PlayerAPI.playSoundFromConfig(damager, Config.SOUND_KILL, true, false);
-        PlayerAPI.incrementStatistic(damager, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), true);
+        PlayerUtils.playSoundFromConfig(damager, Config.SOUND_KILL, true, false);
+        PlayerUtils.incrementStatistic(damager, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), true);
         damager.incrementStatistic(Statistic.PLAYER_KILLS, 1);
     }
 }

@@ -6,7 +6,7 @@ import com.github.victortedesco.bds.configs.Config;
 import com.github.victortedesco.bds.configs.ConfigHandler;
 import com.github.victortedesco.bds.configs.Messages;
 import com.github.victortedesco.bds.listener.Events;
-import com.github.victortedesco.bds.utils.PlayerAPI;
+import com.github.victortedesco.bds.utils.PlayerUtils;
 import com.github.victortedesco.bds.utils.Tasks;
 import com.github.victortedesco.bds.utils.Version;
 import com.viaversion.viaversion.api.Via;
@@ -16,12 +16,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BetterDeathScreen extends JavaPlugin {
-
-    PluginDescriptionFile description = this.getDescription();
 
     public static BetterDeathScreen getInstance() {
         return getPlugin(BetterDeathScreen.class);
@@ -75,13 +72,13 @@ public class BetterDeathScreen extends JavaPlugin {
         getCommand("bds").setTabCompleter(new MainTabComplete());
         Metrics metrics = new Metrics(this, 14729);
         for (Player players : Bukkit.getOnlinePlayers()) {
-            if (players.getGameMode() == GameMode.SPECTATOR && (players.getHealth() == 0.1 || !players.hasPermission(Config.ADMIN)) && PlayerAPI.isHardcore(players)) {
+            if (players.getGameMode() == GameMode.SPECTATOR && (players.getHealth() == 0.1 || !players.hasPermission(Config.ADMIN)) && PlayerUtils.isHardcore(players)) {
                 Config.DEAD_PLAYERS.add(players.getName());
                 Tasks.startTimer(players);
             }
         }
         for (String enabled : Messages.ENABLED) {
-            sendConsoleMessage(enabled.replace("%plugin_version%", "(v" + description.getVersion() + ")"));
+            sendConsoleMessage(enabled.replace("%plugin_version%", "(v" + getDescription().getVersion() + ")"));
         }
         sendConsoleMessage("&fMinecraft " + Version.getMinecraftVersion());
     }
@@ -94,7 +91,7 @@ public class BetterDeathScreen extends JavaPlugin {
             }
         }
         for (String disabled : Messages.DISABLED) {
-            sendConsoleMessage(disabled.replace("%plugin_version%", "(v" + description.getVersion() + ")"));
+            sendConsoleMessage(disabled.replace("%plugin_version%", "(v" + getDescription().getVersion() + ")"));
         }
     }
 

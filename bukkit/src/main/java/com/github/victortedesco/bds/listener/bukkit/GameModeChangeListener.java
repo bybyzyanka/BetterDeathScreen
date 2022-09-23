@@ -1,7 +1,7 @@
 package com.github.victortedesco.bds.listener.bukkit;
 
 import com.github.victortedesco.bds.configs.Config;
-import com.github.victortedesco.bds.utils.PlayerAPI;
+import com.github.victortedesco.bds.utils.PlayerUtils;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,7 +17,7 @@ public class GameModeChangeListener implements Listener {
 
         // To prevent exploits, the player cannot change gamemode when dead.
         if (Config.DEAD_PLAYERS.contains(player.getName()) && event.getNewGameMode() != GameMode.SPECTATOR) {
-            if (!PlayerAPI.isHardcore(player)) {
+            if (!PlayerUtils.isHardcore(player)) {
                 event.setCancelled(true);
             }
         }

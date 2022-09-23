@@ -48,7 +48,7 @@ public class Tasks {
         assert playerRespawnEvent != null;
         Bukkit.getPluginManager().callEvent(playerRespawnEvent);
         if (Config.USE_SAFE_TELEPORT && player.getBedSpawnLocation() == null) {
-            PlayerAPI.teleportSafeLocation(player, playerRespawnEvent.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            PlayerUtils.teleportSafeLocation(player, playerRespawnEvent.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         }
         if (!Config.USE_SAFE_TELEPORT || player.getBedSpawnLocation() != null) {
             player.teleport(playerRespawnEvent.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
@@ -57,7 +57,7 @@ public class Tasks {
 
     @SuppressWarnings({"deprecation", "ConstantConditions"})
     public static void performRespawn(Player player) {
-        if (!PlayerAPI.isHardcore(player) || (PlayerAPI.isHardcore(player) && player.getGameMode() != GameMode.SPECTATOR)) {
+        if (!PlayerUtils.isHardcore(player) || (PlayerUtils.isHardcore(player) && player.getGameMode() != GameMode.SPECTATOR)) {
             Config.DEAD_PLAYERS.remove(player.getName());
             double maxHealth = 0;
             if (BetterDeathScreen.getVersion() == Version.v1_8) maxHealth = player.getMaxHealth();
@@ -74,14 +74,14 @@ public class Tasks {
                 player.setFlySpeed(0.1F);
             }
             teleportToSpawnPoint(player);
-            PlayerAPI.playSoundFromConfig(player, Config.SOUND_RESPAWN, true, false);
-            if (!PlayerAPI.isHardcore(player)) player.setGameMode(Bukkit.getServer().getDefaultGameMode());
+            PlayerUtils.playSoundFromConfig(player, Config.SOUND_RESPAWN, true, false);
+            if (!PlayerUtils.isHardcore(player)) player.setGameMode(Bukkit.getServer().getDefaultGameMode());
             player.updateInventory();
         }
     }
 
     public static void startTimer(Player player) {
-        if (!PlayerAPI.isHardcore(player)) PlayerAPI.playSoundFromConfig(player, Config.SOUND_COUNTDOWN, true, true);
+        if (!PlayerUtils.isHardcore(player)) PlayerUtils.playSoundFromConfig(player, Config.SOUND_COUNTDOWN, true, true);
 
         new BukkitRunnable() {
             int time = Config.TIME;
@@ -89,25 +89,25 @@ public class Tasks {
             @Override
             public void run() {
                 if (!player.isOnline()) cancel();
-                if (!PlayerAPI.isHardcore(player)) {
+                if (!PlayerUtils.isHardcore(player)) {
                     time--;
 
                     if (player.hasPermission(Config.INSTANT_RESPAWN)) time = 0;
 
                     if (time > 1) {
                         ActionBar.sendActionBar(player, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
-                        PlayerAPI.playSoundFromConfig(player, Config.SOUND_COUNTDOWN, false, false);
+                        PlayerUtils.playSoundFromConfig(player, Config.SOUND_COUNTDOWN, false, false);
                     }
                     if (time == 1) {
                         ActionBar.sendActionBar(player, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
-                        PlayerAPI.playSoundFromConfig(player, Config.SOUND_COUNTDOWN, false, false);
+                        PlayerUtils.playSoundFromConfig(player, Config.SOUND_COUNTDOWN, false, false);
                     }
                     if (time <= 0) {
                         performRespawn(player);
                         cancel();
                     }
                 }
-                if (PlayerAPI.isHardcore(player)) {
+                if (PlayerUtils.isHardcore(player)) {
                     ActionBar.sendActionBar(player, Messages.ACTIONBAR_HARDCORE);
 
                     // When changing the gamemode of the player, he respawns.

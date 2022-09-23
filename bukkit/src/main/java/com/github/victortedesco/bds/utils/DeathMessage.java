@@ -205,7 +205,7 @@ public class DeathMessage {
                     message.addWith(damager.getName());
                     if (damager instanceof LivingEntity) {
                         LivingEntity livingEntity = (LivingEntity) damager;
-                        if (!PlayerAPI.isStackEmpty(livingEntity.getEquipment().getItemInHand())) {
+                        if (!PlayerUtils.isStackEmpty(livingEntity.getEquipment().getItemInHand())) {
                             if (livingEntity.getEquipment().getItemInHand().getItemMeta().hasDisplayName()) {
                                 if (BetterDeathScreen.getVersion().value >= Version.v1_13.value) {
                                     message = new TranslatableComponent("death.attack.mob.item");
@@ -232,7 +232,7 @@ public class DeathMessage {
                         message = new TranslatableComponent("death.attack.player");
                         message.addWith(player.getName());
                         message.addWith(damager.getName());
-                        if (!PlayerAPI.isStackEmpty(playerDamager.getEquipment().getItemInHand())) {
+                        if (!PlayerUtils.isStackEmpty(playerDamager.getEquipment().getItemInHand())) {
                             if (playerDamager.getEquipment().getItemInMainHand().getItemMeta().hasDisplayName()) {
                                 message = new TranslatableComponent("death.attack.player.item");
                                 message.addWith(player.getName());
@@ -294,7 +294,7 @@ public class DeathMessage {
                                 message = new TranslatableComponent("death.attack.arrow");
                                 message.addWith(player.getName());
                                 message.addWith(shooter.getName());
-                                if (!PlayerAPI.isStackEmpty(shooter.getEquipment().getItemInHand())) {
+                                if (!PlayerUtils.isStackEmpty(shooter.getEquipment().getItemInHand())) {
                                     if (shooter.getEquipment().getItemInHand().getItemMeta().hasDisplayName()) {
                                         message = new TranslatableComponent("death.attack.arrow.item");
                                         message.addWith(player.getName());
@@ -308,7 +308,7 @@ public class DeathMessage {
                                         message = new TranslatableComponent("death.attack.trident");
                                         message.addWith(player.getName());
                                         message.addWith(shooter.getName());
-                                        if (!PlayerAPI.isStackEmpty(shooter.getEquipment().getItemInHand())) {
+                                        if (!PlayerUtils.isStackEmpty(shooter.getEquipment().getItemInHand())) {
                                             if (trident.getItem().getItemMeta().hasDisplayName()) {
                                                 message = new TranslatableComponent("death.attack.trident.item");
                                                 message.addWith(player.getName());
