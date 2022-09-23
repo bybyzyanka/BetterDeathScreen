@@ -167,7 +167,7 @@ public class EntityDamageListener implements Listener {
         }
         playerDeathEvent.setNewTotalExp(player.getTotalExperience());
         Bukkit.getPluginManager().callEvent(playerDeathEvent);
-        PlayerUtils.playSoundFromConfig(player, Config.SOUND_DEATH, true, false);
+        PlayerUtils.playRandomSound(player, Config.SOUND_DEATH, true, false);
         player.setHealth(0.1);
         player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
         player.incrementStatistic(Statistic.DEATHS, 1);
@@ -178,7 +178,7 @@ public class EntityDamageListener implements Listener {
     private void killedByPlayer(Player victim, Player damager, int time, EntityDamageEvent event) {
         Titles.sendTitle(victim, 2, 20 * time, 2, Randomizer.getRandomMessage(victim, damager, Messages.KILLED_BY_PLAYER_TITLES), Randomizer.getRandomMessage(victim, damager, Messages.KILLED_BY_PLAYER_SUBTITLES));
         ActionBar.sendActionBar(damager, Randomizer.getRandomMessage(victim, null, Messages.ACTIONBAR_KILL));
-        PlayerUtils.playSoundFromConfig(damager, Config.SOUND_KILL, true, false);
+        PlayerUtils.playRandomSound(damager, Config.SOUND_KILL, true, false);
         PlayerUtils.incrementStatistic(damager, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), true);
         damager.incrementStatistic(Statistic.PLAYER_KILLS, 1);
     }

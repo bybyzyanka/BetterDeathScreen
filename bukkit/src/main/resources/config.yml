@@ -21,7 +21,7 @@ sound: #sound;volume;pitch
     - ITEM_PICKUP;1.0;1.0
     - ENDERMAN_DEATH;1.0;1.0
   countdown:
-    - NOTE_BASS_DRUM;1.01;1.0
+    - NOTE_BASS_DRUM;1.0;1.0
     - CLICK;1.0;1.0
   respawn:
     - NOTE_PLING;1.0;1.0

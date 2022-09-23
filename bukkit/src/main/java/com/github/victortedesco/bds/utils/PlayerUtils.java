@@ -48,7 +48,7 @@ public class PlayerUtils {
         PlayerDeathListener.DAMAGE_BY_BLOCK_BEFORE_DEATH.put(player.getName(), caused_by_damage);
     }
 
-    public static void playSoundFromConfig(Player player, List<String> type, boolean throwable, boolean silent) {
+    public static void playRandomSound(Player player, List<String> type, boolean throwable, boolean silent) {
         String randomSound = Randomizer.getRandomSound(type);
         try {
             String sound = StringUtils.substringBefore(randomSound, ";");
@@ -60,8 +60,24 @@ public class PlayerUtils {
                 return;
             }
             player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
-        } catch (IllegalArgumentException illegalArgumentException) {
+        } catch (Exception exception) {
             if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", randomSound));
+        }
+    }
+
+    public static void playSound(Player player, String string, boolean throwable, boolean silent) {
+        try {
+            String sound = StringUtils.substringBefore(string, ";");
+            float volume = Float.parseFloat(StringUtils.substringBetween(string, ";", ";"));
+            float pitch = Float.parseFloat(StringUtils.substringAfterLast(string, ";"));
+            if (silent) volume = 0;
+            if (sound.contains(".")) {
+                player.playSound(player.getLocation(), sound, volume, pitch);
+                return;
+            }
+            player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
+        } catch (Exception exception) {
+            if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", string));
         }
     }
 

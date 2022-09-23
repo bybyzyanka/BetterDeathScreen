@@ -74,14 +74,15 @@ public class Tasks {
                 player.setFlySpeed(0.1F);
             }
             teleportToSpawnPoint(player);
-            PlayerUtils.playSoundFromConfig(player, Config.SOUND_RESPAWN, true, false);
+            PlayerUtils.playRandomSound(player, Config.SOUND_RESPAWN, true, false);
             if (!PlayerUtils.isHardcore(player)) player.setGameMode(Bukkit.getServer().getDefaultGameMode());
             player.updateInventory();
         }
     }
 
     public static void startTimer(Player player) {
-        if (!PlayerUtils.isHardcore(player)) PlayerUtils.playSoundFromConfig(player, Config.SOUND_COUNTDOWN, true, true);
+        String randomSound = Randomizer.getRandomSound(Config.SOUND_COUNTDOWN);
+        if (!PlayerUtils.isHardcore(player)) PlayerUtils.playSound(player, randomSound, true, true);
 
         new BukkitRunnable() {
             int time = Config.TIME;
@@ -96,11 +97,11 @@ public class Tasks {
 
                     if (time > 1) {
                         ActionBar.sendActionBar(player, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.PLURAL));
-                        PlayerUtils.playSoundFromConfig(player, Config.SOUND_COUNTDOWN, false, false);
+                        PlayerUtils.playSound(player, randomSound, false, false);
                     }
                     if (time == 1) {
                         ActionBar.sendActionBar(player, Messages.ACTIONBAR_DEATH.replace("%time%", time + Messages.SINGULAR));
-                        PlayerUtils.playSoundFromConfig(player, Config.SOUND_COUNTDOWN, false, false);
+                        PlayerUtils.playSound(player, randomSound, false, false);
                     }
                     if (time <= 0) {
                         performRespawn(player);
