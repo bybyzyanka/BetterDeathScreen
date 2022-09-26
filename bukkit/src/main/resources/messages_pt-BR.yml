@@ -50,7 +50,7 @@ commands:
 plugin:
   incompatible:
     - "&cA versão do seu servidor está atrás da 1.8! §f%server_version%"
-    - "&cSe você acha que isso é um erro, contate o autor Tedesk"
+    - "&cSe você acha que isso é um erro, contate o autor Tedesk."
     - "&cO plugin será desativado."
   enabled:
     - "&aPlugin ativado! &f%plugin_version%"
