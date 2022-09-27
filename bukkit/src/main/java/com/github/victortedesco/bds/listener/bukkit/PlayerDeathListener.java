@@ -18,15 +18,14 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
 public class PlayerDeathListener implements Listener {
 
-    public static HashMap<String, ArrayList<Object>> DAMAGE_BEFORE_DEATH = new HashMap<>();
-    public static HashMap<String, ArrayList<Object>> DAMAGE_BY_BLOCK_BEFORE_DEATH = new HashMap<>();
-    public static HashMap<String, ArrayList<Object>> DAMAGE_BY_ENTITY_BEFORE_DEATH = new HashMap<>();
+    public static HashMap<String, Object[]> DAMAGE_BEFORE_DEATH = new HashMap<>();
+    public static HashMap<String, Object[]> DAMAGE_BY_BLOCK_BEFORE_DEATH = new HashMap<>();
+    public static HashMap<String, Object[]> DAMAGE_BY_ENTITY_BEFORE_DEATH = new HashMap<>();
     public static HashMap<String, Entity> KILL_ASSIST = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -42,21 +41,21 @@ public class PlayerDeathListener implements Listener {
         // Damage without blocks and entities.
         PlayerDamageBeforeDeathEvent playerDamageBeforeDeathEvent;
         try {
-            playerDamageBeforeDeathEvent = new PlayerDamageBeforeDeathEvent(player, (EntityDamageEvent.DamageCause) DAMAGE_BEFORE_DEATH.get(player.getName()).get(0), (double) DAMAGE_BEFORE_DEATH.get(player.getName()).get(1), (double) DAMAGE_BEFORE_DEATH.get(player.getName()).get(2));
+            playerDamageBeforeDeathEvent = new PlayerDamageBeforeDeathEvent(player, (EntityDamageEvent.DamageCause) DAMAGE_BEFORE_DEATH.get(player.getName())[0], (double) DAMAGE_BEFORE_DEATH.get(player.getName())[1], (double) DAMAGE_BEFORE_DEATH.get(player.getName())[2]);
         } catch (Exception exception) {
             playerDamageBeforeDeathEvent = new PlayerDamageBeforeDeathEvent(player, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
         }
         // Damage by entity
         PlayerDamageByEntityBeforeDeathEvent playerDamageByEntityBeforeDeathEvent;
         try {
-            playerDamageByEntityBeforeDeathEvent = new PlayerDamageByEntityBeforeDeathEvent(player, (Entity) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName()).get(0), (EntityDamageEvent.DamageCause) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName()).get(1), (double) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName()).get(2), (double) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName()).get(3));
+            playerDamageByEntityBeforeDeathEvent = new PlayerDamageByEntityBeforeDeathEvent(player, (Entity) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName())[0], (EntityDamageEvent.DamageCause) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName())[1], (double) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName())[2], (double) DAMAGE_BY_ENTITY_BEFORE_DEATH.get(player.getName())[3]);
         } catch (Exception exception) {
             playerDamageByEntityBeforeDeathEvent = new PlayerDamageByEntityBeforeDeathEvent(player, null, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
         }
         // Damage by block
         PlayerDamageByBlockBeforeDeathEvent playerDamageByBlockBeforeDeathEvent;
         try {
-            playerDamageByBlockBeforeDeathEvent = new PlayerDamageByBlockBeforeDeathEvent(player, (Block) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName()).get(0), (EntityDamageEvent.DamageCause) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName()).get(1), (double) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName()).get(2), (double) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName()).get(3));
+            playerDamageByBlockBeforeDeathEvent = new PlayerDamageByBlockBeforeDeathEvent(player, (Block) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName())[0], (EntityDamageEvent.DamageCause) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName())[1], (double) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName())[2], (double) DAMAGE_BY_BLOCK_BEFORE_DEATH.get(player.getName())[3]);
         } catch (Exception exception) {
             playerDamageByBlockBeforeDeathEvent = new PlayerDamageByBlockBeforeDeathEvent(player, null, EntityDamageEvent.DamageCause.CUSTOM, 0, 0);
         }

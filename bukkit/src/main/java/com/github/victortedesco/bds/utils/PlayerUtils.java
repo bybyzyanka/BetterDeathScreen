@@ -1,5 +1,6 @@
 package com.github.victortedesco.bds.utils;
 
+import com.cryptomorin.xseries.XSound;
 import com.github.victortedesco.bds.BetterDeathScreen;
 import com.github.victortedesco.bds.configs.Messages;
 import com.github.victortedesco.bds.listener.bukkit.PlayerDeathListener;
@@ -10,7 +11,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerUtils {
@@ -32,20 +32,20 @@ public class PlayerUtils {
     }
 
     public static void resetDamageBeforeDeath(Player player) {
-        ArrayList<Object> default_damage = new ArrayList<>();
-        default_damage.add(EntityDamageEvent.DamageCause.CUSTOM);
-        default_damage.add(0);
-        default_damage.add(0);
-        PlayerDeathListener.DAMAGE_BEFORE_DEATH.put(player.getName(), default_damage);
+        Object[] defaultDamage = new Object[3];
+        defaultDamage[0] = EntityDamageEvent.DamageCause.CUSTOM;
+        defaultDamage[1] = 0;
+        defaultDamage[2] = 0;
+        PlayerDeathListener.DAMAGE_BEFORE_DEATH.put(player.getName(), defaultDamage);
 
-        ArrayList<Object> caused_by_damage = new ArrayList<>();
-        caused_by_damage.add(null);
-        caused_by_damage.add(EntityDamageEvent.DamageCause.CUSTOM);
-        caused_by_damage.add(0);
-        caused_by_damage.add(0);
+        Object[] damageByEntityOrBlock = new Object[4];
+        damageByEntityOrBlock[0] = null;
+        damageByEntityOrBlock[1] = EntityDamageEvent.DamageCause.CUSTOM;
+        damageByEntityOrBlock[2] = 0;
+        damageByEntityOrBlock[3] = 0;
 
-        PlayerDeathListener.DAMAGE_BY_ENTITY_BEFORE_DEATH.put(player.getName(), caused_by_damage);
-        PlayerDeathListener.DAMAGE_BY_BLOCK_BEFORE_DEATH.put(player.getName(), caused_by_damage);
+        PlayerDeathListener.DAMAGE_BY_ENTITY_BEFORE_DEATH.put(player.getName(), damageByEntityOrBlock);
+        PlayerDeathListener.DAMAGE_BY_BLOCK_BEFORE_DEATH.put(player.getName(), damageByEntityOrBlock);
     }
 
     public static void playRandomSound(Player player, List<String> type, boolean throwable, boolean silent) {
@@ -59,7 +59,8 @@ public class PlayerUtils {
                 player.playSound(player.getLocation(), sound, volume, pitch);
                 return;
             }
-            player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
+            Sound bukkitSound = XSound.matchXSound(sound).orElse(null).parseSound();
+            player.playSound(player.getLocation(), bukkitSound, volume, pitch);
         } catch (Exception exception) {
             if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", randomSound));
         }
@@ -75,7 +76,8 @@ public class PlayerUtils {
                 player.playSound(player.getLocation(), sound, volume, pitch);
                 return;
             }
-            player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
+            Sound bukkitSound = XSound.matchXSound(sound).orElse(null).parseSound();
+            player.playSound(player.getLocation(), bukkitSound, volume, pitch);
         } catch (Exception exception) {
             if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", string));
         }

@@ -54,7 +54,6 @@
                             <artifact>*:*</artifact>
                             <excludes>
                                 <exclude>com/cryptomorin/xseries/XMaterial*</exclude>
-                                <exclude>com/cryptomorin/xseries/XSound*</exclude>
                                 <exclude>com/cryptomorin/xseries/XBlock*</exclude>
                                 <exclude>com/cryptomorin/xseries/XPotion*</exclude>
                                 <exclude>com/cryptomorin/xseries/XTag*</exclude>
@@ -142,7 +141,7 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>9.0.0</version>
+            <version>9.1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

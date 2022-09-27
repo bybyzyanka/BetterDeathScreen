@@ -14,7 +14,6 @@ misc: # Available languages: en-US, pt-BR, zh-TW
   use-default-world-spawn: true # If this option is enabled, locations.yml spawn points will be ignored.
   use-kill-camera: true # If this option is enabled, the player will spectate his killer.
 sound:
-  # Please check the sounds of your server version!
   # This section is compatible with resource pack sounds.
   # sound;volume;pitch
   death:

@@ -28,7 +28,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -93,36 +92,34 @@ public class EntityDamageListener implements Listener {
 
     private void sendDamageInfo(Player player, EntityDamageEvent event) {
         if (!(event instanceof EntityDamageByEntityEvent) && !(event instanceof EntityDamageByBlockEvent)) {
-            ArrayList<Object> list = new ArrayList<>();
-            list.add(event.getCause());
-            list.add(event.getDamage());
-            list.add(event.getFinalDamage());
+            Object[] array = new Object[3];
 
-            PlayerDeathListener.DAMAGE_BEFORE_DEATH.put(player.getName(), list);
+            array[0] = event.getCause();
+            array[1] = event.getDamage();
+            array[2] = event.getFinalDamage();
+            PlayerDeathListener.DAMAGE_BEFORE_DEATH.put(player.getName(), array);
         }
         if (event instanceof EntityDamageByEntityEvent) {
-            ArrayList<Object> list = new ArrayList<>();
             Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
-            if (damager instanceof LivingEntity) {
-                list.add(damager);
-            }
-            if (damager instanceof Projectile) {
-                list.add(((Projectile) damager).getShooter());
-            }
-            list.add(event.getCause());
-            list.add(event.getDamage());
-            list.add(event.getFinalDamage());
+            Object[] array = new Object[4];
 
-            PlayerDeathListener.DAMAGE_BY_ENTITY_BEFORE_DEATH.put(player.getName(), list);
+            array[0] = damager;
+            if (damager instanceof Projectile) {
+                array[0] = ((Projectile) damager).getShooter();
+            }
+            array[1] = event.getCause();
+            array[2] = event.getDamage();
+            array[3] = event.getFinalDamage();
+            PlayerDeathListener.DAMAGE_BY_ENTITY_BEFORE_DEATH.put(player.getName(), array);
         }
         if (event instanceof EntityDamageByBlockEvent) {
-            ArrayList<Object> list = new ArrayList<>();
-            list.add(((EntityDamageByBlockEvent) event).getDamager());
-            list.add(event.getCause());
-            list.add(event.getDamage());
-            list.add(event.getFinalDamage());
+            Object[] array = new Object[4];
 
-            PlayerDeathListener.DAMAGE_BY_BLOCK_BEFORE_DEATH.put(player.getName(), list);
+            array[0] = ((EntityDamageByBlockEvent) event).getDamager();
+            array[1] = event.getCause();
+            array[2] = event.getDamage();
+            array[3] = event.getFinalDamage();
+            PlayerDeathListener.DAMAGE_BY_BLOCK_BEFORE_DEATH.put(player.getName(), array);
         }
     }
 
