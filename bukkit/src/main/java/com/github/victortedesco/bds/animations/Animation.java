@@ -50,6 +50,9 @@ public class Animation {
     }
 
     public static void sendAnimation(Player player) {
+        if (Config.ANIMATION.toUpperCase().contains("NONE")) {
+            return;
+        }
         if (Config.ANIMATION.toUpperCase().contains("BLOOD")) {
             sendBloodAnimation(player);
         }

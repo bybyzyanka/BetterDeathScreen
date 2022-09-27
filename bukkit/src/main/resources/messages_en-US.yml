@@ -5,19 +5,19 @@ misc:
 actionbar:
   death: '&7You will respawn in &6%time%.'
   hardcore: '&cYou will never respawn again...'
-  kill: #This section uses the victim for the placeholders.
+  kill: # This section uses the victim for the placeholders.
     - "&cYou killed &f%player_name%!"
     - "&6Congratulations for killing &f%player_name%"
     - "&bYou are pretty good at this! &f%player_name% &7is impressed."
 titles:
-  killed: #This section uses the victim for the placeholders.
+  killed: # This section uses the victim for the placeholders.
     - "&cYOU HAVE BEEN SLAIN"
     - "&cYOU DIED"
-  killed-by-player: #This section uses the killer for the placeholders.
+  killed-by-player: # This section uses the killer for the placeholders.
     - "&cYOU HAVE BEEN SLAIN"
     - "&cYOU DIED"
 subtitles:
-  killed: #This section uses the victim for the placeholders.
+  killed: # This section uses the victim for the placeholders.
     - "&7Winning means being better."
     - "&7Patience is what separate good hunters from dead ones."
     - "&7You are already forgotten..."
@@ -25,7 +25,7 @@ subtitles:
     - "&7You are not the hero of this tale, you are nothing!"
     - "&7Results speaks louder than words."
     - "&7Pay attention!"
-  killed-by-player: #This section uses the killer for the placeholders.
+  killed-by-player: # This section uses the killer for the placeholders.
     - "&7Someone outclassed you."
     - "&7%player_name% said good day."
     - "&7%player_name% is just better."

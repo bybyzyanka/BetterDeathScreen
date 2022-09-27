@@ -1,5 +1,6 @@
 package com.github.victortedesco.bds.configs;
 
+import com.github.victortedesco.bds.BetterDeathScreen;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -33,6 +34,7 @@ public class Messages {
     @SuppressWarnings("ConstantConditions")
     public static void loadMessages() {
         FileConfiguration messages = ConfigHandler.getConfig("messages_" + Config.LANGUAGE);
+        if (BetterDeathScreen.invalidLanguage) messages = ConfigHandler.getConfig("messages_en-US");
 
         INCOMPATIBLE = messages.getStringList("plugin.incompatible");
         ENABLED = messages.getStringList("plugin.enabled");

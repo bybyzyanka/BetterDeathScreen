@@ -40,18 +40,19 @@ public class Config {
         FileConfiguration locations = ConfigHandler.getConfig("locations");
 
         LANGUAGE = config.getString("misc.language");
+        TIME = config.getInt("misc.respawn-time");
         USE_DEFAULT_WORLD_SPAWN = config.getBoolean("misc.use-default-world-spawn");
         USE_SAFE_TELEPORT = config.getBoolean("misc.use-safe-teleport");
         USE_KILL_CAM = config.getBoolean("misc.use-kill-camera");
 
         try {
             SPAWN = new Location(Bukkit.getWorld(locations.getString("normal.world")), locations.getDouble("normal.X"), locations.getDouble("normal.Y"), locations.getDouble("normal.Z"), (float) locations.getDouble("normal.yaw"), (float) locations.getDouble("normal.pitch"));
-        } catch (Exception e) {
+        } catch (Exception exception) {
             SPAWN = null;
         }
         try {
             VIP_SPAWN = new Location(Bukkit.getWorld(locations.getString("vip.world")), locations.getDouble("vip.X"), locations.getDouble("vip.Y"), locations.getDouble("vip.Z"), (float) locations.getDouble("vip.yaw"), (float) locations.getDouble("vip.pitch"));
-        } catch (Exception e) {
+        } catch (Exception exception) {
             VIP_SPAWN = null;
         }
 
@@ -59,8 +60,6 @@ public class Config {
         SOUND_COUNTDOWN = config.getStringList("sound.countdown");
         SOUND_RESPAWN = config.getStringList("sound.respawn");
         SOUND_KILL = config.getStringList("sound.kill");
-
-        TIME = config.getInt("time.duration");
 
         INSTANT_RESPAWN = config.getString("permissions.instant-respawn");
         VIP = config.getString("permissions.vip-spawn");

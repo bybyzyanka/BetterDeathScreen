@@ -20,6 +20,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class BetterDeathScreen extends JavaPlugin {
 
+    public static boolean invalidLanguage;
+
     public static BetterDeathScreen getInstance() {
         return getPlugin(BetterDeathScreen.class);
     }
@@ -46,9 +48,11 @@ public class BetterDeathScreen extends JavaPlugin {
         Config.loadConfigs();
         try {
             ConfigHandler.createConfig("messages_" + Config.LANGUAGE);
+            invalidLanguage = false;
         } catch (Exception exception) {
             ConfigHandler.createConfig("messages_en-US");
             sendConsoleMessage("&cThe plugin will use the language &fen-US &cbecause &f" + Config.LANGUAGE + " &cis not available.");
+            invalidLanguage = true;
         }
         Messages.loadMessages();
     }
