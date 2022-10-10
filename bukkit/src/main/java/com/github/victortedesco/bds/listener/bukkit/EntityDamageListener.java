@@ -1,5 +1,6 @@
 package com.github.victortedesco.bds.listener.bukkit;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.messages.ActionBar;
 import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.bds.BetterDeathScreen;
@@ -10,12 +11,12 @@ import com.github.victortedesco.bds.utils.PlayerUtils;
 import com.github.victortedesco.bds.utils.Randomizer;
 import com.github.victortedesco.bds.utils.Tasks;
 import com.github.victortedesco.bds.utils.Version;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -42,6 +43,7 @@ public class EntityDamageListener implements Listener {
 
         if (entity instanceof Player) {
             Player playerVictim = (Player) entity;
+            Player playerKiller = null;
 
             if (PlayerUtils.isHardcore(playerVictim)) time = 5;
             if (Config.DEAD_PLAYERS.contains(playerVictim.getName())) {
@@ -58,33 +60,40 @@ public class EntityDamageListener implements Listener {
                         () -> PlayerTeleportListener.TELEPORT_MESSAGE_IMUNE.remove(playerVictim.getName()), 5);
                 playerVictim.setGameMode(GameMode.SPECTATOR);
                 Titles.sendTitle(playerVictim, 2, 20 * time, 2, Randomizer.getRandomMessage(playerVictim, null, Messages.KILLED_TITLES), Randomizer.getRandomMessage(playerVictim, null, Messages.KILLED_SUBTITLES));
-                PlayerUtils.incrementStatistic(playerVictim, Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage(), true);
+                PlayerUtils.incrementStatistic(playerVictim, Statistic.DAMAGE_TAKEN, (int) event.getFinalDamage());
                 if (event instanceof EntityDamageByEntityEvent) {
                     Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 
                     if (Config.USE_KILL_CAM) playerVictim.setSpectatorTarget(damager);
-                    if (damager instanceof Player) killedByPlayer(playerVictim, (Player) damager, 20 * time, event);
+                    if (damager instanceof Player) {
+                        playerKiller = (Player) damager;
+                        killedByPlayer(playerVictim, playerKiller, 20 * time, event);
+                    }
                     if (damager instanceof Projectile) {
                         Projectile projectile = (Projectile) damager;
                         if (projectile.getShooter() instanceof Entity) {
                             if (Config.USE_KILL_CAM) playerVictim.setSpectatorTarget((Entity) projectile.getShooter());
                         }
-                        if (projectile.getShooter() instanceof Player)
-                            killedByPlayer(playerVictim, (Player) projectile.getShooter(), 20 * time, event);
+                        if (projectile.getShooter() instanceof Player) {
+                            playerKiller = (Player) projectile.getShooter();
+                            killedByPlayer(playerVictim, playerKiller, 20 * time, event);
+                        }
                     }
                 }
                 sendDeath(playerVictim);
+                sendCommands(playerVictim, playerKiller);
                 event.setDamage(0);
             }
         }
     }
 
     private boolean noTotem(Player player, EntityDamageEvent event) {
-        if (BetterDeathScreen.getVersion() != Version.v1_8) {
-            Material hand = player.getInventory().getItemInMainHand().getType();
-            Material off_hand = player.getInventory().getItemInOffHand().getType();
+        if (BetterDeathScreen.getVersion().value >= Version.v1_11.value) {
+            Material mainHand = player.getInventory().getItemInMainHand().getType();
+            Material offHand = player.getInventory().getItemInOffHand().getType();
 
-            if (!hand.toString().contains("TOTEM") && !off_hand.toString().contains("TOTEM")) return true;
+            if (mainHand != XMaterial.TOTEM_OF_UNDYING.parseMaterial() && offHand != XMaterial.TOTEM_OF_UNDYING.parseMaterial())
+                return true;
             return event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID;
         }
         return true;
@@ -164,7 +173,7 @@ public class EntityDamageListener implements Listener {
         }
         playerDeathEvent.setNewTotalExp(player.getTotalExperience());
         Bukkit.getPluginManager().callEvent(playerDeathEvent);
-        PlayerUtils.playRandomSound(player, Config.SOUND_DEATH, true, false);
+        PlayerUtils.playSound(player, Config.SOUND_DEATH, true, false);
         player.setHealth(0.1);
         player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
         player.incrementStatistic(Statistic.DEATHS, 1);
@@ -172,11 +181,29 @@ public class EntityDamageListener implements Listener {
         Animation.sendAnimation(player);
     }
 
-    private void killedByPlayer(Player victim, Player damager, int time, EntityDamageEvent event) {
-        Titles.sendTitle(victim, 2, 20 * time, 2, Randomizer.getRandomMessage(victim, damager, Messages.KILLED_BY_PLAYER_TITLES), Randomizer.getRandomMessage(victim, damager, Messages.KILLED_BY_PLAYER_SUBTITLES));
-        ActionBar.sendActionBar(damager, Randomizer.getRandomMessage(victim, null, Messages.ACTIONBAR_KILL));
-        PlayerUtils.playRandomSound(damager, Config.SOUND_KILL, true, false);
-        PlayerUtils.incrementStatistic(damager, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage(), true);
-        damager.incrementStatistic(Statistic.PLAYER_KILLS, 1);
+    private void killedByPlayer(Player player, Player killer, int time, EntityDamageEvent event) {
+        Titles.sendTitle(player, 2, time, 2, Randomizer.getRandomMessage(player, killer, Messages.KILLED_BY_PLAYER_TITLES), Randomizer.getRandomMessage(player, killer, Messages.KILLED_BY_PLAYER_SUBTITLES));
+        ActionBar.sendActionBar(killer, Randomizer.getRandomMessage(player, null, Messages.ACTIONBAR_KILL));
+        PlayerUtils.playSound(killer, Config.SOUND_KILL, true, false);
+        PlayerUtils.incrementStatistic(killer, Statistic.DAMAGE_DEALT, (int) event.getFinalDamage());
+        killer.incrementStatistic(Statistic.PLAYER_KILLS, 1);
+    }
+
+    private void sendCommands(Player player, Player killer) {
+        PlayerCommandListener.DISABLE_COMMANDS_IMUNE.add(player.getName());
+        for (String syntax : Config.COMMANDS_ON_DEATH) {
+            String sender = StringUtils.substringBefore(syntax, ": ");
+            String command = StringUtils.substringAfter(syntax, ": ");
+            if (killer == null && (command.contains("@killer") || sender.equalsIgnoreCase("killer"))) continue;
+            String formattedCommand = "";
+            if (killer == null) formattedCommand = command.replace("@player", player.getName());
+            if (killer != null)
+                formattedCommand = command.replace("@player", player.getName()).replace("@killer", killer.getName());
+
+            if (sender.equalsIgnoreCase("console")) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), formattedCommand);
+            if (sender.equalsIgnoreCase("player")) player.chat(formattedCommand);
+            if (sender.equalsIgnoreCase("killer")) killer.chat(formattedCommand);
+        }
+        PlayerCommandListener.DISABLE_COMMANDS_IMUNE.remove(player.getName());
     }
 }

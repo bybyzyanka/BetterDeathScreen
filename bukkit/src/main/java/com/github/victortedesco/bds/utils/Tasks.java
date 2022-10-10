@@ -74,7 +74,7 @@ public class Tasks {
                 player.setFlySpeed(0.1F);
             }
             teleportToSpawnPoint(player);
-            PlayerUtils.playRandomSound(player, Config.SOUND_RESPAWN, true, false);
+            PlayerUtils.playSound(player, Config.SOUND_RESPAWN, true, false);
             if (!PlayerUtils.isHardcore(player)) player.setGameMode(Bukkit.getServer().getDefaultGameMode());
             player.updateInventory();
         }

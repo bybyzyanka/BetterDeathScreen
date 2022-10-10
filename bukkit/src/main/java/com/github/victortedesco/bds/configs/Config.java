@@ -12,6 +12,7 @@ public class Config {
 
     public static Set<String> DEAD_PLAYERS = new HashSet<>();
     public static String LANGUAGE;
+    public static List<String> COMMANDS_ON_DEATH;
     public static boolean USE_DEFAULT_WORLD_SPAWN;
     public static boolean USE_SAFE_TELEPORT;
     public static boolean USE_KILL_CAM;
@@ -45,6 +46,7 @@ public class Config {
         USE_SAFE_TELEPORT = config.getBoolean("misc.use-safe-teleport");
         USE_KILL_CAM = config.getBoolean("misc.use-kill-camera");
 
+        COMMANDS_ON_DEATH = config.getStringList("commands-on-death");
         try {
             SPAWN = new Location(Bukkit.getWorld(locations.getString("normal.world")), locations.getDouble("normal.X"), locations.getDouble("normal.Y"), locations.getDouble("normal.Z"), (float) locations.getDouble("normal.yaw"), (float) locations.getDouble("normal.pitch"));
         } catch (Exception exception) {

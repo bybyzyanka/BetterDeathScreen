@@ -21,8 +21,8 @@ public class PlayerRespawnListener implements Listener {
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
 
-        // Resets all events related to last damage.
         PlayerUtils.resetDamageBeforeDeath(player);
+        //TODO Need to implement a method that changes respawn charges of the respawn anchor of the player.
 
         if (!BED_MESSAGE.contains(player.getName()) && player.getBedSpawnLocation() == null) {
             TranslatableComponent noBed = new TranslatableComponent("tile.bed.notValid");

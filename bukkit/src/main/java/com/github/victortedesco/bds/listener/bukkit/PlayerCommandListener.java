@@ -15,13 +15,14 @@ import java.util.Set;
 
 public class PlayerCommandListener implements Listener {
 
+    public static Set<String> DISABLE_COMMANDS_IMUNE = new HashSet<>();
     Set<String> MESSAGE_DELAY = new HashSet<>();
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onCommandPreProcess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
 
-        if (Config.DEAD_PLAYERS.contains(player.getName()) && !Config.ALLOW_COMMANDS_WHILE_DEAD) {
+        if (Config.DEAD_PLAYERS.contains(player.getName()) && !Config.ALLOW_COMMANDS_WHILE_DEAD && !DISABLE_COMMANDS_IMUNE.contains(player.getName())) {
             event.setCancelled(true);
             if (!MESSAGE_DELAY.contains(player.getName())) {
                 MESSAGE_DELAY.add(player.getName());

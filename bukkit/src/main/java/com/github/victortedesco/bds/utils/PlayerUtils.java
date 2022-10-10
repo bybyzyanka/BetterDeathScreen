@@ -19,15 +19,11 @@ public class PlayerUtils {
         return stack == null || stack.getType() == Material.AIR || stack.getAmount() == 0;
     }
 
-    public static void incrementStatistic(Player player, Statistic statistic, int value, boolean safe) {
+    public static void incrementStatistic(Player player, Statistic statistic, int value) {
         try {
-            if (safe) {
-                player.incrementStatistic(statistic, (int) Math.min(player.getHealth(), value));
-                return;
-            }
             player.incrementStatistic(statistic, value);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            player.incrementStatistic(statistic, 1);
+        } catch (Exception exception) {
+            player.incrementStatistic(statistic, (int) player.getHealth());
         }
     }
 
@@ -48,12 +44,12 @@ public class PlayerUtils {
         PlayerDeathListener.DAMAGE_BY_BLOCK_BEFORE_DEATH.put(player.getName(), damageByEntityOrBlock);
     }
 
-    public static void playRandomSound(Player player, List<String> type, boolean throwable, boolean silent) {
-        String randomSound = Randomizer.getRandomSound(type);
+    public static void playSound(Player player, List<String> list, boolean throwable, boolean silent) {
+        String string = Randomizer.getRandomSound(list);
         try {
-            String sound = StringUtils.substringBefore(randomSound, ";");
-            float volume = Float.parseFloat(StringUtils.substringBetween(randomSound, ";", ";"));
-            float pitch = Float.parseFloat(StringUtils.substringAfterLast(randomSound, ";"));
+            String sound = StringUtils.substringBefore(string, ";");
+            float volume = Float.parseFloat(StringUtils.substringBetween(string, ";", ";"));
+            float pitch = Float.parseFloat(StringUtils.substringAfterLast(string, ";"));
             if (silent) volume = 0;
             if (sound.contains(".")) {
                 player.playSound(player.getLocation(), sound, volume, pitch);
@@ -62,7 +58,7 @@ public class PlayerUtils {
             Sound bukkitSound = XSound.matchXSound(sound).orElse(null).parseSound();
             player.playSound(player.getLocation(), bukkitSound, volume, pitch);
         } catch (Exception exception) {
-            if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", randomSound));
+            if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SYNTAX_ERROR.replace("%syntax%", string));
         }
     }
 
@@ -79,7 +75,7 @@ public class PlayerUtils {
             Sound bukkitSound = XSound.matchXSound(sound).orElse(null).parseSound();
             player.playSound(player.getLocation(), bukkitSound, volume, pitch);
         } catch (Exception exception) {
-            if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SOUND_ERROR.replace("%sound%", string));
+            if (throwable) BetterDeathScreen.sendConsoleMessage(Messages.SYNTAX_ERROR.replace("%syntax%", string));
         }
     }
 
@@ -96,12 +92,9 @@ public class PlayerUtils {
     }
 
     public static boolean isHardcore(Player player) {
-        if (BetterDeathScreen.getVersion().value < Version.v1_16.value) {
-            return Bukkit.isHardcore();
-        }
         if (BetterDeathScreen.getVersion().value >= Version.v1_16.value) {
             return player.getWorld().isHardcore();
         }
-        return false;
+        return Bukkit.isHardcore();
     }
 }

@@ -36,7 +36,7 @@ time:
 errors:
   actionbar: "&cNão foi possível enviar a actionbar para o jogador %player%"
   title: "&cNão foi possível enviar o title para o jogador %player%"
-  sound: "&cAlgo está errado com a sintaxe %sound%. Verifique sua config.yml"
+  syntax: "&cAlgo está errado com a sintaxe %syntax%. Verifique sua config.yml"
   spawn: "&cO teleporte de %player% para o spawn %type% falhou, ele foi teleportado para o spawn do mundo principal. Verifique sua locations.yml ou defina o spawn."
 commands:
   help:

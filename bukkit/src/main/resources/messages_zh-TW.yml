@@ -36,7 +36,7 @@ time:
 errors:
   actionbar: "&c無法將 Actionbar 傳送給玩家 %player%"
   title: "&c無法將標題訊息傳送給玩家 %player%"
-  sound: "&c聲音 %sound% 在你的伺服器版本中並未存在。請檢查你的 config.yml"
+  syntax: "&c聲音 %syntax% 在你的伺服器版本中並未存在。請檢查你的 config.yml"
   spawn: ""
 commands:
   help:

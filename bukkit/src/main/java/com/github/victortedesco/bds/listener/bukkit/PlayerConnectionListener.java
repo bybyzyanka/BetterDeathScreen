@@ -32,8 +32,7 @@ public class PlayerConnectionListener implements Listener {
         }
         // Fixing respawning in another dimensions.
         if (player.getBedSpawnLocation() != null) {
-            if (player.getBedSpawnLocation().getWorld().getEnvironment() == World.Environment.NETHER || player.getBedSpawnLocation().getWorld().getEnvironment() == World.Environment.THE_END) {
-                //TODO I will implement a solution to Respawn Anchors.
+            if (player.getBedSpawnLocation().getWorld().getEnvironment() == World.Environment.THE_END || (BetterDeathScreen.getVersion().value < Version.v1_16.value && player.getBedSpawnLocation().getWorld().getEnvironment() == World.Environment.NETHER)) {
                 player.setBedSpawnLocation(null);
             }
         }

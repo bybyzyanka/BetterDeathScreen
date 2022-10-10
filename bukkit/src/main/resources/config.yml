@@ -8,29 +8,36 @@
 # Author: Tedesk
 
 misc: # Available languages: en-US, pt-BR, zh-TW
-  language: 'en-US'
+  language: "en-US"
   respawn-time: 10
   use-safe-teleport: true
   use-default-world-spawn: true # If this option is enabled, locations.yml spawn points will be ignored.
   use-kill-camera: true # If this option is enabled, the player will spectate his killer.
+commands-on-death:
+# sender: command
+# Variables: @player, @killer
+# If you use @killer or killer: and the killer is not a player or doesn't exist, the command will be ignored.
+# - "console: /i"
+# - "player: /love" # Without the slash, the player will send a message in chat.
+# - "killer: /you"
 sound:
   # This section is compatible with resource pack sounds.
   # sound;volume;pitch
   death:
-    - ENTITY_BLAZE_DEATH;1.0;1.0
-    - BLOCK_ANVIL_LAND;1.0;1.0
-    - ENTITY_ITEM_PICKUP;1.0;1.0
-    - ENTITY_ENDERMAN_DEATH;1.0;1.0
+    - "ENTITY_BLAZE_DEATH;1.0;1.0"
+    - "BLOCK_ANVIL_LAND;1.0;1.0"
+    - "ENTITY_ITEM_PICKUP;1.0;1.0"
+    - "ENTITY_ENDERMAN_DEATH;1.0;1.0"
   countdown:
-    - BLOCK_NOTE_BLOCK_BASEDRUM;1.0;1.0
-    - UI_BUTTON_CLICK;1.0;1.0
+    - "BLOCK_NOTE_BLOCK_BASEDRUM;1.0;1.0"
+    - "UI_BUTTON_CLICK;1.0;1.0"
   respawn:
-    - BLOCK_NOTE_BLOCK_PLING;1.0;1.0
-    - ENTITY_EXPERIENCE_ORB_PICKUP;1.0;1.0
-    - ENTITY_PLAYER_LEVELUP;1.0;1.0
+    - "BLOCK_NOTE_BLOCK_PLING;1.0;1.0"
+    - "ENTITY_EXPERIENCE_ORB_PICKUP;1.0;1.0"
+    - "ENTITY_PLAYER_LEVELUP;1.0;1.0"
   kill:
-    - ENTITY_SKELETON_DEATH;1.0;1.0
-    - BLOCK_GLASS_BREAK;1.0;1.0
+    - "ENTITY_SKELETON_DEATH;1.0;1.0"
+    - "BLOCK_GLASS_BREAK;1.0;1.0"
 animation:
   # Types: BLOOD, LIGHTNING, EXPLOSION (Use NONE to disable)
   # They can be mixed. Example: LIGHTING-EXPLOSION

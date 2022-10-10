@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 public class EntityRegainHealthListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onRegen(EntityRegainHealthEvent event) {
+    public void onEntityRegainHealth(EntityRegainHealthEvent event) {
         Entity entity = event.getEntity();
 
         // Why the player would regain health since he is dead?

@@ -28,7 +28,7 @@ public class Messages {
     public static String SPAWN_SET;
     public static String ACTIONBAR_ERROR;
     public static String TITLE_ERROR;
-    public static String SOUND_ERROR;
+    public static String SYNTAX_ERROR;
     public static String SPAWN_ERROR;
 
     @SuppressWarnings("ConstantConditions")
@@ -63,7 +63,7 @@ public class Messages {
 
         ACTIONBAR_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.actionbar"));
         TITLE_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.title"));
-        SOUND_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.sound"));
+        SYNTAX_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.syntax"));
         SPAWN_ERROR = ChatColor.translateAlternateColorCodes('&', messages.getString("errors.spawn"));
     }
 }
