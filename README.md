@@ -1,7 +1,6 @@
 # BetterDeathScreen
 
 Um plugin simples que altera a tela de morte do Minecraft. </br>
-https://www.spigotmc.org/resources/102005/
 
 ## Observações
 
@@ -26,6 +25,3 @@ Acesse a pasta [**resources**](https://github.com/VictorTedesco/BetterDeathScree
 ver os exemplos de configuração do plugin. Na primeira inicialização, o plugin (se não for modificado) cria os
 arquivos `config.yml`, `locations.yml` e `messages_en-US`.
 
-## Estatísticas de uso
-
-![alt text](https://bstats.org/signatures/bukkit/BetterDeathScreen.svg)

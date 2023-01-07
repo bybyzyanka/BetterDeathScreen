@@ -1,58 +1,54 @@
 misc:
-  commands-blocked: "&cVocê não pode usar comandos, você está morto."
-  spectate-blocked: "&cVocê não pode entrar na visão de outros jogadores ou mobs."
-  hotbar-tp-blocked: "&cVocê não pode se teleportar para outros jogadores usando o menu do modo espectador."
-actionbar:
-  death: '&7Você ressurgirá em &6%time%.'
-  hardcore: '&cVocê não irá renascer...'
-  kill: # A vítima será usada como alvo para as placeholders.
+  command-blocked: "&cVocê não pode usar esse comando, pois está morto."
+  time:
+    singular: " segundo"
+    plural: " segundos"
+death:
+  kill: # This section uses the victim for the placeholders.
     - "&cVocê matou &f%player_name%!"
-    - "&6Parabéns por matar &f%player_name%"
-    - "&bVocê é muito bom nisso! &f%player_name% &7está impressionado."
-titles:
-  killed: # A vítima será usada como alvo para as placeholders.
-    - "&cVOCÊ FOI ELIMINADO"
-    - "&cVOCÊ MORREU"
-  killed-by-player: # O assassino será usado como alvo para as placeholders.
-    - "&cVOCÊ FOI ELIMINADO"
-    - "&cVOCÊ MORREU"
-subtitles:
-  killed: # A vítima será usada como alvo para as placeholders.
-    - "&7Vencer significa ser melhor."
-    - "&7Paciência é o que separa os caçadores bons dos mortos."
-    - "&7Já caiu no esquecimento."
-    - "&7Isso foi no máximo... mediocre."
-    - "&7Você não é o herói desse história, você não é nada!"
-    - "&7Resultados dizem mais do que palavras."
-    - "&7Preste atenção!"
-  killed-by-player: # O assassino será usado como alvo para as placeholders.
-    - "&7Alguém te deu uma aula."
-    - "&7%player_name% disse bom dia."
-    - "&7%player_name% só é melhor."
-    - "&7Seu inimigo ficou vivo com &c%player_health_rounded% ❤"
-time:
-  singular: " segundo"
-  plural: " segundos"
-errors:
-  actionbar: "&cNão foi possível enviar a actionbar para o jogador %player%"
-  title: "&cNão foi possível enviar o title para o jogador %player%"
-  syntax: "&cAlgo está errado com a sintaxe %syntax%. Verifique sua config.yml"
-  spawn: "&cO teleporte de %player% para o spawn %type% falhou, ele foi teleportado para o spawn do mundo principal. Verifique sua locations.yml ou defina o spawn."
+    - "&6Parabéns por ter matado &f%player_name%"
+    - "&bVocê é bom nisso! &f%player_name% &7está impressionado."
+  killed: # This section uses the victim for the placeholders.
+    - "&cVOCÊ FOI ELIMINADO\n&7Vencer significa ser melhor."
+    - "&cVOCÊ MORREU\n&7Vencer significa ser melhor."
+    - "&cVOCÊ FOI ELIMINADO\n&7Paciência é o que separa os caçadores bons dos mortos."
+    - "&cVOCÊ MORREU\n&7Paciência é o que separa os caçadores bons dos mortos."
+    - "&cVOCÊ FOI ELIMINADO\n&7Já caiu no esquecimento..."
+    - "&cVOCÊ MORREU\n&7Já caiu no esquecimento..."
+    - "&cVOCÊ FOI ELIMINADO\n&7Isso foi no máximo... mediocre."
+    - "&cVOCÊ MORREU\n&7Isso foi no máximo... mediocre."
+    - "&cVOCÊ FOI ELIMINADO\n&7Você não é o herói desse história, você não é nada!"
+    - "&cVOCÊ MORREU\n&7Você não é o herói desse história, você não é nada!"
+    - "&cVOCÊ FOI ELIMINADO\n&7Resultados dizem mais do que palavras."
+    - "&cVOCÊ MORREU\n&7Resultados dizem mais do que palavras."
+    - "&cVOCÊ FOI ELIMINADO\n&7Preste atenção!"
+    - "&cVOCÊ MORREU\n&7Preste atenção!"
+  killed-by-player: # This section uses the killer for the placeholders.
+    - "&cVOCÊ FOI ELIMINADO\n&7Alguém te deu uma aula."
+    - "&cVOCÊ MORREU\n&7Alguém te deu uma aula."
+    - "&cVOCÊ FOI ELIMINADO\n&7%player_name% disse bom dia."
+    - "&cVOCÊ MORREU\n&7%player_name% disse bom dia."
+    - "&cVOCÊ FOI ELIMINADO\n&7%player_name% só é melhor."
+    - "&cVOCÊ MORREU\n&7%player_name% só é melhor."
+    - "&cVOCÊ FOI ELIMINADO\n&7Seu inimigo ficou vivo com &c%player_health_rounded% ❤"
+    - "&cVOCÊ MORREU\n&7Seu inimigo ficou vivo com &c%player_health_rounded% ❤"
+respawn:
+  non-hardcore-countdown: "&7Você ressurgirá em &6%time%."
+  hardcore-countdown: "&cVocê não irá renascer..."
 commands:
   help:
     - "&cBetterDeathScreen &7- Comandos"
     - ""
-    - "&c/bds reload &7- &fRecarrega a configuração do plugin."
-    - "&c/bds setspawn normal/vip &7 - &fDefine o spawn principal &7&o(Só funciona quando ativado nas configurações)"
-  reload: "&7[BDS] &aPlugin recarregado com sucesso."
-  no-perm: "&7[BDS] &cVocê não tem permissão para usar esse comando."
-  spawn-set: "&7[BDS] &aSpawn %type% redefinido."
+    - "&c/bds reload &7- &fRecarrega as configurações do plugin."
+    - "&c/bds respawn (player) &7- &fForça o jogador a renascer. (Funciona no hardcore)"
+  reloaded: "&aPlugin recarregado com sucesso."
+  without-permission: "&cVocê não tem permissão para usar esse comando."
 plugin:
   incompatible:
-    - "&cA versão do seu servidor está atrás da 1.8! §f%server_version%"
-    - "&cSe você acha que isso é um erro, contate o autor Tedesk."
+    - "&cSeu servidor não está usando um fork do Spigot ou está usando uma versão mais antiga que a 1.8!"
+    - "&cSe você acha que isso é um erro, contate o criador do plugin &fTedesk"
     - "&cO plugin será desativado."
   enabled:
-    - "&aPlugin ativado! &f%plugin_version%"
+    - "&aPlugin ativado!"
   disabled:
-    - "&cPlugin desativado! &f%plugin_version%"
+    - "&cPlugin desativado!"

@@ -3,24 +3,29 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
-
-    <artifactId>bukkit</artifactId>
-    <name>BetterDeathScreen Bukkit</name>
-    <description>Plugin made with the purpose of changing the death screen of Minecraft</description>
-    <version>1.6</version>
-
     <parent>
-        <groupId>com.github.victortedesco.bds</groupId>
+        <groupId>com.github.victortedesco.betterdeathscreen</groupId>
         <artifactId>parent</artifactId>
-        <version>1.6</version>
+        <version>2.0</version>
     </parent>
 
+    <packaging>jar</packaging>
+    <artifactId>bukkit</artifactId>
+
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.victortedesco.betterdeathscreen</groupId>
+            <artifactId>api</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <resources>
@@ -33,20 +38,21 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.4.1</version>
                 <configuration>
+                    <minimizeJar>true</minimizeJar>
                     <relocations>
                         <relocation>
-                            <pattern>com.github.victortedesco.bds.api</pattern>
-                            <shadedPattern>com.github.victortedesco.bds.api</shadedPattern>
+                            <pattern>com.github.victortedesco.betterdeathscreen.api</pattern>
+                            <shadedPattern>com.github.victortedesco.betterdeathscreen.api</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>com.github.victortedesco.bds.utils.bstats</shadedPattern>
+                            <shadedPattern>com.github.victortedesco.betterdeathscreen.shaded.bstats</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
-                            <shadedPattern>com.github.victortedesco.bds.utils.xseries</shadedPattern>
+                            <shadedPattern>com.github.victortedesco.betterdeathscreen.shaded.xseries</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>
@@ -81,79 +87,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.3.0</version>
                 <configuration>
                     <finalName>BetterDeathScreen</finalName>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>sona-type</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <repository>
-            <id>dmulloy2-repo</id>
-            <url>https://repo.dmulloy2.net/repository/public/</url>
-        </repository>
-        <repository>
-            <id>placeholderapi</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <repository>
-            <id>viaversion-repo</id>
-            <url>https://repo.viaversion.com</url>
-        </repository>
-    </repositories>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.bstats</groupId>
-            <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>4.8.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>2.11.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cryptomorin</groupId>
-            <artifactId>XSeries</artifactId>
-            <version>9.1.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.viaversion</groupId>
-            <artifactId>viaversion</artifactId>
-            <version>4.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.victortedesco.bds</groupId>
-            <artifactId>api</artifactId>
-            <version>1.6</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 </project>

@@ -7,19 +7,26 @@
 
 # Author: Tedesk
 
-misc: # Available languages: en-US, pt-BR, zh-TW
+misc: # Available languages: en-US, pt-BR
   language: "en-US"
   respawn-time: 10
   use-safe-teleport: true
-  use-default-world-spawn: true # If this option is enabled, locations.yml spawn points will be ignored.
-  use-kill-camera: true # If this option is enabled, the player will spectate his killer.
 commands-on-death:
 # sender: command
 # Variables: @player, @killer
-# If you use @killer or killer: and the killer is not a player or doesn't exist, the command will be ignored.
+# If killer is not a player or doesn't exist, the commands using it will be ignored.
 # - "console: /i"
 # - "player: /love" # Without the slash, the player will send a message in chat.
 # - "killer: /you"
+message-type:
+  # Choose where the respective messages should appear.
+  # Types: ACTIONBAR, TITLE, CHAT
+  # Use \n to use subtitles.
+  kill: "CHAT"
+  killed: "TITLE"
+  killed-by-player: "TITLE"
+  non-hardcore-countdown: "ACTIONBAR"
+  hardcore-countdown: "ACTIONBAR"
 sound:
   # This section is compatible with resource pack sounds.
   # sound;volume;pitch
@@ -39,18 +46,15 @@ sound:
     - "ENTITY_SKELETON_DEATH;1.0;1.0"
     - "BLOCK_GLASS_BREAK;1.0;1.0"
 animation:
-  # Types: BLOOD, LIGHTNING, EXPLOSION (Use NONE to disable)
-  # They can be mixed. Example: LIGHTING-EXPLOSION
+  # Types: BLOOD, LIGHTNING, EXPLOSION, RANDOM (Use NONE to disable)
   type: "BLOOD"
 permissions:
-  instant-respawn: 'bds.respawn'
-  keep-xp: 'bds.xp'
-  vip-spawn: 'bds.vip'
+  instant-respawn: 'bds.instant-respawn'
   admin: 'bds.admin'
-spectator-settings:
+death-settings:
   queue-teleport: true
-  allow-spectate: false
-  allow-teleport-with-keys: false
-  ignore-walls: false
-  allow-move: true
-  allow-commands: false
+  allow-fly: true
+  allow-spectate: true
+  allowed-commands: # If you want to disable all commands, use []
+    - "/g"
+    - "/report"
