@@ -8,9 +8,12 @@ import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
 import com.github.victortedesco.betterdeathscreen.bukkit.configuration.BukkitConfig;
 import com.github.victortedesco.betterdeathscreen.bukkit.configuration.BukkitMessages;
 import com.github.victortedesco.betterdeathscreen.bukkit.utils.DeathTasks;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Statistic;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,15 +21,7 @@ import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import java.util.HashMap;
-
 public class EntityDamageListener implements Listener {
-
-    private static final HashMap<Player, Boolean> FLY_STATE = new HashMap<>();
-
-    public static HashMap<Player, Boolean> getFlyState() {
-        return FLY_STATE;
-    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
@@ -35,11 +30,9 @@ public class EntityDamageListener implements Listener {
 
             if (BetterDeathScreenAPI.getPlayerManager().isDead(player)) {
                 event.setCancelled(true);
-                if (event.getEntity() instanceof LivingEntity) {
-                    if (BetterDeathScreen.getConfiguration().canSpectate()) {
-                        player.setGameMode(GameMode.SPECTATOR);
-                        player.setSpectatorTarget(event.getEntity());
-                    }
+                if (BetterDeathScreen.getConfiguration().canSpectate()) {
+                    player.setGameMode(GameMode.SPECTATOR);
+                    player.setSpectatorTarget(event.getEntity());
                 }
             }
         }
@@ -61,7 +54,7 @@ public class EntityDamageListener implements Listener {
             Player player = (Player) event.getEntity();
             Player playerKiller = null;
 
-            if (playerManager.isHardcore(player)) time = 5;
+            if (Bukkit.isHardcore()) time = 5;
             if (playerManager.getDeadPlayers().contains(player)) {
                 event.setCancelled(true);
                 if (player.getFireTicks() > 0) player.setFireTicks(0);
@@ -83,7 +76,6 @@ public class EntityDamageListener implements Listener {
                     if (killer instanceof Projectile) {
                         Projectile projectile = (Projectile) killer;
                         if (projectile.getShooter() instanceof Entity) killer = (Entity) projectile.getShooter();
-                        if (projectile instanceof Arrow) projectile.remove();
                     }
                     if (killer instanceof Player) {
                         playerKiller = (Player) killer;
@@ -95,11 +87,8 @@ public class EntityDamageListener implements Listener {
                         playerManager.sendCustomMessage(playerKiller, player, config.getKillMessageType(), randomizer.getRandomItemFromList(messages.getKill()), 1);
                     }
                 }
-                if (config.canFly()) {
-                    getFlyState().put(player, player.getAllowFlight());
-                    player.setAllowFlight(true);
-                    player.setFlying(true);
-                }
+                player.setAllowFlight(config.canFly());
+                player.setFlying(config.canFly());
                 deathTasks.performDeath(player);
                 deathTasks.sendCommandsOnDeath(player, playerKiller);
             }

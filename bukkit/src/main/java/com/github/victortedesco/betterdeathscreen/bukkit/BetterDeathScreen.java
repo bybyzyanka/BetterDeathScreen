@@ -1,5 +1,7 @@
 package com.github.victortedesco.betterdeathscreen.bukkit;
 
+import com.cryptomorin.xseries.messages.ActionBar;
+import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import com.github.victortedesco.betterdeathscreen.bukkit.commands.MainCommand;
@@ -9,7 +11,12 @@ import com.github.victortedesco.betterdeathscreen.bukkit.configuration.BukkitMes
 import com.github.victortedesco.betterdeathscreen.bukkit.listener.EventRegistry;
 import com.github.victortedesco.betterdeathscreen.bukkit.utils.DeathTasks;
 import com.github.victortedesco.betterdeathscreen.bukkit.utils.RespawnTasks;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.configuration.AbstractViaConfig;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,6 +52,10 @@ public class BetterDeathScreen extends JavaPlugin {
         getMessages().loadFields();
     }
 
+    public static void sendConsoleMessage(String message) {
+        Bukkit.getConsoleSender().sendMessage("[BetterDeathScreen] " + ChatColor.translateAlternateColorCodes('&', message));
+    }
+
     @Override
     public void onEnable() {
         boolean forceDisable = false;
@@ -57,25 +68,42 @@ public class BetterDeathScreen extends JavaPlugin {
         if (Version.getServerVersion() == Version.UNKNOWN) forceDisable = true;
         if (forceDisable) {
             for (String incompatible : getMessages().getIncompatible())
-                BetterDeathScreenAPI.getPluginManager().sendConsoleMessage(incompatible);
+                sendConsoleMessage(incompatible);
             getServer().getScheduler().runTaskLater(this, () -> getServer().getPluginManager().disablePlugin(this), 1L);
             return;
         }
         new EventRegistry().setupListeners();
-        BetterDeathScreenAPI.getPluginManager().fixViaVersionConfiguration();
+        fixViaVersionConfiguration();
         getCommand("bds").setExecutor(new MainCommand());
         getCommand("bds").setTabCompleter(new MainTabCompleter());
-        Metrics metrics = new Metrics(this, 17249);
-        for (String enabled : getMessages().getEnabled())
-            BetterDeathScreenAPI.getPluginManager().sendConsoleMessage(enabled);
-        BetterDeathScreenAPI.getPluginManager().sendConsoleMessage("&fMinecraft " + Version.getMinecraftVersion());
+        new Metrics(this, 17249);
+        for (Player player : getServer().getOnlinePlayers()) {
+            if (!getServer().isHardcore()) break;
+            if (player.getGameMode() == GameMode.SPECTATOR && !player.hasPermission(getConfiguration().getAdminPermission())) {
+                BetterDeathScreenAPI.getPlayerManager().getDeadPlayers().add(player);
+                BetterDeathScreen.getRespawnTasks().startCountdown(player);
+            }
+        }
+        for (String enabled : getMessages().getEnabled()) sendConsoleMessage(enabled);
+        sendConsoleMessage("&fMinecraft " + Version.getMinecraftVersion());
     }
 
     @Override
     public void onDisable() {
-        for (Player player : getServer().getOnlinePlayers())
+        for (Player player : getServer().getOnlinePlayers()) {
+            Titles.sendTitle(player, 1, 1, 1, "", "");
+            ActionBar.sendActionBar(player, "");
             BetterDeathScreen.getRespawnTasks().performRespawn(player, false);
-        for (String disabled : getMessages().getDisabled())
-            BetterDeathScreenAPI.getPluginManager().sendConsoleMessage(disabled);
+        }
+        for (String disabled : getMessages().getDisabled()) sendConsoleMessage(disabled);
+    }
+
+    private void fixViaVersionConfiguration() {
+        if (Bukkit.getServer().getPluginManager().getPlugin("ViaVersion") != null) {
+            AbstractViaConfig config = (AbstractViaConfig) Via.getConfig();
+            config.set("use-new-deathmessages", false);
+            config.saveConfig();
+            config.reloadConfig();
+        }
     }
 }

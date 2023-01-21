@@ -2,7 +2,6 @@ package com.github.victortedesco.betterdeathscreen.bukkit.listener.bukkit;
 
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,10 +13,11 @@ public class PlayerCommandPreprocessListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        String command = event.getMessage();
+        String command = event.getMessage().split(" ")[0];
 
+        if (command.equalsIgnoreCase("/bds") || command.equalsIgnoreCase("/betterdeathscreen")) return;
         if (BetterDeathScreenAPI.getPlayerManager().isDead(player)) {
-            if (!BetterDeathScreen.getConfiguration().getAllowedCommands().contains(StringUtils.substringBefore(command, " "))) {
+            if (!BetterDeathScreen.getConfiguration().getAllowedCommands().contains(command)) {
                 event.setCancelled(true);
                 player.sendMessage(BetterDeathScreen.getMessages().getBlockedCommand());
             }

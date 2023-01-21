@@ -6,9 +6,8 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
 
 public final class LoginPacketListener {
 
@@ -17,10 +16,9 @@ public final class LoginPacketListener {
 
             @Override
             public void onPacketSending(PacketEvent event) {
-                Player player = event.getPlayer();
                 PacketContainer packet = event.getPacket();
 
-                packet.getBooleans().write(0, BetterDeathScreenAPI.getPlayerManager().isHardcore(player));
+                packet.getBooleans().write(0, Bukkit.isHardcore());
             }
         });
     }

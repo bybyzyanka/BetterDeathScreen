@@ -5,7 +5,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.cryptomorin.xseries.XSound;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,7 +28,7 @@ public class Animations {
         particle.getFloat().write(2, (float) player.getLocation().getZ());
         particle.getIntegers().write(0, 1);
 
-        for (Player players : Bukkit.getOnlinePlayers()) {
+        for (Player players : player.getWorld().getPlayers()) {
             try {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(players, particle);
             } catch (InvocationTargetException ignored) {
@@ -52,10 +51,8 @@ public class Animations {
             exception.printStackTrace();
         }
         if (animation == AnimationType.NONE) return;
-        if (animation == AnimationType.RANDOM) {
-            Random random = new Random();
-            animation = AnimationType.values()[random.nextInt(3)];
-        }
+        if (animation == AnimationType.RANDOM)
+            animation = AnimationType.values()[new Random().nextInt(3)];
         if (animation == AnimationType.BLOOD) createBloodAnimation(player);
         if (animation == AnimationType.EXPLOSION) createExplosionAnimation(player);
         if (animation == AnimationType.LIGHTNING) createLightningAnimation(player);

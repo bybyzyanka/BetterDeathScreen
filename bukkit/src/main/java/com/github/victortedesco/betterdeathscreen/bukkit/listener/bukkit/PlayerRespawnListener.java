@@ -7,6 +7,7 @@ import com.github.victortedesco.betterdeathscreen.api.manager.PlayerManager;
 import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
 import net.md_5.bungee.api.chat.TranslatableComponent;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,14 +47,10 @@ public class PlayerRespawnListener implements Listener {
             }
         } else getBedNotFoundMessageSent().remove(player);
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
-        if (BetterDeathScreen.getConfiguration().canFly()) {
-            if (EntityDamageListener.getFlyState().containsKey(player))
-                player.setAllowFlight(EntityDamageListener.getFlyState().get(player));
-            else player.setFlying(false);
-        }
-        if (PlayerDeathListener.getEquipedArmor().containsKey(player)) {
-            player.getInventory().setArmorContents(PlayerDeathListener.getEquipedArmor().get(player));
-            PlayerDeathListener.getEquipedArmor().remove(player);
+        player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR);
+        if (PlayerDeathListener.getEquippedArmor().containsKey(player)) {
+            player.getInventory().setArmorContents(PlayerDeathListener.getEquippedArmor().get(player));
+            PlayerDeathListener.getEquippedArmor().remove(player);
             if (Version.getServerVersion() == Version.v1_8) {
                 player.setItemInHand(PlayerDeathListener.getItemInMainHand().get(player));
                 PlayerDeathListener.getItemInMainHand().remove(player);

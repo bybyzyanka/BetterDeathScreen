@@ -15,8 +15,8 @@ public abstract class ConfigurationHandler {
     }
 
     public final FileConfiguration getFileConfiguration(String file) {
-        final File new_file = new File(BetterDeathScreen.getInstance().getDataFolder() + File.separator + file + ".yml");
-        return YamlConfiguration.loadConfiguration(new_file);
+        final File newFile = new File(BetterDeathScreen.getInstance().getDataFolder() + File.separator + file + ".yml");
+        return YamlConfiguration.loadConfiguration(newFile);
     }
 
     public abstract void loadFields();

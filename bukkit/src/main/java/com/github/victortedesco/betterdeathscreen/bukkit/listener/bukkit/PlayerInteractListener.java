@@ -3,7 +3,6 @@ package com.github.victortedesco.betterdeathscreen.bukkit.listener.bukkit;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
 import org.bukkit.GameMode;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,7 +28,8 @@ public class PlayerInteractListener implements Listener {
 
         if (BetterDeathScreenAPI.getPlayerManager().isDead(player)) {
             event.setCancelled(true);
-            if (BetterDeathScreen.getConfiguration().canSpectate() && event.getRightClicked() instanceof LivingEntity) {
+            player.updateInventory();
+            if (BetterDeathScreen.getConfiguration().canSpectate()) {
                 player.setGameMode(GameMode.SPECTATOR);
                 player.setSpectatorTarget(event.getRightClicked());
             }

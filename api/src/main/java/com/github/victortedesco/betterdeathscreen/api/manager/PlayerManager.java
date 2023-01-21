@@ -7,7 +7,6 @@ import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -29,7 +28,7 @@ public class PlayerManager {
     }
 
     public boolean isDead(Player player) {
-        return (player.getHealth() == 0.1 || getDeadPlayers().contains(player));
+        return getDeadPlayers().contains(player);
     }
 
     public void playSound(Player player, List<String> list, boolean throwable, boolean silent) {
@@ -65,11 +64,11 @@ public class PlayerManager {
             Sound bukkitSound = XSound.matchXSound(sound).orElse(null).parseSound();
             player.playSound(player.getLocation(), bukkitSound, volume, pitch);
         } catch (Exception exception) {
-            if (throwable) ;
+            if (throwable) exception.printStackTrace();
         }
     }
 
-    public void sendCustomMessage(Player player, Player placeholderTarget, String type, String message, int time) {
+    public void sendCustomMessage(Player player, Player placeholderTarget, String type, String message, int timeSeconds) {
         message = ChatColor.translateAlternateColorCodes('&', message);
         MessageType messageType;
         try {
@@ -83,10 +82,18 @@ public class PlayerManager {
         }
         if (messageType == MessageType.ACTIONBAR) ActionBar.sendActionBar(player, message);
         if (messageType == MessageType.TITLE) {
-            String title = StringUtils.substringBefore(message, "\n");
-            String subtitle = StringUtils.substringAfter(message, "\n");
-
-            Titles.sendTitle(player, 5, 20 * time, 5, title, subtitle);
+            String[] array = message.split("\n");
+            String title;
+            String subtitle;
+            if (array.length == 1) {
+                title = "";
+                subtitle = array[0];
+            } else {
+                title = array[0];
+                subtitle = array[1];
+            }
+            if (Bukkit.isHardcore()) timeSeconds = 86400;
+            Titles.sendTitle(player, 5, 20 * timeSeconds, 5, title, subtitle);
         }
         if (messageType == MessageType.CHAT) player.sendMessage(message);
 
@@ -94,7 +101,7 @@ public class PlayerManager {
 
     public void teleportSafeLocation(Player player, Location location, PlayerTeleportEvent.TeleportCause teleportCause) {
         if (location.getWorld() == null) location = Bukkit.getWorlds().get(0).getSpawnLocation();
-        int y = location.getWorld().getMaxHeight();
+        int y = location.getWorld().getMaxHeight() - 1;
 
         for (int i = y; i > 0; i--) {
             Location newLocation = new Location(location.getWorld(), location.getX(), i, location.getZ());
@@ -106,24 +113,12 @@ public class PlayerManager {
     }
 
     /**
-     * Get if the player is on hardcore mode, returns hardcore state of the world the player is on versions newer than 1.15
-     */
-    public boolean isHardcore(Player player) {
-        if (Version.isVeryNewVersion()) {
-            return player.getWorld().isHardcore();
-        }
-        return Bukkit.isHardcore();
-    }
-
-    /**
      * Get the max health of the player, returns the GENERIC_MAX_HEALTH attribute on versions newer than 1.8
      */
     public double getMaxHealth(Player player) {
-        if (Version.getServerVersion().getValue() > Version.v1_8.getValue()) {
+        if (Version.getServerVersion().getValue() > Version.v1_8.getValue())
             return player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        } else {
-            return player.getMaxHealth();
-        }
+        return player.getMaxHealth();
     }
 
     /**

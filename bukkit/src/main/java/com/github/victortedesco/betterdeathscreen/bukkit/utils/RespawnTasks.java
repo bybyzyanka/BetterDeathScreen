@@ -15,52 +15,51 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class RespawnTasks {
+public final class RespawnTasks {
 
     public void startCountdown(Player player) {
         Config config = BetterDeathScreen.getConfiguration();
         Messages messages = BetterDeathScreen.getMessages();
 
         new BukkitRunnable() {
-            final String randomSound = BetterDeathScreenAPI.getRandomizer().getRandomItemFromList(config.getCountdownSounds());
+            final String randomCountdownSound = BetterDeathScreenAPI.getRandomizer().getRandomItemFromList(config.getCountdownSounds());
             int time = config.getRespawnTime();
 
             @Override
             public void run() {
-                if (!player.isOnline()) cancel();
-                if (!BetterDeathScreenAPI.getPlayerManager().isHardcore(player)) {
+                if (!player.isOnline() || !BetterDeathScreenAPI.getPlayerManager().isDead(player)) cancel();
+                if (!Bukkit.isHardcore()) {
                     time--;
                     if (player.hasPermission(config.getInstantRespawnPermission())) time = 0;
                     if (time > 1) {
                         BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getNonHardcoreCountdownMessageType(), messages.getNonHardcoreCountdown().replace("%time%", time + messages.getTimePlural()), 1);
-                        BetterDeathScreenAPI.getPlayerManager().playSound(player, randomSound, false, false);
+                        BetterDeathScreenAPI.getPlayerManager().playSound(player, randomCountdownSound, false, false);
                     }
                     if (time == 1) {
                         BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getNonHardcoreCountdownMessageType(), messages.getNonHardcoreCountdown().replace("%time%", time + messages.getTimeSingular()), 1);
-                        BetterDeathScreenAPI.getPlayerManager().playSound(player, randomSound, false, false);
+                        BetterDeathScreenAPI.getPlayerManager().playSound(player, randomCountdownSound, false, false);
                     }
                     if (time <= 0) {
                         BetterDeathScreen.getRespawnTasks().performRespawn(player, false);
                         cancel();
                     }
                 }
-                if (BetterDeathScreenAPI.getPlayerManager().isHardcore(player)) {
-                    if (!config.getHardcoreCountdownMessageType().equalsIgnoreCase("CHAT")) {
-                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getHardcoreCountdownMessageType(), messages.getHardcoreCountdown(), 1);
-                    }
+                if (Bukkit.isHardcore()) {
+                    time--;
                     // When changing the gamemode of the player, he respawns.
                     if (player.getGameMode() != GameMode.SPECTATOR) {
-                        performRespawn(player, false);
+                        performRespawn(player, true);
                         cancel();
+                    }
+                    if (config.getHardcoreCountdownMessageType().equalsIgnoreCase("ACTIONBAR") && time <= 0) {
+                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, "ACTIONBAR", messages.getHardcoreCountdown(), 0);
+                    }
+                    if (!config.getHardcoreCountdownMessageType().equalsIgnoreCase("ACTIONBAR") && time == 0) {
+                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getHardcoreCountdownMessageType(), messages.getHardcoreCountdown(), 0);
                     }
                 }
             }
         }.runTaskTimer(BetterDeathScreen.getInstance(), 20L, 20L);
-        if (BetterDeathScreenAPI.getPlayerManager().isHardcore(player)) {
-            if (config.getHardcoreCountdownMessageType().equalsIgnoreCase("CHAT")) {
-                BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, "CHAT", messages.getHardcoreCountdown(), 0);
-            }
-        }
     }
 
     public void sendPlayerRespawnEvent(Player player) {
@@ -89,13 +88,12 @@ public class RespawnTasks {
         PlayerManager playerManager = BetterDeathScreenAPI.getPlayerManager();
         BukkitConfig config = BetterDeathScreen.getConfiguration();
 
-        if (playerManager.isHardcore(player) && !forceRespawn) return;
-        if (playerManager.isDead(player)) {
+        if (Bukkit.isHardcore() && !forceRespawn) return;
+        if (playerManager.isDead(player) || forceRespawn) {
             playerManager.getDeadPlayers().remove(player);
             player.setGameMode(Bukkit.getDefaultGameMode());
-            player.setHealth(playerManager.getMaxHealth(player));
-            player.setRemainingAir(20);
-            this.sendPlayerRespawnEvent(player);
+            BetterDeathScreen.getDeathTasks().changeAttributes(player);
+            sendPlayerRespawnEvent(player);
             playerManager.playSound(player, config.getRespawnSounds(), true, false);
         }
     }

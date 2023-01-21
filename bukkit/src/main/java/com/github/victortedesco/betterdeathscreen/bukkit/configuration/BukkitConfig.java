@@ -2,6 +2,7 @@ package com.github.victortedesco.betterdeathscreen.bukkit.configuration;
 
 
 import com.github.victortedesco.betterdeathscreen.api.configuration.Config;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
 
         language = config.getString("misc.language", "en-US");
         respawnTime = config.getInt("misc.respawn-time", 10);
+        if (Bukkit.isHardcore()) respawnTime = 6;
         safeTeleport = config.getBoolean("misc.use-safe-teleport", true);
         commandsOnDeath = config.getStringList("commands-on-death");
         deathSounds = config.getStringList("sound.death");

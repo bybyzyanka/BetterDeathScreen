@@ -14,9 +14,8 @@ public class PlayerQuitListener implements Listener {
         Player player = event.getPlayer();
 
         // To avoid bugs, the player will respawn after disconnecting.
-        if (BetterDeathScreenAPI.getPlayerManager().isDead(player) && !BetterDeathScreenAPI.getPlayerManager().isHardcore(player)) {
+        if (BetterDeathScreenAPI.getPlayerManager().isDead(player))
             BetterDeathScreen.getRespawnTasks().performRespawn(player, false);
-        }
         PlayerRespawnListener.getBedNotFoundMessageSent().remove(player);
     }
 }

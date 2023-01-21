@@ -1,12 +1,8 @@
 package com.github.victortedesco.betterdeathscreen.bukkit.utils;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketContainer;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Statistic;
@@ -17,12 +13,10 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class DeathTasks {
+public final class DeathTasks {
 
     public void sendPlayerDeathEvent(Player player) {
         List<ItemStack> inventory = BetterDeathScreenAPI.getPlayerManager().getFilteredInventory(player);
@@ -51,10 +45,34 @@ public class DeathTasks {
         for (PotionEffect potion : player.getActivePotionEffects()) player.removePotionEffect(potion.getType());
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 30000, 0, false, false));
         BetterDeathScreenAPI.getPlayerManager().getDeadPlayers().add(player);
-        player.setHealth(0.1);
+        changeAttributes(player);
+        sendPlayerDeathEvent(player);
+        BetterDeathScreen.getRespawnTasks().startCountdown(player);
+        BetterDeathScreenAPI.getPlayerManager().playSound(player, BetterDeathScreen.getConfiguration().getDeathSounds(), true, false);
+        BetterDeathScreenAPI.getAnimations().sendAnimation(player, BetterDeathScreen.getConfiguration().getAnimationType());
+        if (Bukkit.isHardcore()) player.setGameMode(GameMode.SPECTATOR);
+    }
+
+    public void sendCommandsOnDeath(Player player, Player killer) {
+        for (String regex : BetterDeathScreen.getConfiguration().getCommandsOnDeath()) {
+            String[] array = regex.split(": ");
+            String sender = array[0];
+            String command = array[1];
+            if ((sender.equalsIgnoreCase("killer") || command.contains("@killer")) && killer == null) continue;
+            String formattedCommand = command.replace("@player", player.getName()).replace("@killer", killer.getName());
+
+            if (sender.equalsIgnoreCase("console"))
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), formattedCommand.split("/")[1]);
+            if (sender.equalsIgnoreCase("player")) player.chat(formattedCommand);
+            if (sender.equalsIgnoreCase("killer")) killer.chat(formattedCommand);
+        }
+    }
+
+    public void changeAttributes(Player player) {
+        player.setHealth(BetterDeathScreenAPI.getPlayerManager().getMaxHealth(player));
+        player.setRemainingAir(player.getMaximumAir());
         player.setFireTicks(0);
         player.setFoodLevel(20);
-        changeDisplayHealth(player);
         player.eject();
         for (Entity entity : player.getWorld().getEntities()) {
             if (Version.getServerVersion().getValue() < Version.v1_12.getValue()) {
@@ -65,46 +83,5 @@ public class DeathTasks {
                 if (creature.getTarget() == player) creature.setTarget(null);
             }
         }
-        sendPlayerDeathEvent(player);
-        BetterDeathScreen.getRespawnTasks().startCountdown(player);
-        BetterDeathScreenAPI.getPlayerManager().playSound(player, BetterDeathScreen.getConfiguration().getDeathSounds(), true, false);
-        BetterDeathScreenAPI.getAnimations().sendAnimation(player, BetterDeathScreen.getConfiguration().getAnimationType());
-        if (BetterDeathScreenAPI.getPlayerManager().isHardcore(player)) player.setGameMode(GameMode.SPECTATOR);
-    }
-
-    public void sendCommandsOnDeath(Player player, Player killer) {
-        for (String regex : BetterDeathScreen.getConfiguration().getCommandsOnDeath()) {
-            String sender = StringUtils.substringBefore(regex, ": ");
-            String command = StringUtils.substringAfter(regex, ": ");
-            if ((sender.equalsIgnoreCase("killer") || command.contains("@killer")) && killer == null) continue;
-            assert killer != null;
-
-            String formattedCommand = command.replace("@player", player.getName()).replace("@killer", killer.getName());
-
-            if (sender.equalsIgnoreCase("console"))
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), StringUtils.substringAfter(formattedCommand, "/"));
-
-            if (sender.equalsIgnoreCase("player")) player.chat(formattedCommand);
-            if (sender.equalsIgnoreCase("killer")) killer.chat(formattedCommand);
-        }
-    }
-
-    public void changeDisplayHealth(Player player) {
-        PacketContainer healthPacket = new PacketContainer(PacketType.Play.Server.UPDATE_HEALTH);
-        healthPacket.getFloat().write(0, (float) BetterDeathScreenAPI.getPlayerManager().getMaxHealth(player));
-        healthPacket.getIntegers().write(0, 20);
-        healthPacket.getFloat().write(1, 2F);
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (BetterDeathScreenAPI.getPlayerManager().isDead(player)) {
-                    try {
-                        ProtocolLibrary.getProtocolManager().sendServerPacket(player, healthPacket);
-                    } catch (InvocationTargetException ignored) {
-                    }
-                } else cancel();
-            }
-        }.runTaskTimerAsynchronously(BetterDeathScreen.getInstance(), 1L, 1L);
     }
 }

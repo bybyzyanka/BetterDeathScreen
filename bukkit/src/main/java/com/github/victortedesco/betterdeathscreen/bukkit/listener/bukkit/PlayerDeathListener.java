@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class PlayerDeathListener implements Listener {
 
     private static final HashMap<Player, Entity> KILL_ASSISTS = new HashMap<>();
-    private static final HashMap<Player, ItemStack[]> EQUIPED_ARMOR = new HashMap<>();
+    private static final HashMap<Player, ItemStack[]> EQUIPPED_ARMOR = new HashMap<>();
     private static final HashMap<Player, ItemStack> ITEM_IN_MAIN_HAND = new HashMap<>();
     private static final HashMap<Player, ItemStack> ITEM_IN_OFF_HAND = new HashMap<>();
 
@@ -27,8 +27,8 @@ public class PlayerDeathListener implements Listener {
         return KILL_ASSISTS;
     }
 
-    public static HashMap<Player, ItemStack[]> getEquipedArmor() {
-        return EQUIPED_ARMOR;
+    public static HashMap<Player, ItemStack[]> getEquippedArmor() {
+        return EQUIPPED_ARMOR;
     }
 
     public static HashMap<Player, ItemStack> getItemInMainHand() {
@@ -53,7 +53,7 @@ public class PlayerDeathListener implements Listener {
             player.getInventory().clear();
             player.updateInventory();
         } else {
-            getEquipedArmor().put(player, player.getInventory().getArmorContents());
+            getEquippedArmor().put(player, player.getInventory().getArmorContents());
             player.getInventory().setArmorContents(null);
             if (Version.getServerVersion() == Version.v1_8) {
                 getItemInMainHand().put(player, player.getItemInHand());

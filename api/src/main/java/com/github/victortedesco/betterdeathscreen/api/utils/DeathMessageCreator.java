@@ -169,7 +169,7 @@ public class DeathMessageCreator {
                                     item = ((LivingEntity) projectile.getShooter()).getEquipment().getItemInHand();
                                 }
                             }
-                            if ((Version.isNewVersion() | Version.isVeryNewVersion())) {
+                            if (Version.isNewVersion() | Version.isVeryNewVersion()) {
                                 if (projectile instanceof Trident) {
                                     Trident trident = (Trident) projectile;
                                     message = new TranslatableComponent("death.attack.trident");

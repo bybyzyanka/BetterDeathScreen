@@ -17,10 +17,9 @@ public class PlayerMoveListener implements Listener {
         Player player = event.getPlayer();
 
         if (BetterDeathScreenAPI.getPlayerManager().isDead(player) && BetterDeathScreen.getConfiguration().canSpectate()) {
-            if (BetterDeathScreenAPI.getPlayerManager().isHardcore(player)) return;
-            if (player.getSpectatorTarget() == null && player.getGameMode() == GameMode.SPECTATOR) {
+            if (Bukkit.isHardcore()) return;
+            if (player.getSpectatorTarget() == null && player.getGameMode() == GameMode.SPECTATOR)
                 player.setGameMode(Bukkit.getDefaultGameMode());
-            }
         }
     }
 }
