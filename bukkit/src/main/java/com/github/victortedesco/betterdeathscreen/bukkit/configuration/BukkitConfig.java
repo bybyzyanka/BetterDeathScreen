@@ -20,8 +20,7 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
     private String killMessageType;
     private String killedMessageType;
     private String killedByPlayerMessageType;
-    private String hardcoreCountdownMessageType;
-    private String nonHardcoreCountdownMessageType;
+    private String countdownMessageType;
     private String animationType;
     private String instantRespawnPermission;
     private String adminPermission;
@@ -47,8 +46,7 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
         killMessageType = config.getString("message-type.kill", "CHAT");
         killedMessageType = config.getString("message-type.killed", "TITLE");
         killedByPlayerMessageType = config.getString("message-type.killed-by-player", "TITLE");
-        nonHardcoreCountdownMessageType = config.getString("message-type.non-hardcore-countdown", "ACTIONBAR");
-        hardcoreCountdownMessageType = config.getString("message-type.hardcore-countdown", "ACTIONBAR");
+        countdownMessageType = config.getString("message-type.hardcore-countdown", "ACTIONBAR");
         animationType = config.getString("animation.type", "BLOOD");
         instantRespawnPermission = config.getString("permissions.instant-respawn", "bds.instant-respawn");
         adminPermission = config.getString("permissions.admin", "bds.admin");
@@ -114,13 +112,8 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
     }
 
     @Override
-    public String getHardcoreCountdownMessageType() {
-        return hardcoreCountdownMessageType;
-    }
-
-    @Override
-    public String getNonHardcoreCountdownMessageType() {
-        return nonHardcoreCountdownMessageType;
+    public String getCountdownMessageType() {
+        return countdownMessageType;
     }
 
     @Override

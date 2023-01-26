@@ -55,9 +55,9 @@ public class EntityDamageListener implements Listener {
             Player playerKiller = null;
 
             if (Bukkit.isHardcore()) time = 5;
-            if (playerManager.getDeadPlayers().contains(player)) {
+            if (playerManager.isDead(player)) {
                 event.setCancelled(true);
-                if (player.getFireTicks() > 0) player.setFireTicks(0);
+                player.setFireTicks(0);
                 return;
             }
             if (player.getHealth() > event.getFinalDamage() || BetterDeathScreenAPI.getPlayerManager().usingTotem(player)) {

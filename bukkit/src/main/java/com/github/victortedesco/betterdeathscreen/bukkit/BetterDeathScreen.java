@@ -67,8 +67,7 @@ public class BetterDeathScreen extends JavaPlugin {
         }
         if (Version.getServerVersion() == Version.UNKNOWN) forceDisable = true;
         if (forceDisable) {
-            for (String incompatible : getMessages().getIncompatible())
-                sendConsoleMessage(incompatible);
+            getMessages().getIncompatible().forEach(BetterDeathScreen::sendConsoleMessage);
             getServer().getScheduler().runTaskLater(this, () -> getServer().getPluginManager().disablePlugin(this), 1L);
             return;
         }
@@ -84,7 +83,7 @@ public class BetterDeathScreen extends JavaPlugin {
                 BetterDeathScreen.getRespawnTasks().startCountdown(player);
             }
         }
-        for (String enabled : getMessages().getEnabled()) sendConsoleMessage(enabled);
+        getMessages().getEnabled().forEach(BetterDeathScreen::sendConsoleMessage);
         sendConsoleMessage("&fMinecraft " + Version.getMinecraftVersion());
     }
 
@@ -95,7 +94,7 @@ public class BetterDeathScreen extends JavaPlugin {
             ActionBar.sendActionBar(player, "");
             BetterDeathScreen.getRespawnTasks().performRespawn(player, false);
         }
-        for (String disabled : getMessages().getDisabled()) sendConsoleMessage(disabled);
+        getMessages().getDisabled().forEach(BetterDeathScreen::sendConsoleMessage);
     }
 
     private void fixViaVersionConfiguration() {

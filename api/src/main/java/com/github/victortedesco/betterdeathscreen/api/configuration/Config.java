@@ -26,9 +26,7 @@ public interface Config {
 
     String getKilledByPlayerMessageType();
 
-    String getHardcoreCountdownMessageType();
-
-    String getNonHardcoreCountdownMessageType();
+    String getCountdownMessageType();
 
     String getAnimationType();
 

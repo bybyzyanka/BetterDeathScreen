@@ -25,8 +25,7 @@ message-type:
   kill: "CHAT"
   killed: "TITLE"
   killed-by-player: "TITLE"
-  non-hardcore-countdown: "ACTIONBAR"
-  hardcore-countdown: "ACTIONBAR"
+  countdown: "ACTIONBAR"
 sound:
   # This section is compatible with resource pack sounds.
   # sound;volume;pitch

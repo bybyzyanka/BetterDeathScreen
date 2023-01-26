@@ -79,13 +79,13 @@ public class PlayerDeathListener implements Listener {
                         if (Version.getServerVersion().getValue() < Version.v1_12.getValue())
                             Bukkit.getConsoleSender().sendMessage(player.getName() + " died");
                         else Bukkit.getConsoleSender().spigot().sendMessage(deathMessage);
-                        for (Player players : Bukkit.getOnlinePlayers()) players.spigot().sendMessage(deathMessage);
+                        Bukkit.getOnlinePlayers().forEach(players -> players.spigot().sendMessage(deathMessage));
                         getKillAssists().remove(player);
                     }
                 }.runTaskLaterAsynchronously(BetterDeathScreen.getInstance(), 1L);
             } else {
                 Bukkit.getConsoleSender().sendMessage(event.getDeathMessage());
-                for (Player players : Bukkit.getOnlinePlayers()) players.sendMessage(event.getDeathMessage());
+                Bukkit.getOnlinePlayers().forEach(players -> players.sendMessage(event.getDeathMessage()));
             }
         }
     }

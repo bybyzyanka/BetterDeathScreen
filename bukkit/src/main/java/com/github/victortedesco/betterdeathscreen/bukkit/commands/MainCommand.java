@@ -46,8 +46,8 @@ public class MainCommand implements CommandExecutor {
             }
         }
         if (!performed) {
-            for (String help : messages.getHelp())
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', help));
+            messages.getHelp()
+                    .forEach(message -> sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message)));
         }
         return true;
     }

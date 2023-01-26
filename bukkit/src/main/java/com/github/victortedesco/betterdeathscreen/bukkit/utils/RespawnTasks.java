@@ -32,11 +32,11 @@ public final class RespawnTasks {
                     time--;
                     if (player.hasPermission(config.getInstantRespawnPermission())) time = 0;
                     if (time > 1) {
-                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getNonHardcoreCountdownMessageType(), messages.getNonHardcoreCountdown().replace("%time%", time + messages.getTimePlural()), 1);
+                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getCountdownMessageType(), messages.getNonHardcoreCountdown().replace("%time%", time + messages.getTimePlural()), 1);
                         BetterDeathScreenAPI.getPlayerManager().playSound(player, randomCountdownSound, false, false);
                     }
                     if (time == 1) {
-                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getNonHardcoreCountdownMessageType(), messages.getNonHardcoreCountdown().replace("%time%", time + messages.getTimeSingular()), 1);
+                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getCountdownMessageType(), messages.getNonHardcoreCountdown().replace("%time%", time + messages.getTimeSingular()), 1);
                         BetterDeathScreenAPI.getPlayerManager().playSound(player, randomCountdownSound, false, false);
                     }
                     if (time <= 0) {
@@ -51,11 +51,11 @@ public final class RespawnTasks {
                         performRespawn(player, true);
                         cancel();
                     }
-                    if (config.getHardcoreCountdownMessageType().equalsIgnoreCase("ACTIONBAR") && time <= 0) {
+                    if (config.getCountdownMessageType().equalsIgnoreCase("ACTIONBAR") && time <= 0) {
                         BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, "ACTIONBAR", messages.getHardcoreCountdown(), 0);
                     }
-                    if (!config.getHardcoreCountdownMessageType().equalsIgnoreCase("ACTIONBAR") && time == 0) {
-                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getHardcoreCountdownMessageType(), messages.getHardcoreCountdown(), 0);
+                    if (!config.getCountdownMessageType().equalsIgnoreCase("ACTIONBAR") && time == 0) {
+                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getCountdownMessageType(), messages.getHardcoreCountdown(), 0);
                     }
                 }
             }
