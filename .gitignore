@@ -1,0 +1,9 @@
+/api/api.iml
+/bukkit/bukkit.iml
+/bukkit/plugin.iml
+/api.iml
+/parent.iml
+/.idea/
+/api/target
+/bukkit/target
+/bukkit/dependency-reduced-pom.xml
