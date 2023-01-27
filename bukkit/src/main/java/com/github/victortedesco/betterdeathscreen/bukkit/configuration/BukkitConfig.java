@@ -46,7 +46,7 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
         killMessageType = config.getString("message-type.kill", "CHAT");
         killedMessageType = config.getString("message-type.killed", "TITLE");
         killedByPlayerMessageType = config.getString("message-type.killed-by-player", "TITLE");
-        countdownMessageType = config.getString("message-type.hardcore-countdown", "ACTIONBAR");
+        countdownMessageType = config.getString("message-type.countdown", "ACTIONBAR");
         animationType = config.getString("animation.type", "BLOOD");
         instantRespawnPermission = config.getString("permissions.instant-respawn", "bds.instant-respawn");
         adminPermission = config.getString("permissions.admin", "bds.admin");
