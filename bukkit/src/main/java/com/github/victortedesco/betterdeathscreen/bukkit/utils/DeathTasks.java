@@ -40,9 +40,10 @@ public final class DeathTasks {
 
     public void performDeath(Player player) {
         player.closeInventory();
+        player.incrementStatistic(Statistic.DEATHS, 1);
         player.incrementStatistic(Statistic.DAMAGE_TAKEN, (int) Math.max(1, player.getHealth()));
         player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
-        for (PotionEffect potion : player.getActivePotionEffects()) player.removePotionEffect(potion.getType());
+        player.getActivePotionEffects().forEach(potion -> player.removePotionEffect(potion.getType()));
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 30000, 0, false, false));
         BetterDeathScreenAPI.getPlayerManager().getDeadPlayers().add(player);
         changeAttributes(player);
@@ -55,16 +56,22 @@ public final class DeathTasks {
 
     public void sendCommandsOnDeath(Player player, Player killer) {
         for (String regex : BetterDeathScreen.getConfiguration().getCommandsOnDeath()) {
-            String[] array = regex.split(": ");
-            String sender = array[0];
-            String command = array[1];
-            if ((sender.equalsIgnoreCase("killer") || command.contains("@killer")) && killer == null) continue;
-            String formattedCommand = command.replace("@player", player.getName()).replace("@killer", killer.getName());
+            try {
+                String[] array = regex.split(": ");
+                String sender = array[0];
+                String command = array[1];
+                if ((sender.equalsIgnoreCase("killer") || command.contains("@killer")) && killer == null) continue;
+                String formattedCommand;
+                if (killer != null) formattedCommand = command.replace("@player", player.getName()).replace("@killer", killer.getName());
+                else formattedCommand = command.replace("@player", player.getName());
 
-            if (sender.equalsIgnoreCase("console"))
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), formattedCommand.split("/")[1]);
-            if (sender.equalsIgnoreCase("player")) player.chat(formattedCommand);
-            if (sender.equalsIgnoreCase("killer")) killer.chat(formattedCommand);
+                if (sender.equalsIgnoreCase("console"))
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), formattedCommand.split("/")[1]);
+                if (sender.equalsIgnoreCase("player")) player.chat(formattedCommand);
+                if (sender.equalsIgnoreCase("killer")) killer.chat(formattedCommand);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
     }
 
