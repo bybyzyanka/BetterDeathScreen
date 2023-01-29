@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class PlayerMoveListener implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 

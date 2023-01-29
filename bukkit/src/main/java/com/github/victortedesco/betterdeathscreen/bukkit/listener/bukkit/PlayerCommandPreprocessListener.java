@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class PlayerCommandPreprocessListener implements Listener {
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         String command = event.getMessage().split(" ")[0];
