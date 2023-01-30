@@ -87,7 +87,6 @@ public class PlayerManager {
                     title = array[0];
                     subtitle = array[1];
                 }
-                if (Bukkit.isHardcore()) timeSeconds = 86400;
                 Titles.sendTitle(player, 5, 20 * timeSeconds, 5, title, subtitle);
             }
             if (messageType == MessageType.CHAT) player.sendMessage(message);

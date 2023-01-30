@@ -62,7 +62,8 @@ public final class DeathTasks {
                 String command = array[1];
                 if ((sender.equalsIgnoreCase("killer") || command.contains("@killer")) && killer == null) continue;
                 String formattedCommand;
-                if (killer != null) formattedCommand = command.replace("@player", player.getName()).replace("@killer", killer.getName());
+                if (killer != null)
+                    formattedCommand = command.replace("@player", player.getName()).replace("@killer", killer.getName());
                 else formattedCommand = command.replace("@player", player.getName());
 
                 if (sender.equalsIgnoreCase("console"))

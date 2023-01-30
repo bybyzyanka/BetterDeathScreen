@@ -55,7 +55,7 @@ public final class RespawnTasks {
                         BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, "ACTIONBAR", messages.getHardcoreCountdown(), 0);
                     }
                     if (!config.getCountdownMessageType().equalsIgnoreCase("ACTIONBAR") && time == 0) {
-                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getCountdownMessageType(), messages.getHardcoreCountdown(), 0);
+                        BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getCountdownMessageType(), messages.getHardcoreCountdown(), 86400);
                     }
                 }
             }

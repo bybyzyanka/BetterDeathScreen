@@ -20,7 +20,8 @@ public class PlayerJoinListener implements Listener {
         BukkitConfig config = BetterDeathScreen.getConfiguration();
 
         if (Bukkit.isHardcore()) {
-            if (player.getGameMode() == GameMode.SPECTATOR && !player.hasPermission(config.getAdminPermission())) {
+            if ((player.getGameMode() == GameMode.SPECTATOR && !player.hasPermission(config.getAdminPermission())
+                    || BetterDeathScreenAPI.getPlayerManager().isDead(player))) {
                 Bukkit.getScheduler().runTaskLater(BetterDeathScreen.getInstance(),
                         () -> player.setGameMode(GameMode.SPECTATOR), 2L); //MV Compatibility
                 BetterDeathScreenAPI.getPlayerManager().getDeadPlayers().add(player);
