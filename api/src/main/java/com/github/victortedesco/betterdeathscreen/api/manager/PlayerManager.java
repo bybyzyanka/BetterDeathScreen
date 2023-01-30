@@ -1,6 +1,5 @@
 package com.github.victortedesco.betterdeathscreen.api.manager;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.messages.ActionBar;
 import com.cryptomorin.xseries.messages.Titles;
@@ -133,7 +132,7 @@ public class PlayerManager {
             Material mainHand = player.getInventory().getItemInMainHand().getType();
             Material offHand = player.getInventory().getItemInOffHand().getType();
 
-            return mainHand == XMaterial.TOTEM_OF_UNDYING.parseMaterial() || offHand == XMaterial.TOTEM_OF_UNDYING.parseMaterial();
+            return mainHand.toString().contains("TOTEM") || offHand.toString().contains("TOTEM");
         }
         return false;
     }
