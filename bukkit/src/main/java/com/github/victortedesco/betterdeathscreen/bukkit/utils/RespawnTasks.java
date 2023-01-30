@@ -27,7 +27,10 @@ public final class RespawnTasks {
 
             @Override
             public void run() {
-                if (!player.isOnline() || !BetterDeathScreenAPI.getPlayerManager().isDead(player)) cancel();
+                if (!player.isOnline() || !BetterDeathScreenAPI.getPlayerManager().isDead(player)) {
+                    cancel();
+                    return;
+                }
                 if (!Bukkit.isHardcore()) {
                     time--;
                     if (player.hasPermission(config.getInstantRespawnPermission())) time = 0;
@@ -50,6 +53,7 @@ public final class RespawnTasks {
                     if (player.getGameMode() != GameMode.SPECTATOR) {
                         performRespawn(player, true);
                         cancel();
+                        return;
                     }
                     if (config.getCountdownMessageType().equalsIgnoreCase("ACTIONBAR") && time <= 0) {
                         BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, "ACTIONBAR", messages.getHardcoreCountdown(), 0);
