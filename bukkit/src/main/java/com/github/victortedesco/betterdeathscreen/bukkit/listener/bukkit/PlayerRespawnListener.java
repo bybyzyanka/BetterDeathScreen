@@ -3,9 +3,7 @@ package com.github.victortedesco.betterdeathscreen.bukkit.listener.bukkit;
 import com.cryptomorin.xseries.messages.ActionBar;
 import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
-import com.github.victortedesco.betterdeathscreen.api.manager.PlayerManager;
 import com.github.victortedesco.betterdeathscreen.api.utils.Version;
-import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -30,11 +28,10 @@ public class PlayerRespawnListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onRespawnMonitorPriority(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        PlayerManager playerManager = BetterDeathScreenAPI.getPlayerManager();
 
         BetterDeathScreenAPI.getEventManager().resetPlayerDamage(player);
-        Titles.sendTitle(player, 1, 1, 1, "", "");
-        ActionBar.sendActionBar(player, "");
+        Titles.clearTitle(player);
+        ActionBar.clearActionBar(player);
         if (player.getBedSpawnLocation() == null) {
             if (!getBedNotFoundMessageSent().contains(player)) {
                 TranslatableComponent noBed = new TranslatableComponent("tile.bed.notValid");
@@ -61,10 +58,7 @@ public class PlayerRespawnListener implements Listener {
                 PlayerDeathListener.getItemInOffHand().get(player);
             }
         }
-        if (BetterDeathScreen.getConfiguration().useSafeTeleport())
-            playerManager.teleportSafeLocation(player, event.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-        else
-            player.teleport(event.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        player.teleport(event.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

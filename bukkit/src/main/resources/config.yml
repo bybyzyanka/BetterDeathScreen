@@ -10,7 +10,6 @@
 misc: # Available languages: en-US, pt-BR
   language: "en-US"
   respawn-time: 10
-  use-safe-teleport: true
 commands-on-death:
 # sender: command
 # Variables: @player, @killer

@@ -7,10 +7,12 @@ import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -69,46 +71,29 @@ public class PlayerManager {
     }
 
     public void sendCustomMessage(Player player, Player placeholderTarget, String type, String message, int timeSeconds) {
-        message = ChatColor.translateAlternateColorCodes('&', message);
-        MessageType messageType;
         try {
-            messageType = MessageType.valueOf(type);
-        } catch (IllegalArgumentException exception) {
-            messageType = MessageType.CHAT;
+            message = ChatColor.translateAlternateColorCodes('&', message);
+            MessageType messageType = MessageType.valueOf(type);
+            if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && placeholderTarget != null)
+                message = PlaceholderAPI.setPlaceholders(placeholderTarget, message);
+            if (messageType == MessageType.ACTIONBAR) ActionBar.sendActionBar(player, message);
+            if (messageType == MessageType.TITLE) {
+                String[] array = message.split("\n");
+                String title;
+                String subtitle;
+                if (array.length == 1) {
+                    title = "";
+                    subtitle = array[0];
+                } else {
+                    title = array[0];
+                    subtitle = array[1];
+                }
+                if (Bukkit.isHardcore()) timeSeconds = 86400;
+                Titles.sendTitle(player, 5, 20 * timeSeconds, 5, title, subtitle);
+            }
+            if (messageType == MessageType.CHAT) player.sendMessage(message);
+        } catch (Exception exception) {
             exception.printStackTrace();
-        }
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && placeholderTarget != null) {
-            message = PlaceholderAPI.setPlaceholders(placeholderTarget, message);
-        }
-        if (messageType == MessageType.ACTIONBAR) ActionBar.sendActionBar(player, message);
-        if (messageType == MessageType.TITLE) {
-            String[] array = message.split("\n");
-            String title;
-            String subtitle;
-            if (array.length == 1) {
-                title = "";
-                subtitle = array[0];
-            } else {
-                title = array[0];
-                subtitle = array[1];
-            }
-            if (Bukkit.isHardcore()) timeSeconds = 86400;
-            Titles.sendTitle(player, 5, 20 * timeSeconds, 5, title, subtitle);
-        }
-        if (messageType == MessageType.CHAT) player.sendMessage(message);
-
-    }
-
-    public void teleportSafeLocation(Player player, Location location, PlayerTeleportEvent.TeleportCause teleportCause) {
-        if (location.getWorld() == null) location = Bukkit.getWorlds().get(0).getSpawnLocation();
-        int y = location.getWorld().getMaxHeight() - 1;
-
-        for (int i = y; i > 0; i--) {
-            Location newLocation = new Location(location.getWorld(), location.getX(), i, location.getZ());
-            if (newLocation.getBlock().getType().isSolid() && newLocation.add(0, 1, 0).getBlock().getType() == Material.AIR) {
-                player.teleport(newLocation.add(0, 1.2, 0), teleportCause);
-                break;
-            }
         }
     }
 

@@ -8,8 +8,6 @@ public interface Config {
 
     int getRespawnTime();
 
-    boolean useSafeTeleport();
-
     List<String> getCommandsOnDeath();
 
     List<String> getDeathSounds();

@@ -1,7 +1,5 @@
 package com.github.victortedesco.betterdeathscreen.bukkit;
 
-import com.cryptomorin.xseries.messages.ActionBar;
-import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import com.github.victortedesco.betterdeathscreen.bukkit.commands.MainCommand;
@@ -89,11 +87,7 @@ public class BetterDeathScreen extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        for (Player player : getServer().getOnlinePlayers()) {
-            Titles.sendTitle(player, 1, 1, 1, "", "");
-            ActionBar.sendActionBar(player, "");
-            BetterDeathScreen.getRespawnTasks().performRespawn(player, false);
-        }
+        getServer().getOnlinePlayers().forEach(player -> BetterDeathScreen.getRespawnTasks().performRespawn(player, false));
         getMessages().getDisabled().forEach(BetterDeathScreen::sendConsoleMessage);
     }
 
