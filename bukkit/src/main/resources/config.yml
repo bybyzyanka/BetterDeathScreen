@@ -10,6 +10,7 @@
 misc: # Available languages: en-US, pt-BR
   language: "en-US"
   respawn-time: 10
+  notify-updates: true
 commands-on-death:
 # sender: command
 # Variables: @player, @killer

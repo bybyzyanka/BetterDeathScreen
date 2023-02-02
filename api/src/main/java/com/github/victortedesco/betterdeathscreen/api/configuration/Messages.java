@@ -10,6 +10,8 @@ public interface Messages {
 
     List<String> getDisabled();
 
+    List<String> getUpdateAvailable();
+
     String getReloaded();
 
     String getWithoutPermission();

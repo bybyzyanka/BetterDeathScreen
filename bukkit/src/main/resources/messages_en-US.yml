@@ -37,7 +37,7 @@ respawn:
   hardcore-countdown: "&cYou will never respawn again..."
 commands:
   help:
-    - "&cBetterDeathScreen &7- Commands"
+    - "&cBetterDeathScreen &f| Commands"
     - ""
     - "&c/bds reload &7- &fReloads the configuration of the plugin."
     - "&c/bds respawn (player) &7- &fForce the player to respawn. (Works on hardcore)"
@@ -45,10 +45,15 @@ commands:
   without-permission: "&cYou don´t have permission to use this command."
 plugin:
   incompatible:
-    - "&cYour server is not using a spigot fork or is using a version older than 1.8!"
+    - "&cYour server is not using a Spigot fork or is using a version older than 1.8!"
     - "&cIf you think this is an error, contact the author &fTedesk"
     - "&cThe plugin will be disabled."
   enabled:
     - "&aPlugin enabled!"
   disabled:
     - "&cPlugin disabled!"
+  update-available:
+    - "&aBetterDeathScreen &f| (%current_version%) -> (%latest_version%)"
+    - ""
+    - "&eThe plugin can be updated!"
+    - "&7Download: &f%release_link%"

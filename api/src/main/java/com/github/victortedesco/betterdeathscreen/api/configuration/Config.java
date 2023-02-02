@@ -8,6 +8,8 @@ public interface Config {
 
     int getRespawnTime();
 
+    boolean canNotifyUpdates();
+
     List<String> getCommandsOnDeath();
 
     List<String> getDeathSounds();

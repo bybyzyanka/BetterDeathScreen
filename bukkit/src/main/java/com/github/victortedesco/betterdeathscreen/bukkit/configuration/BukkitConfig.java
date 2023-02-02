@@ -10,6 +10,7 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
 
     private String language;
     private int respawnTime;
+    private boolean notifyUpdates;
     private List<String> commandsOnDeath;
     private List<String> deathSounds;
     private List<String> killSounds;
@@ -34,6 +35,7 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
 
         language = config.getString("misc.language", "en-US");
         respawnTime = config.getInt("misc.respawn-time", 10);
+        notifyUpdates = config.getBoolean("misc.notify-updates", true);
         if (Bukkit.isHardcore()) respawnTime = 6;
         commandsOnDeath = config.getStringList("commands-on-death");
         deathSounds = config.getStringList("sound.death");
@@ -61,6 +63,11 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
     @Override
     public int getRespawnTime() {
         return respawnTime;
+    }
+
+    @Override
+    public boolean canNotifyUpdates() {
+        return notifyUpdates;
     }
 
     @Override

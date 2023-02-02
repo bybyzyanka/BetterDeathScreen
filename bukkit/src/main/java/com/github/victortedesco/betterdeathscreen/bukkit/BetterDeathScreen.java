@@ -9,6 +9,7 @@ import com.github.victortedesco.betterdeathscreen.bukkit.configuration.BukkitMes
 import com.github.victortedesco.betterdeathscreen.bukkit.listener.EventRegistry;
 import com.github.victortedesco.betterdeathscreen.bukkit.utils.DeathTasks;
 import com.github.victortedesco.betterdeathscreen.bukkit.utils.RespawnTasks;
+import com.github.victortedesco.betterdeathscreen.bukkit.utils.updater.UpdateChecker;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
 import org.bstats.bukkit.Metrics;
@@ -70,6 +71,7 @@ public class BetterDeathScreen extends JavaPlugin {
             return;
         }
         new EventRegistry().setupListeners();
+        new UpdateChecker();
         fixViaVersionConfiguration();
         getCommand("bds").setExecutor(new MainCommand());
         getCommand("bds").setTabCompleter(new MainTabCompleter());

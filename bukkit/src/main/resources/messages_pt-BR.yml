@@ -37,7 +37,7 @@ respawn:
   hardcore-countdown: "&cVocê não irá renascer..."
 commands:
   help:
-    - "&cBetterDeathScreen &7- Comandos"
+    - "&cBetterDeathScreen &f| Comandos"
     - ""
     - "&c/bds reload &7- &fRecarrega as configurações do plugin."
     - "&c/bds respawn (player) &7- &fForça o jogador a renascer. (Funciona no hardcore)"
@@ -52,3 +52,8 @@ plugin:
     - "&aPlugin ativado!"
   disabled:
     - "&cPlugin desativado!"
+  update-available:
+    - "&aBetterDeathScreen &f| (%current_version%) -> (%latest_version%)"
+    - ""
+    - "&eO plugin pode ser atualizado!"
+    - "&7Download: &f%release_link%"

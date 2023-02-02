@@ -12,6 +12,7 @@ public class BukkitMessages extends ConfigurationHandler implements Messages {
     private List<String> incompatible;
     private List<String> enabled;
     private List<String> disabled;
+    private List<String> updateAvailable;
     private String reloaded;
     private String blockedCommand;
     private String withoutPermission;
@@ -38,6 +39,7 @@ public class BukkitMessages extends ConfigurationHandler implements Messages {
         incompatible = messages.getStringList("plugin.incompatible");
         enabled = messages.getStringList("plugin.enabled");
         disabled = messages.getStringList("plugin.disabled");
+        updateAvailable = messages.getStringList("plugin.update-available");
         blockedCommand = ChatColor.translateAlternateColorCodes('&', messages.getString("misc.command-blocked", "&cYou can´t use that command, because you are dead."));
         reloaded = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.reloaded", "&aPlugin successfully reloaded."));
         withoutPermission = ChatColor.translateAlternateColorCodes('&', messages.getString("commands.without-permission", "&cYou don´t have permission to use this command."));
@@ -64,6 +66,11 @@ public class BukkitMessages extends ConfigurationHandler implements Messages {
     @Override
     public List<String> getDisabled() {
         return disabled;
+    }
+
+    @Override
+    public List<String> getUpdateAvailable() {
+        return updateAvailable;
     }
 
     @Override
