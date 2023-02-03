@@ -15,6 +15,7 @@ public class PlayerCommandPreprocessListener implements Listener {
         Player player = event.getPlayer();
         String command = event.getMessage().split(" ")[0];
 
+        if (BetterDeathScreen.getConfiguration().getAllowedCommands().contains("*")) return;
         if (command.equalsIgnoreCase("/bds") || command.equalsIgnoreCase("/betterdeathscreen")) return;
         if (BetterDeathScreenAPI.getPlayerManager().isDead(player)) {
             if (!BetterDeathScreen.getConfiguration().getAllowedCommands().contains(command)) {
