@@ -1,7 +1,7 @@
 package com.github.victortedesco.betterdeathscreen.bukkit;
 
+import com.cryptomorin.xseries.ReflectionUtils;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
-import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import com.github.victortedesco.betterdeathscreen.bukkit.commands.MainCommand;
 import com.github.victortedesco.betterdeathscreen.bukkit.commands.MainTabCompleter;
 import com.github.victortedesco.betterdeathscreen.bukkit.configuration.BukkitConfig;
@@ -64,13 +64,13 @@ public class BetterDeathScreen extends JavaPlugin {
         } catch (NoSuchMethodException exception) {
             forceDisable = true;
         }
-        if (Version.getServerVersion() == Version.UNKNOWN) forceDisable = true;
+        if (ReflectionUtils.VER < 8) forceDisable = true;
         if (forceDisable) {
             getMessages().getIncompatible().forEach(BetterDeathScreen::sendConsoleMessage);
             getServer().getScheduler().runTaskLater(this, () -> getServer().getPluginManager().disablePlugin(this), 1L);
             return;
         }
-        new EventRegistry().setupListeners();
+        new EventRegistry();
         new UpdateChecker();
         fixViaVersionConfiguration();
         getCommand("bds").setExecutor(new MainCommand());
@@ -84,7 +84,7 @@ public class BetterDeathScreen extends JavaPlugin {
             }
         }
         getMessages().getEnabled().forEach(BetterDeathScreen::sendConsoleMessage);
-        sendConsoleMessage("&fMinecraft " + Version.getMinecraftVersion());
+        sendConsoleMessage("&fMinecraft 1." + ReflectionUtils.VER);
     }
 
     @Override

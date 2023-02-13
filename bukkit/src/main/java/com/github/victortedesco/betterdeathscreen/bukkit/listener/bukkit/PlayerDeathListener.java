@@ -1,7 +1,7 @@
 package com.github.victortedesco.betterdeathscreen.bukkit.listener.bukkit;
 
+import com.cryptomorin.xseries.ReflectionUtils;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
-import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
@@ -51,11 +51,10 @@ public class PlayerDeathListener implements Listener {
         if (!event.getKeepInventory()) {
             player.getInventory().setArmorContents(null);
             player.getInventory().clear();
-            player.updateInventory();
         } else {
             getEquippedArmor().put(player, player.getInventory().getArmorContents());
             player.getInventory().setArmorContents(null);
-            if (Version.getServerVersion() == Version.v1_8) {
+            if (ReflectionUtils.VER < 9) {
                 getItemInMainHand().put(player, player.getItemInHand());
                 player.setItemInHand(null);
             } else {
@@ -65,6 +64,7 @@ public class PlayerDeathListener implements Listener {
                 player.getInventory().setItemInOffHand(null);
             }
         }
+        player.updateInventory();
         if (!event.getKeepLevel()) {
             player.setLevel(0);
             player.setExp(0);
@@ -76,7 +76,7 @@ public class PlayerDeathListener implements Listener {
                     @Override
                     public void run() {
                         TranslatableComponent deathMessage = BetterDeathScreenAPI.getDeathMessageCreator().getMessage(player, getKillAssists().get(player));
-                        if (Version.getServerVersion().getValue() < Version.v1_12.getValue())
+                        if (ReflectionUtils.VER < 12)
                             Bukkit.getConsoleSender().sendMessage(player.getName() + " died");
                         else Bukkit.getConsoleSender().spigot().sendMessage(deathMessage);
                         Bukkit.getOnlinePlayers().forEach(players -> players.spigot().sendMessage(deathMessage));

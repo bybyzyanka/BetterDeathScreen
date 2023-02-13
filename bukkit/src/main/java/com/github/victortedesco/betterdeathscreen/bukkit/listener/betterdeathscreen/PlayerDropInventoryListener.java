@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 
 public class PlayerDropInventoryListener implements Listener {
 
@@ -17,6 +16,6 @@ public class PlayerDropInventoryListener implements Listener {
         if (Bukkit.getServer().getPluginManager().getPlugin("AngelChest") != null) return;
         if (Bukkit.getServer().getPluginManager().getPlugin("Graves") != null) return;
 
-        for (ItemStack item : event.getDrops()) player.getWorld().dropItemNaturally(player.getLocation(), item);
+        event.getDrops().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
     }
 }

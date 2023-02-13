@@ -1,6 +1,6 @@
 package com.github.victortedesco.betterdeathscreen.bukkit.listener;
 
-import com.github.victortedesco.betterdeathscreen.api.utils.Version;
+import com.cryptomorin.xseries.ReflectionUtils;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
 import com.github.victortedesco.betterdeathscreen.bukkit.listener.betterdeathscreen.PlayerDamageByEntityBeforeDeathListener;
 import com.github.victortedesco.betterdeathscreen.bukkit.listener.betterdeathscreen.PlayerDropInventoryListener;
@@ -10,7 +10,11 @@ import org.bukkit.Bukkit;
 
 public final class EventRegistry {
 
-    public void setupListeners() {
+    public EventRegistry() {
+        this.setupListeners();
+    }
+
+    private void setupListeners() {
         Bukkit.getPluginManager().registerEvents(new PlayerDamageByEntityBeforeDeathListener(), BetterDeathScreen.getInstance());
         Bukkit.getPluginManager().registerEvents(new PlayerDropInventoryListener(), BetterDeathScreen.getInstance());
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), BetterDeathScreen.getInstance());
@@ -29,10 +33,10 @@ public final class EventRegistry {
         Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(), BetterDeathScreen.getInstance());
         Bukkit.getPluginManager().registerEvents(new PlayerTeleportListener(), BetterDeathScreen.getInstance());
 
-        if (Version.getServerVersion().getValue() >= Version.v1_12.getValue())
+        if (ReflectionUtils.VER > 11)
             Bukkit.getPluginManager().registerEvents(new EntityPickupItemListener(), BetterDeathScreen.getInstance());
         else
             Bukkit.getPluginManager().registerEvents(new PlayerPickupItemListener(), BetterDeathScreen.getInstance());
-        new LoginPacketListener().setupListener();
+        new LoginPacketListener();
     }
 }

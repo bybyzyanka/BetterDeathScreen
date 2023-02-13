@@ -32,9 +32,9 @@ public class UpdateChecker {
                 if (canUpdate() && BetterDeathScreen.getConfiguration().canNotifyUpdates()) {
                     BetterDeathScreen.getMessages().getUpdateAvailable().forEach(
                             message -> Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message
-                                    .replace("%release_link%", lastRelease.getDownloadURL())
-                                    .replace("%current_version%", currentVersion)
-                                    .replace("%latest_version%", lastRelease.getVersion())))
+                                    .replace("%release_link%", getLastRelease().getDownloadURL())
+                                    .replace("%current_version%", getCurrentVersion())
+                                    .replace("%latest_version%", getLastRelease().getVersion())))
                     );
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (!player.hasPermission(BetterDeathScreen.getConfiguration().getAdminPermission()))
@@ -42,9 +42,9 @@ public class UpdateChecker {
                         BetterDeathScreen.getMessages().getUpdateAvailable().forEach(
                                 message -> player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                                         message
-                                                .replace("%release_link%", lastRelease.getDownloadURL())
-                                                .replace("%current_version%", currentVersion)
-                                                .replace("%latest_version%", lastRelease.getVersion()))
+                                                .replace("%release_link%", getLastRelease().getDownloadURL())
+                                                .replace("%current_version%", getCurrentVersion())
+                                                .replace("%latest_version%", getLastRelease().getVersion()))
                                 )
                         );
                     }

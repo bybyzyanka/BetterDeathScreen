@@ -1,10 +1,10 @@
 package com.github.victortedesco.betterdeathscreen.api.manager;
 
+import com.cryptomorin.xseries.ReflectionUtils;
 import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.messages.ActionBar;
 import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
-import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -99,7 +99,7 @@ public class PlayerManager {
      * Get the max health of the player, returns the GENERIC_MAX_HEALTH attribute on versions newer than 1.8
      */
     public double getMaxHealth(Player player) {
-        if (Version.getServerVersion().getValue() > Version.v1_8.getValue())
+        if (ReflectionUtils.VER > 8)
             return player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
         return player.getMaxHealth();
     }
@@ -110,7 +110,7 @@ public class PlayerManager {
     public List<ItemStack> getFilteredInventory(Player player) {
         List<ItemStack> inventory = Arrays.stream(player.getInventory().getContents())
                 .filter(stack -> !isStackEmpty(stack)).collect(Collectors.toList());
-        if (Version.getServerVersion() == Version.v1_8) {
+        if (ReflectionUtils.VER <= 8) {
             List<ItemStack> armor = Arrays.stream(player.getInventory().getArmorContents())
                     .filter(stack -> !isStackEmpty(stack))
                     .collect(Collectors.toList());
@@ -126,8 +126,8 @@ public class PlayerManager {
     /**
      * Get if the player is using a Totem of Undying in the main hand or in the offhand
      */
-    public boolean usingTotem(Player player) {
-        if (Version.getServerVersion().getValue() >= Version.v1_11.getValue()) {
+    public boolean isUsingTotem(Player player) {
+        if (ReflectionUtils.VER >= 11) {
             Material mainHand = player.getInventory().getItemInMainHand().getType();
             Material offHand = player.getInventory().getItemInOffHand().getType();
 

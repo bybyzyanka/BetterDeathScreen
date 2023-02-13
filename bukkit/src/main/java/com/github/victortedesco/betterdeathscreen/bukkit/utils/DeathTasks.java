@@ -1,7 +1,7 @@
 package com.github.victortedesco.betterdeathscreen.bukkit.utils;
 
+import com.cryptomorin.xseries.ReflectionUtils;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
-import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -83,7 +83,7 @@ public final class DeathTasks {
         player.setFoodLevel(20);
         player.eject();
         for (Entity entity : player.getWorld().getEntities()) {
-            if (Version.getServerVersion().getValue() < Version.v1_12.getValue()) {
+            if (ReflectionUtils.VER < 12) {
                 if (entity.getPassenger() == player) entity.eject();
             } else if (entity.getPassengers().contains(player)) entity.removePassenger(player);
             if (entity instanceof Creature) {

@@ -1,10 +1,10 @@
 package com.github.victortedesco.betterdeathscreen.bukkit.utils;
 
+import com.cryptomorin.xseries.ReflectionUtils;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import com.github.victortedesco.betterdeathscreen.api.configuration.Config;
 import com.github.victortedesco.betterdeathscreen.api.configuration.Messages;
 import com.github.victortedesco.betterdeathscreen.api.manager.PlayerManager;
-import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
 import com.github.victortedesco.betterdeathscreen.bukkit.configuration.BukkitConfig;
 import org.bukkit.Bukkit;
@@ -27,12 +27,12 @@ public final class RespawnTasks {
 
             @Override
             public void run() {
+                time--;
                 if (!player.isOnline() || !BetterDeathScreenAPI.getPlayerManager().isDead(player)) {
                     cancel();
                     return;
                 }
                 if (!Bukkit.isHardcore()) {
-                    time--;
                     if (player.hasPermission(config.getInstantRespawnPermission())) time = 0;
                     if (time > 1) {
                         BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getCountdownMessageType(), messages.getNonHardcoreCountdown().replace("%time%", time + messages.getTimePlural()), 1);
@@ -48,7 +48,6 @@ public final class RespawnTasks {
                     }
                 }
                 if (Bukkit.isHardcore()) {
-                    time--;
                     // When changing the gamemode of the player, he respawns.
                     if (player.getGameMode() != GameMode.SPECTATOR) {
                         performRespawn(player, true);
@@ -80,7 +79,7 @@ public final class RespawnTasks {
                 anchorSpawn = true;
             }
         }
-        if (Version.isVeryNewVersion())
+        if (ReflectionUtils.VER > 15)
             playerRespawnEvent = new PlayerRespawnEvent(player, respawnLocation, bedSpawn, anchorSpawn);
         else playerRespawnEvent = new PlayerRespawnEvent(player, respawnLocation, bedSpawn);
 

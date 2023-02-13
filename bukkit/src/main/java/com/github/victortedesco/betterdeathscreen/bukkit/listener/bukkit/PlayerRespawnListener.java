@@ -1,9 +1,9 @@
 package com.github.victortedesco.betterdeathscreen.bukkit.listener.bukkit;
 
+import com.cryptomorin.xseries.ReflectionUtils;
 import com.cryptomorin.xseries.messages.ActionBar;
 import com.cryptomorin.xseries.messages.Titles;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
-import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -35,9 +35,9 @@ public class PlayerRespawnListener implements Listener {
         if (player.getBedSpawnLocation() == null) {
             if (!getBedNotFoundMessageSent().contains(player)) {
                 TranslatableComponent noBed = new TranslatableComponent("tile.bed.notValid");
-                if (Version.getServerVersion().getValue() >= Version.v1_13.getValue())
+                if (ReflectionUtils.VER > 12)
                     noBed = new TranslatableComponent("block.minecraft.bed.not_valid");
-                if (Version.getServerVersion().getValue() >= Version.v1_16.getValue())
+                if (ReflectionUtils.VER > 15)
                     noBed = new TranslatableComponent("block.minecraft.spawn.not_valid");
                 player.spigot().sendMessage(noBed);
                 getBedNotFoundMessageSent().add(player);
@@ -48,7 +48,7 @@ public class PlayerRespawnListener implements Listener {
         if (PlayerDeathListener.getEquippedArmor().containsKey(player)) {
             player.getInventory().setArmorContents(PlayerDeathListener.getEquippedArmor().get(player));
             PlayerDeathListener.getEquippedArmor().remove(player);
-            if (Version.getServerVersion() == Version.v1_8) {
+            if (ReflectionUtils.VER < 9) {
                 player.setItemInHand(PlayerDeathListener.getItemInMainHand().get(player));
                 PlayerDeathListener.getItemInMainHand().remove(player);
             } else {

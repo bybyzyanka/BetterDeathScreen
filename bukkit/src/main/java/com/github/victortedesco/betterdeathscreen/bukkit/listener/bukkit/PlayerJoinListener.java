@@ -1,7 +1,7 @@
 package com.github.victortedesco.betterdeathscreen.bukkit.listener.bukkit;
 
+import com.cryptomorin.xseries.ReflectionUtils;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
-import com.github.victortedesco.betterdeathscreen.api.utils.Version;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
 import com.github.victortedesco.betterdeathscreen.bukkit.configuration.BukkitConfig;
 import org.bukkit.Bukkit;
@@ -29,7 +29,7 @@ public class PlayerJoinListener implements Listener {
             }
         }
         if (player.getBedSpawnLocation() != null) {
-            if (player.getBedSpawnLocation().getWorld().getEnvironment() == World.Environment.THE_END || (!Version.isVeryNewVersion() && player.getBedSpawnLocation().getWorld().getEnvironment() == World.Environment.NETHER)) {
+            if (player.getBedSpawnLocation().getWorld().getEnvironment() == World.Environment.THE_END || (ReflectionUtils.VER < 16 && player.getBedSpawnLocation().getWorld().getEnvironment() == World.Environment.NETHER)) {
                 player.setBedSpawnLocation(null);
             }
         }

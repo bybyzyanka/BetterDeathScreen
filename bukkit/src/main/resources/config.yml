@@ -55,6 +55,6 @@ death-settings:
   allow-fly: true
   allow-spectate: true
   allowed-commands:
-  # If you want to allow all commands, put "*" on the list
+    # If you want to allow all commands, put "*" on the list
     - "/g"
     - "/report"

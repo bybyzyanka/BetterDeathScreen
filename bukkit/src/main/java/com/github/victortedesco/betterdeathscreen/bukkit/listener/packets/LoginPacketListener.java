@@ -11,7 +11,11 @@ import org.bukkit.Bukkit;
 
 public final class LoginPacketListener {
 
-    public void setupListener() {
+    public LoginPacketListener() {
+        this.setupListener();
+    }
+
+    private void setupListener() {
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(BetterDeathScreen.getInstance(), ListenerPriority.LOW, PacketType.Play.Server.LOGIN) {
 
             @Override

@@ -60,7 +60,7 @@ public class EntityDamageListener implements Listener {
                 player.setFireTicks(0);
                 return;
             }
-            if (player.getHealth() > event.getFinalDamage() || (BetterDeathScreenAPI.getPlayerManager().usingTotem(player) && event.getCause() != EntityDamageEvent.DamageCause.SUICIDE && event.getCause() != EntityDamageEvent.DamageCause.VOID)) {
+            if (player.getHealth() > event.getFinalDamage() || (BetterDeathScreenAPI.getPlayerManager().isUsingTotem(player) && event.getCause() != EntityDamageEvent.DamageCause.SUICIDE && event.getCause() != EntityDamageEvent.DamageCause.VOID)) {
                 if (!(event instanceof EntityDamageByBlockEvent) && !(event instanceof EntityDamageByEntityEvent))
                     eventManager.setPlayerDamageBeforeDeath(player, event);
                 if (event instanceof EntityDamageByBlockEvent)
@@ -68,7 +68,7 @@ public class EntityDamageListener implements Listener {
                 if (event instanceof EntityDamageByEntityEvent)
                     eventManager.setPlayerDamageByEntityBeforeDeath(player, (EntityDamageByEntityEvent) event);
             }
-            if (player.getHealth() <= event.getFinalDamage() && (!BetterDeathScreenAPI.getPlayerManager().usingTotem(player) || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID)) {
+            if (player.getHealth() <= event.getFinalDamage() && (!BetterDeathScreenAPI.getPlayerManager().isUsingTotem(player) || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID)) {
                 event.setDamage(0);
                 playerManager.sendCustomMessage(player, player, config.getKilledMessageType(), randomizer.getRandomItemFromList(messages.getKilled()), time);
                 if (event instanceof EntityDamageByEntityEvent) {
