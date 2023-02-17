@@ -3,7 +3,6 @@ package com.github.victortedesco.betterdeathscreen.bukkit.listener.bukkit;
 import com.cryptomorin.xseries.ReflectionUtils;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
-import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -12,7 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 
@@ -72,17 +70,10 @@ public class PlayerDeathListener implements Listener {
 
         if (event.getDeathMessage() != null && player.getWorld().getGameRuleValue("showDeathMessages").equalsIgnoreCase("true")) {
             if (event.getDeathMessage().equals("BetterDeathScreen")) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        TranslatableComponent deathMessage = BetterDeathScreenAPI.getDeathMessageCreator().getMessage(player, getKillAssists().get(player));
-                        if (ReflectionUtils.VER < 12)
-                            Bukkit.getConsoleSender().sendMessage(player.getName() + " died");
-                        else Bukkit.getConsoleSender().spigot().sendMessage(deathMessage);
-                        Bukkit.getOnlinePlayers().forEach(players -> players.spigot().sendMessage(deathMessage));
-                        getKillAssists().remove(player);
-                    }
-                }.runTaskLaterAsynchronously(BetterDeathScreen.getInstance(), 1L);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(BetterDeathScreen.getInstance(), () -> {
+                    BetterDeathScreenAPI.getDeathMessageCreator().sendDeathMessage(player, getKillAssists().get(player));
+                    getKillAssists().remove(player);
+                }, 1L);
             } else {
                 Bukkit.getConsoleSender().sendMessage(event.getDeathMessage());
                 Bukkit.getOnlinePlayers().forEach(players -> players.sendMessage(event.getDeathMessage()));
