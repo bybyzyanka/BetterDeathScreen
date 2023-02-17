@@ -52,7 +52,8 @@ public class BetterDeathScreen extends JavaPlugin {
     }
 
     public static void sendConsoleMessage(String message) {
-        Bukkit.getConsoleSender().sendMessage("[BetterDeathScreen] " + ChatColor.translateAlternateColorCodes('&', message));
+        Bukkit.getConsoleSender()
+                .sendMessage("[BetterDeathScreen] " + ChatColor.translateAlternateColorCodes('&', message));
     }
 
     @Override
@@ -76,12 +77,13 @@ public class BetterDeathScreen extends JavaPlugin {
         getCommand("bds").setExecutor(new MainCommand());
         getCommand("bds").setTabCompleter(new MainTabCompleter());
         new Metrics(this, 17249);
-        for (Player player : getServer().getOnlinePlayers()) {
-            if (!getServer().isHardcore()) break;
-            if (player.getGameMode() == GameMode.SPECTATOR && !player.hasPermission(getConfiguration().getAdminPermission())) {
-                BetterDeathScreenAPI.getPlayerManager().getDeadPlayers().add(player);
-                BetterDeathScreen.getRespawnTasks().startCountdown(player);
-            }
+        if (getServer().isHardcore()) {
+            getServer().getOnlinePlayers().forEach(player -> {
+                if (player.getGameMode() == GameMode.SPECTATOR && !player.hasPermission(getConfiguration().getAdminPermission())) {
+                    BetterDeathScreenAPI.getPlayerManager().getDeadPlayers().add(player);
+                    BetterDeathScreen.getRespawnTasks().startCountdown(player);
+                }
+            });
         }
         getMessages().getEnabled().forEach(BetterDeathScreen::sendConsoleMessage);
         sendConsoleMessage("&fMinecraft 1." + ReflectionUtils.VER);
@@ -94,11 +96,11 @@ public class BetterDeathScreen extends JavaPlugin {
     }
 
     private void fixViaVersionConfiguration() {
-        if (Bukkit.getServer().getPluginManager().getPlugin("ViaVersion") != null) {
-            AbstractViaConfig config = (AbstractViaConfig) Via.getConfig();
-            config.set("use-new-deathmessages", false);
-            config.saveConfig();
-            config.reloadConfig();
-        }
+        if (getServer().getPluginManager().getPlugin("ViaVersion") == null) return;
+
+        AbstractViaConfig config = (AbstractViaConfig) Via.getConfig();
+        config.set("use-new-deathmessages", false);
+        config.saveConfig();
+        config.reloadConfig();
     }
 }

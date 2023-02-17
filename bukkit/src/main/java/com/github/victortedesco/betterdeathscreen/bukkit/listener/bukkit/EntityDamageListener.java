@@ -60,14 +60,6 @@ public class EntityDamageListener implements Listener {
                 player.setFireTicks(0);
                 return;
             }
-            if (player.getHealth() > event.getFinalDamage() || (BetterDeathScreenAPI.getPlayerManager().isUsingTotem(player) && event.getCause() != EntityDamageEvent.DamageCause.SUICIDE && event.getCause() != EntityDamageEvent.DamageCause.VOID)) {
-                if (!(event instanceof EntityDamageByBlockEvent) && !(event instanceof EntityDamageByEntityEvent))
-                    eventManager.setPlayerDamageBeforeDeath(player, event);
-                if (event instanceof EntityDamageByBlockEvent)
-                    eventManager.setPlayerDamageByBlockBeforeDeath(player, (EntityDamageByBlockEvent) event);
-                if (event instanceof EntityDamageByEntityEvent)
-                    eventManager.setPlayerDamageByEntityBeforeDeath(player, (EntityDamageByEntityEvent) event);
-            }
             if (player.getHealth() <= event.getFinalDamage() && (!BetterDeathScreenAPI.getPlayerManager().isUsingTotem(player) || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID)) {
                 event.setDamage(0);
                 playerManager.sendCustomMessage(player, player, config.getKilledMessageType(), randomizer.getRandomItemFromList(messages.getKilled()), time);
@@ -91,6 +83,13 @@ public class EntityDamageListener implements Listener {
                 player.setFlying(config.canFly());
                 deathTasks.performDeath(player);
                 deathTasks.sendCommandsOnDeath(player, playerKiller);
+            } else {
+                if (!(event instanceof EntityDamageByBlockEvent) && !(event instanceof EntityDamageByEntityEvent))
+                    eventManager.setPlayerDamageBeforeDeath(player, event);
+                if (event instanceof EntityDamageByBlockEvent)
+                    eventManager.setPlayerDamageByBlockBeforeDeath(player, (EntityDamageByBlockEvent) event);
+                if (event instanceof EntityDamageByEntityEvent)
+                    eventManager.setPlayerDamageByEntityBeforeDeath(player, (EntityDamageByEntityEvent) event);
             }
         }
     }
