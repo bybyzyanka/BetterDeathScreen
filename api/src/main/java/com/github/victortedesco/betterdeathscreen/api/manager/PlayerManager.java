@@ -4,7 +4,6 @@ import com.cryptomorin.xseries.ReflectionUtils;
 import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.messages.ActionBar;
 import com.cryptomorin.xseries.messages.Titles;
-import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,41 +31,21 @@ public class PlayerManager {
         return getDeadPlayers().contains(player);
     }
 
-    public void playSound(Player player, List<String> list, boolean throwable, boolean silent) {
-        String string = BetterDeathScreenAPI.getRandomizer().getRandomItemFromList(list);
+    public void playSound(Player player, String string, boolean silent) {
+        if (string.length() == 0) return;
+        String[] array = string.split(";");
+        String sound = array[0];
+        float volume = Float.parseFloat(array[1]);
+        float pitch = Float.parseFloat(array[2]);
+        if (silent) volume = 0;
+        Sound bukkitSound;
         try {
-            String[] array = string.split(";");
-            String sound = array[0];
-            float volume = Float.parseFloat(array[1]);
-            float pitch = Float.parseFloat(array[2]);
-            if (silent) volume = 0;
-            if (sound.contains(".")) {
-                player.playSound(player.getLocation(), sound, volume, pitch);
-                return;
-            }
-            Sound bukkitSound = XSound.matchXSound(sound).orElse(null).parseSound();
-            player.playSound(player.getLocation(), bukkitSound, volume, pitch);
-        } catch (Exception exception) {
-            if (throwable) exception.printStackTrace();
+            bukkitSound = XSound.matchXSound(sound).orElse(null).parseSound();
+        } catch (NullPointerException nullPointerException) {
+            bukkitSound = null;
         }
-    }
-
-    public void playSound(Player player, String string, boolean throwable, boolean silent) {
-        try {
-            String[] array = string.split(";");
-            String sound = array[0];
-            float volume = Float.parseFloat(array[1]);
-            float pitch = Float.parseFloat(array[2]);
-            if (silent) volume = 0;
-            if (sound.contains(".")) {
-                player.playSound(player.getLocation(), sound, volume, pitch);
-                return;
-            }
-            Sound bukkitSound = XSound.matchXSound(sound).orElse(null).parseSound();
-            player.playSound(player.getLocation(), bukkitSound, volume, pitch);
-        } catch (Exception exception) {
-            if (throwable) exception.printStackTrace();
-        }
+        if (bukkitSound != null) player.playSound(player.getLocation(), bukkitSound, volume, pitch);
+        else player.playSound(player.getLocation(), sound, volume, pitch);
     }
 
     public void sendCustomMessage(Player player, Player placeholderTarget, String type, String message, int timeSeconds) {

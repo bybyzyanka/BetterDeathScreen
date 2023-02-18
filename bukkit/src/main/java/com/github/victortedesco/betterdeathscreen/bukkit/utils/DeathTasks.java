@@ -39,6 +39,8 @@ public final class DeathTasks {
     }
 
     public void performDeath(Player player) {
+        List<String> deathSounds = BetterDeathScreen.getConfiguration().getDeathSounds();
+
         player.closeInventory();
         player.incrementStatistic(Statistic.DEATHS, 1);
         player.incrementStatistic(Statistic.DAMAGE_TAKEN, (int) Math.max(1, player.getHealth()));
@@ -49,7 +51,8 @@ public final class DeathTasks {
         changeAttributes(player);
         sendPlayerDeathEvent(player);
         BetterDeathScreen.getRespawnTasks().startCountdown(player);
-        BetterDeathScreenAPI.getPlayerManager().playSound(player, BetterDeathScreen.getConfiguration().getDeathSounds(), true, false);
+        BetterDeathScreenAPI.getPlayerManager()
+                .playSound(player, BetterDeathScreenAPI.getRandomizer().getRandomItemFromList(deathSounds), false);
         BetterDeathScreenAPI.getAnimations().sendAnimation(player, BetterDeathScreen.getConfiguration().getAnimationType());
         if (Bukkit.isHardcore()) player.setGameMode(GameMode.SPECTATOR);
     }

@@ -15,6 +15,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+
 public final class RespawnTasks {
 
     public void startCountdown(Player player) {
@@ -36,11 +38,11 @@ public final class RespawnTasks {
                     if (player.hasPermission(config.getInstantRespawnPermission())) time = 0;
                     if (time > 1) {
                         BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getCountdownMessageType(), messages.getNonHardcoreCountdown().replace("%time%", time + messages.getTimePlural()), 1);
-                        BetterDeathScreenAPI.getPlayerManager().playSound(player, randomCountdownSound, false, false);
+                        BetterDeathScreenAPI.getPlayerManager().playSound(player, randomCountdownSound, false);
                     }
                     if (time == 1) {
                         BetterDeathScreenAPI.getPlayerManager().sendCustomMessage(player, null, config.getCountdownMessageType(), messages.getNonHardcoreCountdown().replace("%time%", time + messages.getTimeSingular()), 1);
-                        BetterDeathScreenAPI.getPlayerManager().playSound(player, randomCountdownSound, false, false);
+                        BetterDeathScreenAPI.getPlayerManager().playSound(player, randomCountdownSound, false);
                     }
                     if (time <= 0) {
                         BetterDeathScreen.getRespawnTasks().performRespawn(player, false);
@@ -88,8 +90,9 @@ public final class RespawnTasks {
 
     public void performRespawn(Player player, boolean forceRespawn) {
         if (player == null) return;
-        PlayerManager playerManager = BetterDeathScreenAPI.getPlayerManager();
         BukkitConfig config = BetterDeathScreen.getConfiguration();
+        List<String> respawnSounds = config.getRespawnSounds();
+        PlayerManager playerManager = BetterDeathScreenAPI.getPlayerManager();
 
         if (Bukkit.isHardcore() && !forceRespawn) return;
         if (playerManager.isDead(player) || forceRespawn) {
@@ -97,7 +100,7 @@ public final class RespawnTasks {
             player.setGameMode(Bukkit.getDefaultGameMode());
             BetterDeathScreen.getDeathTasks().changeAttributes(player);
             sendPlayerRespawnEvent(player);
-            playerManager.playSound(player, config.getRespawnSounds(), true, false);
+            playerManager.playSound(player, BetterDeathScreenAPI.getRandomizer().getRandomItemFromList(respawnSounds), false);
         }
     }
 }

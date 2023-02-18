@@ -30,8 +30,8 @@ public class PlayerRespawnListener implements Listener {
         Player player = event.getPlayer();
 
         BetterDeathScreenAPI.getEventManager().resetPlayerDamage(player);
-        Titles.clearTitle(player);
-        ActionBar.clearActionBar(player);
+        Titles.sendTitle(player, 1, 1, 1,"", "");
+        ActionBar.sendActionBar(player, "");
         if (player.getBedSpawnLocation() == null) {
             if (!getBedNotFoundMessageSent().contains(player)) {
                 TranslatableComponent noBed = new TranslatableComponent("tile.bed.notValid");
