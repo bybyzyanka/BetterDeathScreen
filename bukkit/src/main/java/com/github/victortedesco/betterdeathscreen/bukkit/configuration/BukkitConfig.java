@@ -25,6 +25,7 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
     private String adminPermission;
     private boolean queueTeleport;
     private boolean spectate;
+    private boolean spectateKillerOnDeath;
     private boolean fly;
     private List<String> allowedCommands;
 
@@ -51,6 +52,7 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
         adminPermission = config.getString("permissions.admin", "bds.admin");
         queueTeleport = config.getBoolean("death-settings.queue-teleport", true);
         spectate = config.getBoolean("death-settings.allow-spectate", true);
+        spectateKillerOnDeath = config.getBoolean("death-settings.spectate-killer-on-death", true);
         fly = config.getBoolean("death-settings.allow-fly", true);
         allowedCommands = config.getStringList("death-settings.allowed-commands");
     }
@@ -138,6 +140,11 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
     @Override
     public boolean canSpectate() {
         return spectate;
+    }
+
+    @Override
+    public boolean willSpectateKillerOnDeath() {
+        return spectateKillerOnDeath;
     }
 
     @Override

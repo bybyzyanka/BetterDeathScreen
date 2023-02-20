@@ -38,6 +38,8 @@ public interface Config {
 
     boolean canSpectate();
 
+    boolean willSpectateKillerOnDeath();
+
     boolean canFly();
 
     List<String> getAllowedCommands();

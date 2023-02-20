@@ -74,9 +74,13 @@ public class EntityDamageListener implements Listener {
 
                         playerKiller.incrementStatistic(Statistic.PLAYER_KILLS, 1);
                         playerKiller.incrementStatistic(Statistic.DAMAGE_DEALT, (int) Math.max(player.getHealth(), 1));
-                        playerManager.playSound(player, config.getKillSounds(), true, false);
+                        playerManager.playSound(player, BetterDeathScreenAPI.getRandomizer().getRandomItemFromList(config.getKillSounds()), false);
                         playerManager.sendCustomMessage(player, playerKiller, config.getKilledByPlayerMessageType(), randomizer.getRandomItemFromList(messages.getKilledByPlayer()), time);
                         playerManager.sendCustomMessage(playerKiller, player, config.getKillMessageType(), randomizer.getRandomItemFromList(messages.getKill()), 1);
+                    }
+                    if (config.willSpectateKillerOnDeath()) {
+                        player.setGameMode(GameMode.SPECTATOR);
+                        player.setSpectatorTarget(killer);
                     }
                 }
                 player.setAllowFlight(config.canFly());

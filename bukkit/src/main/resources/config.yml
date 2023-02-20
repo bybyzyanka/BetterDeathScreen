@@ -53,6 +53,7 @@ permissions:
 death-settings:
   queue-teleport: true
   allow-fly: true
+  spectate-killer-on-death: true
   allow-spectate: true
   allowed-commands:
     # If you want to allow all commands, put "*" on the list

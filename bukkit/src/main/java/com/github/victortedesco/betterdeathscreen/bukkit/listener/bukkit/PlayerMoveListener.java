@@ -16,7 +16,8 @@ public class PlayerMoveListener implements Listener {
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (BetterDeathScreenAPI.getPlayerManager().isDead(player) && BetterDeathScreen.getConfiguration().canSpectate()) {
+        if (BetterDeathScreenAPI.getPlayerManager().isDead(player) &&
+                (BetterDeathScreen.getConfiguration().canSpectate() || BetterDeathScreen.getConfiguration().willSpectateKillerOnDeath())) {
             if (Bukkit.isHardcore()) return;
             if (player.getSpectatorTarget() == null && player.getGameMode() == GameMode.SPECTATOR)
                 player.setGameMode(Bukkit.getDefaultGameMode());
