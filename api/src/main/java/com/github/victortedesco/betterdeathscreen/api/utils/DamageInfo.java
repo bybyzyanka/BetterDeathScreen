@@ -4,10 +4,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class DamageInfo<T> {
 
-    T damager;
-    EntityDamageEvent.DamageCause damageCause;
-    double damage;
-    double finalDamage;
+    final T damager;
+    final EntityDamageEvent.DamageCause damageCause;
+    final double damage;
+    final double finalDamage;
 
     public DamageInfo(T damager, EntityDamageEvent.DamageCause damageCause, double damage, double finalDamage) {
         this.damager = damager;
