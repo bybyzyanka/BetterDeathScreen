@@ -42,14 +42,7 @@ public class Animations {
         player.getWorld().strikeLightningEffect(player.getLocation());
     }
 
-    public void sendAnimation(Player player, String type) {
-        AnimationType animation;
-        try {
-            animation = AnimationType.valueOf(type);
-        } catch (IllegalArgumentException exception) {
-            animation = AnimationType.NONE;
-            exception.printStackTrace();
-        }
+    public void sendAnimation(Player player, AnimationType animation) {
         if (animation == AnimationType.NONE) return;
         if (animation == AnimationType.RANDOM)
             animation = AnimationType.values()[new Random().nextInt(3)];
