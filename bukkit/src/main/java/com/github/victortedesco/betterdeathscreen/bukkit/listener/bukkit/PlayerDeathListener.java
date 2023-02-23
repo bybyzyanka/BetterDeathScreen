@@ -13,27 +13,28 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerDeathListener implements Listener {
 
-    private static final HashMap<Player, Entity> KILL_ASSISTS = new HashMap<>();
-    private static final HashMap<Player, ItemStack[]> EQUIPPED_ARMOR = new HashMap<>();
-    private static final HashMap<Player, ItemStack> ITEM_IN_MAIN_HAND = new HashMap<>();
-    private static final HashMap<Player, ItemStack> ITEM_IN_OFF_HAND = new HashMap<>();
+    private static final Map<Player, Entity> KILL_ASSISTS = new HashMap<>();
+    private static final Map<Player, ItemStack[]> EQUIPPED_ARMOR = new HashMap<>();
+    private static final Map<Player, ItemStack> ITEM_IN_MAIN_HAND = new HashMap<>();
+    private static final Map<Player, ItemStack> ITEM_IN_OFF_HAND = new HashMap<>();
 
-    public static HashMap<Player, Entity> getKillAssists() {
+    public static Map<Player, Entity> getKillAssists() {
         return KILL_ASSISTS;
     }
 
-    public static HashMap<Player, ItemStack[]> getEquippedArmor() {
+    public static Map<Player, ItemStack[]> getEquippedArmor() {
         return EQUIPPED_ARMOR;
     }
 
-    public static HashMap<Player, ItemStack> getItemInMainHand() {
+    public static Map<Player, ItemStack> getItemInMainHand() {
         return ITEM_IN_MAIN_HAND;
     }
 
-    public static HashMap<Player, ItemStack> getItemInOffHand() {
+    public static Map<Player, ItemStack> getItemInOffHand() {
         return ITEM_IN_OFF_HAND;
     }
 

@@ -17,12 +17,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventManager {
 
-    private final HashMap<Player, DamageInfo<?>> PLAYER_DAMAGE_BEFORE_DEATH = new HashMap<>();
-    private final HashMap<Player, DamageInfo<Block>> PLAYER_DAMAGE_BY_BLOCK_BEFORE_DEATH = new HashMap<>();
-    private final HashMap<Player, DamageInfo<Entity>> PLAYER_DAMAGE_BY_ENTITY_BEFORE_DEATH = new HashMap<>();
+    private final Map<Player, DamageInfo<?>> PLAYER_DAMAGE_BEFORE_DEATH = new HashMap<>();
+    private final Map<Player, DamageInfo<Block>> PLAYER_DAMAGE_BY_BLOCK_BEFORE_DEATH = new HashMap<>();
+    private final Map<Player, DamageInfo<Entity>> PLAYER_DAMAGE_BY_ENTITY_BEFORE_DEATH = new HashMap<>();
 
     public void setPlayerDamageBeforeDeath(Player player, EntityDamageEvent event) {
         DamageInfo<?> damageInfo = new DamageInfo<>(null, event.getCause(), event.getDamage(), event.getFinalDamage());

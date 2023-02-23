@@ -10,12 +10,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerTeleportListener implements Listener {
 
-    private static final HashMap<Player, Location> QUEUE_TELEPORT_LOCATION = new HashMap<>();
+    private static final Map<Player, Location> QUEUE_TELEPORT_LOCATION = new HashMap<>();
 
-    public static HashMap<Player, Location> getQueueTeleportLocation() {
+    public static Map<Player, Location> getQueueTeleportLocation() {
         return QUEUE_TELEPORT_LOCATION;
     }
 
