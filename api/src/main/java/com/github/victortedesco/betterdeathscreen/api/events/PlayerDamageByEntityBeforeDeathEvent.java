@@ -61,7 +61,6 @@ public class PlayerDamageByEntityBeforeDeathEvent extends Event implements Cance
      *
      * @param cause Set the cause of the event
      */
-    @NotNull
     public void setCause(EntityDamageEvent.DamageCause cause) {
         this.cause = cause;
     }
@@ -69,9 +68,8 @@ public class PlayerDamageByEntityBeforeDeathEvent extends Event implements Cance
     /**
      * Get the amount of damage caused by the event.
      *
-     * @return Damage of the event
+     * @return Damage value of the event
      */
-    @NotNull
     public double getDamage() {
         return this.damage;
     }
@@ -79,9 +77,8 @@ public class PlayerDamageByEntityBeforeDeathEvent extends Event implements Cance
     /**
      * Get the amount of damage caused by the event.
      *
-     * @param damage Set the damage of the event
+     * @param damage Set the damage value of the event
      */
-    @NotNull
     public void setDamage(double damage) {
         this.damage = damage;
     }
@@ -89,9 +86,8 @@ public class PlayerDamageByEntityBeforeDeathEvent extends Event implements Cance
     /**
      * Get the amount of damage reduced by armor, potions caused by the event.
      *
-     * @return Final damage of the event
+     * @return Final damage value of the event
      */
-    @NotNull
     public double getFinalDamage() {
         return this.finalDamage;
     }
@@ -99,9 +95,8 @@ public class PlayerDamageByEntityBeforeDeathEvent extends Event implements Cance
     /**
      * Change the amount of damage reduced by armor, potions caused by the event.
      *
-     * @param damage Set the final damage of the event
+     * @param damage Set the final damage value of the event
      */
-    @NotNull
     public void setFinalDamage(double damage) {
         this.finalDamage = damage;
     }
