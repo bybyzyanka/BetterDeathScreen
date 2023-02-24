@@ -18,7 +18,7 @@ in the `config.yml` change the language you want to use as template, edit the la
 
 ## Configuration examples
 
-Check [**resources**](https://github.com/VictorTedesco/BetterDeathScreen/tree/master/src/main/resources) to
+Check [**resources**](https://github.com/VictorTedesco/BetterDeathScreen/tree/master/bukkit/src/main/resources) to
 see the configuration examples of the plugin. The plugin (if not modified) will create the files
 `config.yml` and `messages_en-US`
 
