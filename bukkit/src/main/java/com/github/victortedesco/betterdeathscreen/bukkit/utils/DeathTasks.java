@@ -2,7 +2,6 @@ package com.github.victortedesco.betterdeathscreen.bukkit.utils;
 
 import com.cryptomorin.xseries.ReflectionUtils;
 import com.github.victortedesco.betterdeathscreen.api.BetterDeathScreenAPI;
-import com.github.victortedesco.betterdeathscreen.api.animations.Animations;
 import com.github.victortedesco.betterdeathscreen.bukkit.BetterDeathScreen;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -54,7 +53,6 @@ public final class DeathTasks {
         BetterDeathScreen.getRespawnTasks().startCountdown(player);
         BetterDeathScreenAPI.getPlayerManager().playSound(player, BetterDeathScreenAPI.getRandomizer().getRandomItemFromList(deathSounds), false);
         if (Bukkit.isHardcore()) player.setGameMode(GameMode.SPECTATOR);
-        BetterDeathScreenAPI.getAnimations().sendAnimation(player, Animations.AnimationType.valueOf(BetterDeathScreen.getConfiguration().getAnimationType()));
     }
 
     public void sendCommandsOnDeath(Player player, Player killer) {

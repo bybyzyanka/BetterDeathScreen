@@ -44,9 +44,6 @@ sound:
   kill:
     - "ENTITY_SKELETON_DEATH;1.0;1.0"
     - "BLOCK_GLASS_BREAK;1.0;1.0"
-animation:
-  # BLOOD, LIGHTNING, EXPLOSION, RANDOM (Use NONE to disable)
-  type: "BLOOD"
 permissions:
   instant-respawn: 'bds.instant-respawn'
   admin: 'bds.admin'

@@ -20,7 +20,6 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
     private String killedMessageType;
     private String killedByPlayerMessageType;
     private String countdownMessageType;
-    private String animationType;
     private String instantRespawnPermission;
     private String adminPermission;
     private boolean queueTeleport;
@@ -47,7 +46,6 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
         killedMessageType = config.getString("message-type.killed", "TITLE");
         killedByPlayerMessageType = config.getString("message-type.killed-by-player", "TITLE");
         countdownMessageType = config.getString("message-type.countdown", "ACTIONBAR");
-        animationType = config.getString("animation.type", "BLOOD");
         instantRespawnPermission = config.getString("permissions.instant-respawn", "bds.instant-respawn");
         adminPermission = config.getString("permissions.admin", "bds.admin");
         queueTeleport = config.getBoolean("death-settings.queue-teleport", true);
@@ -115,11 +113,6 @@ public class BukkitConfig extends ConfigurationHandler implements Config {
     @Override
     public String getCountdownMessageType() {
         return countdownMessageType;
-    }
-
-    @Override
-    public String getAnimationType() {
-        return animationType;
     }
 
     @Override

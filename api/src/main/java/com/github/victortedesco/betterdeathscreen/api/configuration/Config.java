@@ -28,8 +28,6 @@ public interface Config {
 
     String getCountdownMessageType();
 
-    String getAnimationType();
-
     String getInstantRespawnPermission();
 
     String getAdminPermission();
