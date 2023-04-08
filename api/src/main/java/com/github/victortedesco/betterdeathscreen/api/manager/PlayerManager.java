@@ -35,17 +35,24 @@ public class PlayerManager {
         if (string.length() == 0) return;
         String[] array = string.split(";");
         String sound = array[0];
-        float volume = Float.parseFloat(array[1]);
-        float pitch = Float.parseFloat(array[2]);
-        if (silent) volume = 0;
-        Sound bukkitSound;
+        float volume = 0;
+        float pitch = 0;
         try {
-            bukkitSound = XSound.matchXSound(sound).orElse(null).parseSound();
-        } catch (NullPointerException nullPointerException) {
-            bukkitSound = null;
+            volume = Float.parseFloat(array[1]);
+            pitch = Float.parseFloat(array[2]);
+        } catch (NumberFormatException numberFormatException) {
+            numberFormatException.printStackTrace();
         }
-        if (bukkitSound != null) player.playSound(player.getLocation(), bukkitSound, volume, pitch);
-        else player.playSound(player.getLocation(), sound, volume, pitch);
+        if (silent) volume = 0;
+
+        try {
+            Sound bukkitSound = XSound.matchXSound(sound).orElse(null).parseSound();
+            player.playSound(player.getLocation(), bukkitSound, volume, pitch);
+            return;
+        } catch (NullPointerException ignored) {
+
+        }
+        player.playSound(player.getLocation(), sound, volume, pitch);
     }
 
     public void sendCustomMessage(Player player, Player placeholderTarget, String type, String message, int timeSeconds) {
@@ -57,14 +64,18 @@ public class PlayerManager {
             if (messageType == MessageType.ACTIONBAR) ActionBar.sendActionBar(player, message);
             if (messageType == MessageType.TITLE) {
                 String[] array = message.split("\n");
-                String title;
-                String subtitle;
-                if (array.length == 1) {
-                    title = "";
-                    subtitle = array[0];
-                } else {
-                    title = array[0];
-                    subtitle = array[1];
+                String title = null;
+                String subtitle = null;
+                switch (array.length) {
+                    case 1:
+                        subtitle = array[0];
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        title = array[0];
+                        subtitle = array[1];
+                        break;
                 }
                 Titles.sendTitle(player, 5, 20 * timeSeconds, 5, title, subtitle);
             }
