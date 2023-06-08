@@ -20,7 +20,7 @@ commands-on-death:
 # - "killer: /you"
 message-type:
   # Choose where the respective messages should appear.
-  # Types: ACTIONBAR, TITLE, CHAT
+  # Types: ACTIONBAR, TITLE, CHAT, NONE
   # Use \n to use subtitles.
   kill: "CHAT"
   killed: "TITLE"

@@ -59,6 +59,7 @@ public class PlayerManager {
         try {
             message = ChatColor.translateAlternateColorCodes('&', message);
             MessageType messageType = MessageType.valueOf(type);
+            if (messageType == MessageType.NONE) return;
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && placeholderTarget != null)
                 message = PlaceholderAPI.setPlaceholders(placeholderTarget, message);
             if (messageType == MessageType.ACTIONBAR) ActionBar.sendActionBar(player, message);
@@ -130,5 +131,6 @@ public class PlayerManager {
         ACTIONBAR,
         TITLE,
         CHAT,
+        NONE,
     }
 }
