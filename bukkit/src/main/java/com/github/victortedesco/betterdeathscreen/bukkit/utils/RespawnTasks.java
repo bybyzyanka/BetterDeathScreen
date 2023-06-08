@@ -50,7 +50,6 @@ public final class RespawnTasks {
                     }
                 }
                 if (Bukkit.isHardcore()) {
-                    // When changing the gamemode of the player, he respawns.
                     if (player.getGameMode() != GameMode.SPECTATOR) {
                         performRespawn(player, true);
                         cancel();

@@ -26,13 +26,13 @@ public class EntityDamageListener implements Listener {
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
+            Player damager = (Player) event.getDamager();
 
-            if (BetterDeathScreenAPI.getPlayerManager().isDead(player)) {
+            if (BetterDeathScreenAPI.getPlayerManager().isDead(damager)) {
                 event.setCancelled(true);
                 if (BetterDeathScreen.getConfiguration().canSpectate()) {
-                    player.setGameMode(GameMode.SPECTATOR);
-                    player.setSpectatorTarget(event.getEntity());
+                    damager.setGameMode(GameMode.SPECTATOR);
+                    damager.setSpectatorTarget(event.getEntity());
                 }
             }
         }
@@ -61,8 +61,12 @@ public class EntityDamageListener implements Listener {
                 return;
             }
             if (player.getHealth() <= event.getFinalDamage() && (!BetterDeathScreenAPI.getPlayerManager().isUsingTotem(player) || event.getCause() == EntityDamageEvent.DamageCause.SUICIDE || event.getCause() == EntityDamageEvent.DamageCause.VOID)) {
-                event.setDamage(0);
+                double playerHealth = player.getHealth();
+                event.setCancelled(true);
                 playerManager.sendCustomMessage(player, player, config.getKilledMessageType(), randomizer.getRandomItemFromList(messages.getKilled()), time);
+                deathTasks.performDeath(player);
+                player.setAllowFlight(config.canFly());
+                player.setFlying(config.canFly());
                 if (event instanceof EntityDamageByEntityEvent) {
                     Entity killer = ((EntityDamageByEntityEvent) event).getDamager();
                     if (killer instanceof Projectile) {
@@ -71,9 +75,8 @@ public class EntityDamageListener implements Listener {
                     }
                     if (killer instanceof Player) {
                         playerKiller = (Player) killer;
-
                         playerKiller.incrementStatistic(Statistic.PLAYER_KILLS, 1);
-                        playerKiller.incrementStatistic(Statistic.DAMAGE_DEALT, (int) Math.max(player.getHealth(), 1));
+                        playerKiller.incrementStatistic(Statistic.DAMAGE_DEALT, (int) Math.max(playerHealth, 1));
                         playerManager.playSound(player, BetterDeathScreenAPI.getRandomizer().getRandomItemFromList(config.getKillSounds()), false);
                         playerManager.sendCustomMessage(player, playerKiller, config.getKilledByPlayerMessageType(), randomizer.getRandomItemFromList(messages.getKilledByPlayer()), time);
                         playerManager.sendCustomMessage(playerKiller, player, config.getKillMessageType(), randomizer.getRandomItemFromList(messages.getKill()), 1);
@@ -83,9 +86,6 @@ public class EntityDamageListener implements Listener {
                         player.setSpectatorTarget(killer);
                     }
                 }
-                player.setAllowFlight(config.canFly());
-                player.setFlying(config.canFly());
-                deathTasks.performDeath(player);
                 deathTasks.sendCommandsOnDeath(player, playerKiller);
             } else {
                 if (!(event instanceof EntityDamageByBlockEvent) && !(event instanceof EntityDamageByEntityEvent))

@@ -12,9 +12,7 @@ public class EntityPickupItemListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPickup(EntityPickupItemEvent event) {
-        Entity entity = event.getEntity();
-
-        if (entity instanceof Player) {
+        if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             if (BetterDeathScreenAPI.getPlayerManager().isDead(player)) event.setCancelled(true);
         }

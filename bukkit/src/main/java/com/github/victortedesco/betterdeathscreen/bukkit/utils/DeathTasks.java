@@ -45,11 +45,11 @@ public final class DeathTasks {
         player.incrementStatistic(Statistic.DEATHS, 1);
         player.incrementStatistic(Statistic.DAMAGE_TAKEN, (int) Math.max(1, player.getHealth()));
         player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
+        BetterDeathScreenAPI.getPlayerManager().getDeadPlayers().add(player);
+        sendPlayerDeathEvent(player);
+        changeAttributes(player);
         player.getActivePotionEffects().forEach(potion -> player.removePotionEffect(potion.getType()));
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 30000, 0, false, false));
-        BetterDeathScreenAPI.getPlayerManager().getDeadPlayers().add(player);
-        changeAttributes(player);
-        sendPlayerDeathEvent(player);
         BetterDeathScreen.getRespawnTasks().startCountdown(player);
         BetterDeathScreenAPI.getPlayerManager().playSound(player, BetterDeathScreenAPI.getRandomizer().getRandomItemFromList(deathSounds), false);
         if (Bukkit.isHardcore()) player.setGameMode(GameMode.SPECTATOR);
